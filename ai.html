@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lê Quý Đôn Chatbot</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script type="text/javascript" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1a73e8', // Blue
+                        secondary: '#ffffff', // White
+                        light: {
+                            bg: '#f0f2ff', // Lighter background for a softer feel
+                            text: '#2c3e50', // Darker text for better contrast
+                            sidebar: '#ffffff', // White sidebar
+                            hover: '#e0e6ff' // Lighter blue hover for sidebar items
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Calibri', 'Helvetica Neue', 'Helvetica', 'Arial', 'sans-serif'], // Added fallbacks
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Calibri', 'Helvetica Neue', 'Helvetica', 'Arial', 'sans-serif';
+            background-color: #f0f2ff; /* Light background */
+            color: #2c3e50; /* Dark text */
+        }
+        
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        
+        .typing-dots::after {
+            content: '...';
+            animation: typing 1.5s infinite;
+        }
+        
+        @keyframes typing {
+            0% { content: '.'; }
+            33% { content: '..'; }
+            66% { content: '...'; }
+        }
+        
+        .code-block {
+            position: relative;
+            margin: 1rem 0;
+            border-radius: 0.75rem;
+            overflow: hidden;
+            background-color: #e9ecef; /* Lighter grey code block background */
+        }
+        
+        .code-header {
+            font-family: monospace;
+            user-select: none;
+        }
+        
+        .copy-code-btn {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        
+        .copy-code-btn:hover {
+            color: #1a73e8; /* Primary blue on hover */
+        }
+        
+        pre {
+            margin: 0 !important;
+            padding: 1rem !important;
+            background-color: #e9ecef !important; /* Lighter grey code block background */
+            border-radius: 0 0 0.75rem 0.75rem;
+            color: #2c3e50;
+        }
+        
+        .markdown p {
+            margin-bottom: 1rem;
+            line-height: 1.7; /* Slightly increased line-height for readability */
+        }
+        
+        .markdown ul, .markdown ol {
+            margin-bottom: 1rem;
+            padding-left: 1.5rem;
+        }
+        
+        .markdown li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .markdown code:not(pre code) {
+            background-color: #dfe3e7; /* Lighter background for inline code */
+            padding: 0.2rem 0.4rem;
+            border-radius: 0.25rem;
+            font-family: monospace;
+            color: #2c3e50;
+        }
+        
+        .markdown strong {
+            font-weight: 700; /* Bolder for strong text */
+        }
+        
+        .markdown em {
+            font-style: italic;
+        }
+        
+        .markdown h1, .markdown h2, .markdown h3, .markdown h4 {
+            font-weight: 700; /* Bolder for headings */
+            margin-top: 1.8rem; /* More spacing above headings */
+            margin-bottom: 1rem;
+        }
+        
+        .markdown h1 {
+            font-size: 1.75rem; /* Larger H1 */
+            line-height: 2.25rem;
+        }
+        
+        .markdown h2 {
+            font-size: 1.5rem; /* Larger H2 */
+            line-height: 2rem;
+        }
+        
+        .markdown h3 {
+            font-size: 1.25rem; /* Larger H3 */
+            line-height: 1.85rem;
+        }
+        
+        .markdown h4 {
+            font-size: 1.125rem; /* Larger H4 */
+            line-height: 1.65rem;
+        }
+        
+        .markdown table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+            border-radius: 0.75rem;
+            overflow: hidden;
+        }
+        
+        .markdown th, .markdown td {
+            padding: 0.75rem 1rem; /* More padding for table cells */
+            border: 1px solid #d0d0d0; /* Lighter grey border */
+            text-align: left;
+        }
+        
+        .markdown th {
+            background-color: #e9ecef; /* Light header background */
+            font-weight: 700;
+        }
+        
+        .markdown blockquote {
+            border-left: 5px solid #1a73e8; /* Primary blue border, slightly thicker */
+            padding-left: 1.2rem;
+            margin: 1.5rem 0; /* More margin */
+            color: #555555; /* Medium grey text */
+            border-radius: 0.75rem;
+            background-color: rgba(26, 115, 232, 0.08); /* Slightly lighter blue background */
+        }
+        
+        .user-message {
+            align-self: flex-end;
+            background-color: #1a73e8; /* Primary blue */
+            color: #ffffff;
+            border-radius: 1.25rem 1.25rem 0.5rem 1.25rem; /* More rounded, pointed bottom-right */
+            max-width: 80%;
+            margin-left: auto;
+            padding: 0.85rem 1.1rem; /* Slightly more padding */
+        }
+        
+        .bot-message {
+            align-self: flex-start;
+            background-color: #ffffff; /* White bot message */
+            color: #2c3e50;
+            border-radius: 1.25rem 1.25rem 1.25rem 0.5rem; /* More rounded, pointed bottom-left */
+            max-width: 80%;
+            margin-right: auto;
+            padding: 0.85rem 1.1rem; /* Slightly more padding */
+            border: 1px solid #e0e0e0; /* Light grey border */
+        }
+        
+        .typing-indicator {
+            align-self: flex-start;
+            background-color: #ffffff; /* White typing indicator */
+            color: #2c3e50;
+            border-radius: 1.25rem 1.25rem 1.25rem 0.5rem;
+            max-width: 80%;
+            margin-right: auto;
+            padding: 0.85rem 1.1rem;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .message-content {
+            word-wrap: break-word;
+            white-space: pre-wrap;
+            /* Removed border-radius and padding here as it's now handled by the parent message div */
+        }
+        
+        .transition-all {
+            transition-property: all;
+            transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+            transition-duration: 150ms;
+        }
+
+        /* Styles for chat avatars */
+        .message-wrapper {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem; /* Space between avatar and message bubble */
+            margin-bottom: 0.75rem; /* Space between message groups */
+        }
+
+        .message-wrapper.user {
+            justify-content: flex-end;
+        }
+
+        .message-wrapper.bot {
+            justify-content: flex-start;
+        }
+
+        .avatar {
+            width: 2.25rem; /* Slightly larger avatar */
+            height: 2.25rem;
+            border-radius: 9999px; /* Fully rounded */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-weight: 600;
+            font-size: 0.875rem; /* Small text for initials */
+        }
+
+        .avatar.user {
+            background-color: #1a73e8;
+            color: #ffffff;
+        }
+
+        .avatar.bot {
+            background-color: #dee2e6; /* Light gray for bot avatar */
+            color: #495057; /* Darker gray for bot avatar initials */
+        }
+
+        .message-timestamp {
+            font-size: 0.75rem; /* Smaller timestamp */
+            color: #6c757d; /* Muted color */
+            margin-top: 0.25rem;
+        }
+
+        .user .message-timestamp {
+            text-align: right;
+            color: rgba(255, 255, 255, 0.8); /* Lighter color for user timestamp */
+        }
+
+        .bot .message-timestamp {
+            text-align: left;
+        }
+
+        /* Sidebar chat item active state */
+        .chat-item.bg-light-hover {
+            background-color: #e0e6ff; /* Match hover color */
+            color: #1a73e8; /* Primary color for active text */
+        }
+        .chat-item.bg-light-hover .chat-title {
+            color: #1a73e8; /* Ensure active title is primary blue */
+        }
+        .chat-item.bg-light-hover .text-xs {
+            color: #6a8cdb; /* Slightly darker blue for date in active state */
+        }
+
+        /* Header styling */
+        header {
+            background-color: #ffffff; /* White header background */
+            border-bottom: 1px solid #e0e0e0; /* Subtle border */
+        }
+    </style>
+</head>
+<body class="h-screen flex flex-col bg-light-bg text-light-text transition-all">
+
+    <div id="app" class="flex flex-1 overflow-hidden">
+
+        <div id="sidebar" class="w-60 bg-light-sidebar shadow-lg border-r border-gray-200 flex flex-col h-full">
+            <div class="p-3">
+                <button id="new-chat-btn" class="w-full h-10 flex items-center justify-center bg-primary hover:bg-primary/90 text-white rounded-md transition px-4 py-2 text-sm font-medium">
+                    <i class="fa-solid fa-plus mr-2"></i> Cuộc trò chuyện mới
+                </button>
+            </div>
+            
+            <div id="chat-history" class="flex-1 overflow-y-auto hide-scrollbar p-2">
+                </div>
+        </div>
+        
+        <div class="flex-1 flex flex-col h-full overflow-hidden">
+
+            <header class="p-4 border-b border-gray-200 bg-light-bg">
+                <h1 class="text-xl font-semibold text-left">Chatbot Đoàn trường THPT Chuyên Lê Quý Đôn</h1>
+            </header>
+            
+            <div id="chat-container" class="flex-1 overflow-y-auto hide-scrollbar p-4 bg-gray-100 flex flex-col gap-3">
+                <div id="chat-messages" class="flex flex-col gap-3 mx-auto max-w-3xl w-full">
+                    </div>
+            </div>
+            
+            <div id="typing-indicator" class="hidden max-w-3xl mx-auto p-4 mb-4 text-center">
+                <span class="typing-dots text-gray-600">AI đang suy nghĩ, vui lòng đợi giây lát</span>
+            </div>
+            <div id="stop-button-container" class="hidden max-w-3xl mx-auto p-4 mb-4 text-center">
+                <button id="stop-response-btn" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                    <i class="fa-solid fa-stop mr-2"></i> Dừng phản hồi
+                </button>
+            </div>
+
+            <div class="p-4 border-t border-gray-200 bg-light-bg">
+                <div class="max-w-3xl mx-auto">
+                    <form id="chat-form" class="relative">
+                        <textarea 
+                            id="message-input" 
+                            class="w-full p-4 pr-12 rounded-lg border border-gray-300 bg-white resize-none focus:outline-none focus:ring-2 focus:ring-primary text-gray-800"
+                            placeholder="Gửi tin nhắn..."
+                            rows="1"
+                        ></textarea>
+                        <button type="submit" class="absolute right-3 bottom-3 p-2 bg-primary text-white rounded-full hover:bg-primary/90 transition-colors focus:outline-none focus:ring-2 focus:ring-primary">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+        
+    <script>
+        const leQuyDonKeywords = [
+            "Lê Quý Đôn", "chuyên Lê Quý Đôn", "THPT Chuyên Lê Quý Đôn", "Điện Biên", 
+            "Đoàn trường", "Đoàn thanh niên", "Đoàn Thanh niên Cộng sản Hồ Chí Minh", 
+            "Chi đoàn", "đoàn viên", "hoạt động đoàn", "quy định đoàn", "đại hội đoàn",
+            "công tác đoàn", "lịch sử đoàn", "vai trò của đoàn", "ý nghĩa đoàn",
+            "chức năng đoàn", "phong trào đoàn", "thanh niên", "sinh viên", "học sinh",
+            "chào", "là ai", "ban chấp hành", "bí thư", "phó bí thư", "ủy viên",
+            "thành viên", "cơ cấu tổ chức", "khen thưởng", "kỷ luật", "tập huấn",
+            "sinh hoạt", "văn hóa", "thể thao", "học tập", "tình nguyện", "môi trường",
+            "an ninh", "quốc phòng", "giáo dục", "tuyển sinh", "câu lạc bộ", "kì thi",
+            "thành tích", "điều lệ đoàn", "phương hướng nhiệm vụ", "định hướng",
+            "tuyên truyền", "bồi dưỡng", "phát triển đoàn viên", "lễ kết nạp",
+            "chứng nhận đoàn viên", "sổ đoàn viên", "huy hiệu đoàn", "áo thanh niên", "Đoàn"
+        ];
+
+        function isLeQuyDonQuestion(question) {
+            const lowerQuestion = question.toLowerCase();
+            return leQuyDonKeywords.some(keyword => lowerQuestion.includes(keyword.toLowerCase()));
+        }
+
+        class LeQuyDonAI {
+            constructor() {
+                this.endpoint = "YOUR_LE_QUY_DON_API_ENDPOINT"; // Replace with your actual API endpoint if you have one
+                this.conversationHistory = [];
+            }
+
+            async sendQuery(userInput, previousMessages = []) {
+                if (!isLeQuyDonQuestion(userInput)) {
+                    return {
+                        success: false,
+                        message: "Xin lỗi, tôi chỉ trả lời các câu hỏi liên quan đến Đoàn Thanh niên Cộng sản Hồ Chí Minh, Đoàn trường và trường THPT Chuyên Lê Quý Đôn (Điện Biên). Bạn có câu hỏi nào về các chủ đề này không?"
+                    };
+                }
+                try {
+                    // Mock API call for demonstration
+                    const response = await this.mockApiCall(userInput, previousMessages);
+                    return response;
+                } catch (error) {
+                    console.error("API Error:", error);
+                    // Handle specific error for non-relevant questions
+                    if (error.message.includes("không thuộc chủ đề")) {
+                        addMessageToUI("assistant", "Xin lỗi, tôi chỉ trả lời các câu hỏi liên quan đến Đoàn Thanh niên Cộng sản Hồ Chí Minh, Đoàn trường và trường THPT Chuyên Lê Quý Đôn (Điện Biên). Bạn có câu hỏi nào về các chủ đề này không?", new Date().toISOString());
+                    } else {
+                        throw new Error("Đã xảy ra lỗi khi kết nối!");
+                    }
+                }
+            }
+
+            async mockApiCall(userInput, history) {
+                if (!isLeQuyDonQuestion(userInput)) {
+                    return {
+                        success: false,
+                        message: "Xin lỗi, tôi chỉ trả lời các câu hỏi liên quan đến Đoàn Thanh niên Cộng sản Hồ Chí Minh, Đoàn trường và trường THPT Chuyên Lê Quý Đôn (Điện Biên). Bạn có câu hỏi nào về các chủ đề này không?"
+                    };
+                }
+                await new Promise(resolve => setTimeout(resolve, 500 + Math.random() * 1000));
+
+                const leQuyDonResponses = [
+                    "Đoàn trường THPT Chuyên Lê Quý Đôn luôn tích cực tổ chức các hoạt động tình nguyện...",
+                    "Điều lệ Đoàn Thanh niên Cộng sản Hồ Chí Minh quy định rõ ràng về quyền và nghĩa vụ của đoàn viên...",
+                    "Trường THPT Chuyên Lê Quý Đôn Điện Biên nổi tiếng với thành tích cao trong các kỳ thi học sinh giỏi quốc gia.",
+                    "Các hoạt động của Đoàn trường Lê Quý Đôn nhằm bồi dưỡng lý tưởng cách mạng cho học sinh...",
+                    "Để trở thành đoàn viên, bạn cần tìm hiểu kỹ về Đoàn Thanh niên Cộng sản Hồ Chí Minh và tham gia các buổi sinh hoạt...",
+                    "Ban Chấp hành Đoàn trường THPT Chuyên Lê Quý Đôn luôn nỗ lực tạo môi trường học tập và rèn luyện tốt nhất cho đoàn viên.",
+                    "Trường Chuyên Lê Quý Đôn Điện Biên được thành lập vào năm...",
+                    "Đoàn Thanh niên Cộng sản Hồ Chí Minh là tổ chức chính trị - xã hội của thanh niên Việt Nam.",
+                    "Các phong trào thanh niên tiêu biểu của Đoàn trường bao gồm...",
+                    "Chức năng chính của Đoàn là...",
+                    "Bạn có thể tìm hiểu thêm về lịch sử Đoàn trường THPT Chuyên Lê Quý Đôn tại văn phòng Đoàn."
+                ];
+                
+                const randomResponse = leQuyDonResponses[Math.floor(Math.random() * leQuyDonResponses.length)];
+                const enhancedResponse = `${randomResponse}\n\nĐây là thông tin từ Chatbot Đoàn trường THPT Chuyên Lê Quý Đôn.`;
+                
+                return {
+                    success: true,
+                    data: {
+                        response: enhancedResponse
+                    }
+                };
+            }
+        }
+    </script>
+    <script type="importmap">
+        {
+            "imports": {
+                "@google/generative-ai": "https://esm.run/@google/generative-ai"
+            }
+        }
+    </script>
+    <script type="module">
+        import { GoogleGenerativeAI } from "@google/generative-ai";
+
+        // IMPORTANT: Replace with your actual API Key. Do NOT expose this in a public repository.
+        const API_KEY = "AIzaSyAn9dMMM5u8dEGpI8mEzQvdMSuI8KFH8jM"; // Replace with your actual Gemini API Key
+        const genAI = new GoogleGenerativeAI(API_KEY);
+        const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash-thinking-exp-01-21" }); // Using gemini-pro for better general knowledge, adjust if needed
+
+        const chatContainer = document.getElementById('chat-container');
+        const chatMessages = document.getElementById('chat-messages');
+        const chatForm = document.getElementById('chat-form');
+        const messageInput = document.getElementById('message-input');
+        const newChatBtn = document.getElementById('new-chat-btn');
+        const chatHistory = document.getElementById('chat-history');
+        const typingIndicator = document.getElementById('typing-indicator');
+        const stopButtonContainer = document.getElementById('stop-button-container');
+
+        let chats = [];
+        let currentChatId = null;
+        let isSending = false;
+        let typingInterval = null;
+        let isStopped = false;
+
+        function initApp() {
+            loadChats();
+            setupEventListeners();
+            setupTextareaAutoResize();
+
+            if (chats.length === 0) {
+                createNewChat();
+            } else {
+                loadChat(chats[0].id);
+            }
+        }
+
+        function setupEventListeners() {
+            chatForm.addEventListener('submit', handleSubmit);
+            messageInput.addEventListener('input', () => {
+                autoResizeTextarea();
+            });
+            messageInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    if (messageInput.value.trim() !== '') {
+                        chatForm.dispatchEvent(new Event('submit'));
+                    }
+                }
+            });
+            newChatBtn.addEventListener('click', createNewChat);
+
+            document.getElementById('stop-response-btn').addEventListener('click', () => {
+                isStopped = true;
+                if (typingInterval) {
+                    clearInterval(typingInterval);
+                    typingInterval = null;
+                }
+                stopButtonContainer.classList.add('hidden');
+                // Ensure the typing indicator is hidden if stop is pressed before it appears
+                typingIndicator.classList.add("hidden"); 
+            });
+        }
+
+        function setupTextareaAutoResize() {
+            messageInput.addEventListener('input', autoResizeTextarea);
+        }
+
+        function autoResizeTextarea() {
+            messageInput.style.height = 'auto';
+            const newHeight = Math.min(messageInput.scrollHeight, 150);
+            messageInput.style.height = `${newHeight}px`;
+        }
+
+        async function handleSubmit(e) {
+            e.preventDefault();
+            const userMessage = messageInput.value.trim();
+            if (!userMessage || isSending) return;
+
+            // Check for relevant question before processing with AI
+            if (!isLeQuyDonQuestion(userMessage)) {
+                addMessageToUI("user", userMessage, new Date().toISOString()); // Display user message
+                addMessageToUI("assistant", "Xin lỗi, tôi chỉ trả lời các câu hỏi liên quan đến Đoàn Thanh niên Cộng sản Hồ Chí Minh, Đoàn trường và trường THPT Chuyên Lê Quý Đôn (Điện Biên). Bạn có câu hỏi nào về các chủ đề này không?", new Date().toISOString());
+                messageInput.value = "";
+                autoResizeTextarea();
+                return;
+            }
+
+            if (!currentChatId) {
+                createNewChat();
+                return;
+            }
+
+            const currentChat = chats.find(chat => chat.id === currentChatId);
+            if (!currentChat) {
+                console.error("Không tìm thấy cuộc trò chuyện hiện tại!");
+                return;
+            }
+
+            isSending = true;
+            addMessageToUI("user", userMessage, new Date().toISOString());
+
+            const greetings = ["chào", "hello", "hi"];
+            if (greetings.some(greet => userMessage.toLowerCase().includes(greet))) {
+                const greetingResponse = "Xin chào! Tôi là Chatbot Đoàn trường THPT Chuyên Lê Quý Đôn (Điện Biên). Tôi có thể giúp bạn giải đáp các thắc mắc về Đoàn Thanh niên Cộng sản Hồ Chí Minh, Đoàn trường và các hoạt động của trường chúng ta.";
+                displayTypingMessage(greetingResponse, () => {
+                    if (!isStopped) {
+                        currentChat.messages.push({ 
+                            role: "assistant", 
+                            content: greetingResponse,
+                            timestamp: new Date().toISOString()
+                        });
+                        saveChats();
+                    }
+                }, new Date().toISOString()); // Pass timestamp for greeting message
+                messageInput.value = "";
+                autoResizeTextarea();
+                isSending = false;
+                return;
+            }
+
+            currentChat.messages.push({ 
+                role: "user", 
+                content: userMessage,
+                timestamp: new Date().toISOString()
+            });
+
+            saveChats();
+            updateChatTitle(currentChat);
+
+            messageInput.value = "";
+            autoResizeTextarea();
+            typingIndicator.classList.remove("hidden");
+            stopButtonContainer.classList.remove("hidden"); 
+            isStopped = false;
+
+            try {
+                // Prepare conversation history for the Gemini model
+                const historyForGemini = currentChat.messages.map(msg => ({
+                    role: msg.role === "user" ? "user" : "model",
+                    parts: [{ text: msg.content }]
+                }));
+
+                const chatSession = model.startChat({
+                    history: historyForGemini,
+                    generationConfig: {
+                        maxOutputTokens: 2000,
+                        temperature: 0.7, // Slightly lower temperature for more factual responses
+                        topP: 0.9,
+                        topK: 40,
+                    }
+                });
+
+                const result = await chatSession.sendMessage(userMessage);
+                const response = await result.response;
+                const botReply = response.text();
+
+                displayTypingMessage(botReply, () => {
+                    if (!isStopped) {
+                        currentChat.messages.push({ 
+                            role: "assistant", 
+                            content: botReply,
+                            timestamp: new Date().toISOString()
+                        });
+                        saveChats();
+                    }
+                }, new Date().toISOString()); // Pass timestamp for bot reply
+            } catch (error) {
+                console.error("Lỗi:", error);
+                addMessageToUI("assistant", "Xin lỗi, đã có lỗi xảy ra khi tôi xử lý yêu cầu của bạn. Vui lòng thử lại sau.", new Date().toISOString());
+            } finally {
+                isSending = false;
+                typingIndicator.classList.add("hidden");
+                stopButtonContainer.classList.add("hidden"); 
+                scrollToBottom();
+            }
+        }
+
+        function displayTypingMessage(content, callback, timestamp) {
+            const messageWrapper = document.createElement('div');
+            messageWrapper.className = 'message-wrapper bot';
+            messageWrapper.innerHTML = `
+                <div class="avatar bot">AI</div>
+                <div class="bot-message flex-1">
+                    <div class="message-content"></div>
+                    <div class="message-timestamp">${new Date(timestamp).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })}</div>
+                </div>
+            `;
+            chatMessages.appendChild(messageWrapper);
+            scrollToBottom();
+
+            let i = 0;
+            const speed = 10; // Adjust typing speed here (milliseconds per character)
+            const contentDiv = messageWrapper.querySelector('.message-content');
+
+            if (typingInterval) clearInterval(typingInterval);
+            
+            typingIndicator.classList.add("hidden"); 
+            stopButtonContainer.classList.remove("hidden");
+            typingInterval = setInterval(() => {
+                if (isStopped) {
+                    clearInterval(typingInterval);
+                    typingInterval = null;
+                    contentDiv.innerHTML = formatMessage(content.substring(0, i));
+                    stopButtonContainer.classList.add("hidden");
+                    if (callback) callback();
+                    // Ensure MathJax renders the truncated content
+                    if (window.MathJax) {
+                        window.MathJax.typesetPromise([contentDiv]).catch((err) => console.error('MathJax render error:', err));
+                    }
+                    return;
+                }
+
+                if (i < content.length) {
+                    contentDiv.innerHTML = formatMessage(content.substring(0, i + 1));
+                    i++;
+                    scrollToBottom();
+                } else {
+                    clearInterval(typingInterval);
+                    typingInterval = null;
+                    stopButtonContainer.classList.add("hidden");
+                    if (callback) callback();
+                }
+                // Rerender MathJax with each new character to ensure equations are visible as they type
+                if (window.MathJax) {
+                    window.MathJax.typesetPromise([contentDiv]).catch((err) => console.error('MathJax render error:', err));
+                }
+            }, speed);
+        }
+
+        function addMessageToUI(role, content, timestamp) {
+            const messageWrapper = document.createElement('div');
+            messageWrapper.className = `message-wrapper ${role}`;
+            
+            const formattedContent = formatMessage(content);
+            const timeString = new Date(timestamp).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
+
+            if (role === 'user') {
+                messageWrapper.innerHTML = `
+                    <div class="user-message flex-1">
+                        <div class="message-content">${formattedContent}</div>
+                        <div class="message-timestamp">${timeString}</div>
+                    </div>
+                    <div class="avatar user">Bạn</div>
+                `;
+            } else {
+                messageWrapper.innerHTML = `
+                    <div class="avatar bot">AI</div>
+                    <div class="bot-message flex-1">
+                        <div class="message-content">${formattedContent}</div>
+                        <div class="message-timestamp">${timeString}</div>
+                    </div>
+                `;
+            }
+            
+            chatMessages.appendChild(messageWrapper);
+            scrollToBottom();
+
+            // Render MathJax for the newly added message
+            if (window.MathJax) {
+                window.MathJax.typesetPromise([messageWrapper]).catch((err) => console.error('MathJax render error:', err));
+            }
+        }
+
+        function formatMessage(content) {
+            if (!content) return '';
+
+            // Escape HTML characters to prevent XSS and ensure markdown is processed correctly
+            let formatted = escapeHtml(content);
+
+            // Convert markdown to HTML
+            // Code blocks
+            formatted = formatted.replace(/```([\w]*)\n([\s\S]*?)```/g, (match, lang, code) => {
+                const langDisplay = lang ? lang : 'text';
+                return `<div class="code-block">
+                    <div class="code-header flex justify-between items-center px-3 py-2 bg-gray-200 text-gray-600 text-xs rounded-t-md">
+                        <span>${langDisplay}</span>
+                        <button class="copy-code-btn hover:text-primary" onclick="copyToClipboard(this)" data-code="${encodeURIComponent(code.trim())}">
+                            <i class="fas fa-copy"></i> Copy code
+                        </button>
+                    </div>
+                    <pre><code class="language-${lang || 'text'}">${code.trim()}</code></pre>
+                </div>`;
+            });
+
+            // Tables
+            formatted = formatted.replace(/\|(.+)\|\n\|(?:[-:]+\|)+\n((?:\|.+\|\n)+)/g, (match) => {
+                const [headerLine, separatorLine, ...dataLines] = match.split('\n').filter(Boolean);
+                const headerCells = headerLine.split('|').slice(1, -1).map(cell => `<th>${cell.trim()}</th>`).join('');
+                const tableRows = dataLines.map(row => {
+                    const cells = row.split('|').slice(1, -1).map(cell => `<td>${cell.trim()}</td>`).join('');
+                    return `<tr>${cells}</tr>`;
+                }).join('');
+
+                return `<div class="overflow-x-auto"><table class="w-full">
+                    <thead><tr>${headerCells}</tr></thead>
+                    <tbody>${tableRows}</tbody>
+                </table></div>`;
+            });
+
+            // Bold, Italic, Inline Code (after code blocks and tables to avoid re-processing)
+            formatted = formatted.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>'); // Bold
+            formatted = formatted.replace(/\*(.+?)\*/g, '<em>$1</em>');       // Italic
+            formatted = formatted.replace(/`([^`]+)`/g, '<code class="bg-gray-200 px-1 py-0.5 rounded">$1</code>'); // Inline Code
+
+            // Blockquotes
+            formatted = formatted.replace(/^&gt; (.+)$/gm, '<blockquote><p>$1</p></blockquote>');
+
+            // Headings (basic implementation, assuming one per line for simplicity)
+            formatted = formatted.replace(/^###### (.+)$/gm, '<h6>$1</h6>');
+            formatted = formatted.replace(/^##### (.+)$/gm, '<h5>$1</h5>');
+            formatted = formatted.replace(/^#### (.+)$/gm, '<h4>$1</h4>');
+            formatted = formatted.replace(/^### (.+)$/gm, '<h3>$1</h3>');
+            formatted = formatted.replace(/^## (.+)$/gm, '<h2>$1</h2>');
+            formatted = formatted.replace(/^# (.+)$/gm, '<h1>$1</h1>');
+
+            // Lists (simple conversion, might need more robust regex for nested lists)
+            formatted = formatted.replace(/^\s*\*\s(.+)$/gm, '<li>$1</li>'); // Unordered list items
+            formatted = formatted.replace(/^\s*(\d+)\.\s(.+)$/gm, '<li>$2</li>'); // Ordered list items
+            // Wrap list items in ul/ol tags if they exist. This is a simplified approach.
+            // A more robust markdown parser would be needed for complex nested lists.
+            formatted = formatted.replace(/(<li>.+<\/li>(\n<li>.+<\/li>)*)/g, (match) => {
+                if (match.includes('1. ')) { // Simple heuristic for ordered list
+                    return `<ol>${match}</ol>`;
+                }
+                return `<ul>${match}</ul>`;
+            });
+
+
+            // Paragraphs and line breaks: This needs careful handling.
+            // Replace double newlines with <p> tags for paragraphs.
+            formatted = formatted.split('\n\n').map(paragraph => {
+                // Don't wrap if it's already an HTML block element or starts a list/quote
+                if (paragraph.trim().startsWith('<') || paragraph.trim().startsWith('<li>') || paragraph.trim().startsWith('<blockquote>')) {
+                    return paragraph;
+                }
+                return `<p>${paragraph.trim()}</p>`;
+            }).join('');
+
+            // Replace single newlines with <br> inside paragraphs if they are not part of other markdown structures
+            formatted = formatted.replace(/([^\n])\n([^\n])/g, '$1<br>$2');
+
+
+            return formatted;
+        }
+
+        function escapeHtml(text) {
+            const map = {
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#039;'
+            };
+            return text.replace(/[&<>"']/g, m => map[m]);
+        }
+
+        function scrollToBottom() {
+            setTimeout(() => {
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+            }, 100);
+        }
+
+        function createNewChat() {
+            const newChat = {
+                id: Date.now().toString(),
+                title: 'Cuộc trò chuyện mới',
+                messages: [],
+                createdAt: new Date().toISOString()
+            };
+
+            chats.unshift(newChat);
+            saveChats();
+            renderChatHistory();
+            loadChat(newChat.id);
+            
+            messageInput.focus();
+        }
+
+        function loadChat(chatId) {
+            currentChatId = chatId;
+
+            document.querySelectorAll('.chat-item').forEach(item => {
+                if (item.dataset.id === chatId) {
+                    item.classList.add('bg-light-hover');
+                } else {
+                    item.classList.remove('bg-light-hover');
+                }
+            });
+
+            chatMessages.innerHTML = '';
+
+            const currentChat = chats.find(chat => chat.id === chatId);
+            if (!currentChat || currentChat.messages.length === 0) {
+                 // Display a welcome message or clear state if no messages
+                 chatMessages.innerHTML = `<div class="text-center text-gray-500 mt-20">Chào mừng bạn đến với Chatbot Đoàn trường THPT Chuyên Lê Quý Đôn. Hãy hỏi tôi bất cứ điều gì liên quan đến Đoàn, nhà trường và các hoạt động của học sinh!</div>`;
+                return;
+            }
+
+            currentChat.messages.forEach(message => {
+                addMessageToUI(message.role, message.content, message.timestamp);
+            });
+            
+            scrollToBottom();
+        }
+
+        function deleteChat(chatId, event) {
+            event.stopPropagation();
+            chats = chats.filter(chat => chat.id !== chatId);
+            saveChats();
+            renderChatHistory();
+
+            if (chatId === currentChatId) {
+                if (chats.length > 0) {
+                    loadChat(chats[0].id);
+                } else {
+                    createNewChat();
+                }
+            }
+        }
+
+        function updateChatTitle(chat) {
+            if (!chat || !chat.messages || chat.messages.length === 0) {
+                chat.title = "Cuộc trò chuyện mới";
+                saveChats();
+                renderChatHistory();
+                return;
+            }
+
+            const firstUserMessage = chat.messages.find(msg => msg.role === "user");
+            if (firstUserMessage) {
+                let title = firstUserMessage.content.substring(0, 40);
+                if (firstUserMessage.content.length > 40) {
+                    title += "...";
+                }
+                chat.title = title || "Cuộc trò chuyện mới";
+            } else {
+                chat.title = "Cuộc trò chuyện mới";
+            }
+
+            saveChats();
+            renderChatHistory();
+        }
+
+        function renderChatHistory() {
+            chatHistory.innerHTML = '';
+
+            if (chats.length === 0) {
+                chatHistory.innerHTML = `
+                    <div class="text-center p-4 text-gray-400 text-sm">
+                        Chưa có cuộc trò chuyện nào. <br>Nhấn <i class="fa-solid fa-plus"></i> để bắt đầu!
+                    </div>
+                `;
+                return;
+            }
+
+            chats.forEach(chat => {
+                const chatItem = document.createElement('div');
+                chatItem.className = `chat-item p-3 rounded-md flex items-center justify-between cursor-pointer hover:bg-light-hover transition-colors ${chat.id === currentChatId ? 'bg-light-hover' : ''}`;
+                chatItem.dataset.id = chat.id;
+
+                const chatDate = new Date(chat.createdAt || parseInt(chat.id)); // Use parseInt for older IDs
+                const formattedDate = chatDate.toLocaleDateString('vi-VN', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric'
+                });
+
+                chatItem.innerHTML = `
+                    <div class="flex items-center gap-2 overflow-hidden flex-1 min-w-0">
+                        <i class="fa-regular fa-message text-gray-500 text-sm flex-shrink-0"></i>
+                        <div class="min-w-0">
+                            <div class="chat-title truncate font-medium">${chat.title || 'Cuộc trò chuyện mới'}</div>
+                            <div class="text-xs text-gray-500 truncate">${formattedDate}</div>
+                        </div>
+                    </div>
+                    <button class="delete-chat-btn text-gray-500 hover:text-red-500 p-1 rounded-full hover:bg-gray-100 transition-colors">
+                        <i class="fa-solid fa-trash-can"></i>
+                    </button>
+                `;
+
+                chatItem.addEventListener('click', (e) => {
+                    if (!e.target.closest('.delete-chat-btn')) {
+                        loadChat(chat.id);
+                    }
+                });
+
+                const deleteBtn = chatItem.querySelector('.delete-chat-btn');
+                deleteBtn.addEventListener('click', (e) => {
+                    deleteChat(chat.id, e);
+                });
+
+                chatHistory.appendChild(chatItem);
+            });
+        }
+
+        function loadChats() {
+            const storedChats = localStorage.getItem('le-quy-don-chats');
+            if (storedChats) {
+                const now = Date.now();
+                const THIRTY_DAYS = 30 * 24 * 60 * 60 * 1000;
+
+                chats = JSON.parse(storedChats)
+                    .filter(chat => now - new Date(chat.createdAt || parseInt(chat.id)).getTime() < THIRTY_DAYS)
+                    .sort((a, b) => new Date(b.createdAt || parseInt(b.id)) - new Date(a.createdAt || parseInt(a.id)));
+                    
+                saveChats(); // Clean up old chats
+                renderChatHistory();
+            }
+        }
+
+        function saveChats() {
+            const now = Date.now();
+            const THIRTY_DAYS = 30 * 24 * 60 * 60 * 1000;
+
+            chats = chats.filter(chat => {
+                const chatTime = new Date(chat.createdAt || parseInt(chat.id)).getTime();
+                return now - chatTime < THIRTY_DAYS;
+            });
+
+            localStorage.setItem('le-quy-don-chats', JSON.stringify(chats));
+        }
+
+        function copyToClipboard(button) {
+            const code = decodeURIComponent(button.getAttribute('data-code'));
+            navigator.clipboard.writeText(code).then(() => {
+                const originalText = button.innerHTML;
+                button.innerHTML = '<i class="fas fa-check"></i> Đã sao chép!';
+                setTimeout(() => {
+                    button.innerHTML = originalText;
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy text: ', err);
+                alert('Không thể sao chép văn bản.');
+            });
+        }
+
+        window.addEventListener("beforeunload", () => {
+            chats = chats.filter(chat => chat.messages.length > 0);
+            saveChats();
+        });
+
+        document.addEventListener('DOMContentLoaded', initApp);
+        
+        window.copyToClipboard = copyToClipboard; // Make function accessible globally for inline onclick
+    </script>
+</body>
+</html>
