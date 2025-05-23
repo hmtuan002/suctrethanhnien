@@ -6,16 +6,18 @@
     <title>SỨC TRẺ THANH NIÊN</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,700;1,400&display=swap');
 
         :root {
-            --primary-blue: #0A6DFF; /* Màu xanh dương hiện đại */
+            --primary-blue: #0A6DFF;
             --dark-blue: #0056b3;
-            --text-color: #333;
-            --light-grey: #f0f2f5; /* Nền nhẹ nhàng hơn */
+            --text-color: #2d2d2d;
+            --light-grey: #f4f6f9;
             --white: #fff;
-            --shadow-light: 0 4px 8px rgba(0, 0, 0, 0.08);
-            --shadow-hover: 0 8px 16px rgba(0, 0, 0, 0.15);
+            --shadow-light: 0 6px 12px rgba(0, 0, 0, 0.1);
+            --shadow-hover: 0 10px 20px rgba(0, 0, 0, 0.15);
+            --accent-orange: #ff6f61;
+            --border-radius-card: 15px;
         }
 
         body {
@@ -24,14 +26,14 @@
             padding: 0;
             background-color: var(--light-grey);
             color: var(--text-color);
-            line-height: 1.6;
-            overflow-x: hidden; /* Prevent horizontal scroll */
+            line-height: 1.7;
+            overflow-x: hidden;
         }
 
         /* Header Styles */
         .header {
-            background-color: var(--white);
-            padding: 10px 60px;
+            background: linear-gradient(135deg, var(--white) 0%, #e8f0ff 100%);
+            padding: 15px 60px;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -42,12 +44,13 @@
         }
 
         .header-left .logo {
-            height: 50px; /* Tăng kích thước logo */
-            transition: transform 0.3s ease;
+            height: 55px;
+            transition: transform 0.3s ease, filter 0.3s ease;
         }
 
         .header-left .logo:hover {
-            transform: scale(1.05);
+            transform: scale(1.1);
+            filter: brightness(1.1);
         }
 
         /* Navigation Menu Styles */
@@ -61,20 +64,38 @@
 
         .nav-menu li {
             position: relative;
-            margin-left: 40px; /* Tăng khoảng cách giữa các mục */
+            margin-left: 45px;
         }
 
         .nav-menu > li > a {
             text-decoration: none;
             color: var(--text-color);
-            padding: 15px 0; /* Tăng padding để dễ click */
+            padding: 15px 0;
             display: block;
             font-weight: 500;
-            transition: color 0.3s ease;
+            font-size: 1.1em;
+            transition: color 0.3s ease, transform 0.3s ease;
+            position: relative;
         }
 
         .nav-menu > li > a:hover {
             color: var(--primary-blue);
+            transform: translateY(-2px);
+        }
+
+        .nav-menu > li > a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: var(--primary-blue);
+            transition: width 0.3s ease;
+        }
+
+        .nav-menu > li > a:hover::after {
+            width: 100%;
         }
 
         /* Dropdown Styles */
@@ -82,14 +103,14 @@
             display: none;
             position: absolute;
             background-color: var(--white);
-            min-width: 220px; /* Tăng chiều rộng menu con */
+            min-width: 240px;
             box-shadow: var(--shadow-light);
             z-index: 1;
-            border-radius: 8px;
+            border-radius: 10px;
             overflow: hidden;
-            top: 100%; /* Đặt menu con ngay dưới menu cha */
+            top: 100%;
             left: 0;
-            transform: translateY(10px); /* Hiệu ứng trượt xuống */
+            transform: translateY(10px);
             opacity: 0;
             transition: transform 0.3s ease, opacity 0.3s ease;
         }
@@ -106,16 +127,17 @@
 
         .dropdown-menu li a {
             color: var(--text-color);
-            padding: 12px 20px; /* Padding cho mục con */
+            padding: 14px 20px;
             text-decoration: none;
             display: block;
-            white-space: nowrap; /* Ngăn không cho chữ xuống dòng */
-            transition: background-color 0.2s ease, color 0.2s ease;
+            white-space: nowrap;
+            transition: background-color 0.2s ease, color 0.2s ease, padding-left 0.3s ease;
         }
 
         .dropdown-menu li a:hover {
             background-color: var(--primary-blue);
             color: var(--white);
+            padding-left: 25px;
         }
 
         /* Dropdown arrow */
@@ -125,80 +147,236 @@
         }
 
         .dropdown-arrow i {
-            margin-left: 8px; /* Khoảng cách giữa chữ và icon */
-            font-size: 0.7em;
+            margin-left: 8px;
+            font-size: 0.8em;
             transition: transform 0.3s ease;
         }
 
         .nav-menu li:hover .dropdown-arrow i {
-            transform: rotate(180deg); /* Xoay mũi tên khi hover */
+            transform: rotate(180deg);
         }
 
         /* Hero Section Styles */
         .hero-section {
             display: flex;
             align-items: center;
-            padding: 80px 0; /* Tăng padding */
-            background: linear-gradient(to right, var(--white) 55%, var(--light-grey) 100%);
-            min-height: 70vh; /* Đảm bảo đủ chiều cao */
+            padding: 100px 0;
+            background: linear-gradient(120deg, var(--white) 50%, var(--light-grey) 100%);
+            min-height: 80vh;
+            position: relative;
+            overflow: hidden;
         }
 
         .hero-content {
             flex: 1;
-            padding-left: 100px;
-            max-width: 50%; /* Giảm chiều rộng nội dung chữ */
+            padding-left: 120px;
+            max-width: 50%;
             animation: fadeInSlideRight 1.2s ease-out forwards;
             opacity: 0;
             transform: translateX(-50px);
         }
 
         .hero-title {
-            font-size: 4.2em; /* Tăng kích thước tiêu đề */
+            font-size: 4.5em;
             font-weight: 700;
             color: var(--primary-blue);
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             line-height: 1.1;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .hero-subtitle {
-            font-size: 1.8em; /* Tăng kích thước phụ đề */
+            font-size: 1.9em;
             font-weight: 400;
-            color: #555;
-            margin-bottom: 40px;
+            font-style: italic;
+            color: #444;
+            margin-bottom: 30px;
         }
 
         .hero-description {
-            font-size: 1.2em; /* Tăng kích thước mô tả */
-            line-height: 1.7;
-            color: #666;
-            max-width: 650px;
+            font-size: 1.2em;
+            line-height: 1.8;
+            color: #555;
+            max-width: 700px;
+            margin-bottom: 40px;
         }
 
         .hero-image-container {
             flex: 1;
             display: flex;
-            justify-content: center; /* Căn giữa ảnh trong container */
+            justify-content: center;
             align-items: center;
-            padding-right: 80px;
+            padding-right: 100px;
+            position: relative;
         }
 
         .hero-image {
-            width: 90%; /* Điều chỉnh kích thước ảnh */
-            max-width: 600px; /* Giới hạn kích thước tối đa */
+            width: 90%;
+            max-width: 650px;
             height: auto;
             object-fit: cover;
-            border-radius: 12px; /* Bo tròn góc nhiều hơn */
+            border-radius: 15px;
             box-shadow: var(--shadow-light);
             transition: transform 0.4s ease, box-shadow 0.4s ease;
             animation: fadeInSlideLeft 1.2s ease-out 0.3s forwards;
             opacity: 0;
             transform: translateX(50px);
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-image::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, var(--primary-blue), transparent);
+            opacity: 0.2;
+            border-radius: 15px;
+            z-index: -1;
+            transition: opacity 0.3s ease;
         }
 
         .hero-image:hover {
-            transform: scale(1.03); /* Phóng to nhẹ khi hover */
+            transform: scale(1.05);
             box-shadow: var(--shadow-hover);
         }
+
+        .hero-image:hover::before {
+            opacity: 0.3;
+        }
+
+        /* New Section - Content from Image */
+        .image-content-section {
+            padding: 80px 60px;
+            background-color: var(--white);
+            text-align: center;
+        }
+
+        .image-content-section h2 {
+            font-size: 2.8em;
+            color: var(--primary-blue);
+            margin-bottom: 50px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+        }
+
+        .image-content-section h2::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            bottom: -15px;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background-color: var(--accent-orange);
+            border-radius: 2px;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Responsive columns */
+            grid-auto-rows: minmax(250px, auto); /* Ensures minimum height for rows */
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .grid-item {
+            background-color: var(--light-grey);
+            border-radius: var(--border-radius-card);
+            box-shadow: var(--shadow-light);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        /* Styling for a more dynamic layout (example for staggered look) */
+        .grid-item:nth-child(1) {
+            grid-column: 1 / -1; /* First item spans all columns */
+        }
+        /* You can add more specific styling for other nth-child items here if you want
+           a more complex asymmetrical layout, e.g., making one taller or wider */
+
+        .grid-item:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .grid-item img {
+            width: 100%;
+            height: 250px; /* Fixed height for consistency */
+            object-fit: cover;
+            border-top-left-radius: var(--border-radius-card);
+            border-top-right-radius: var(--border-radius-card);
+            transition: transform 0.3s ease;
+        }
+
+        .grid-item:hover img {
+            transform: scale(1.05);
+        }
+
+        .grid-item-content {
+            padding: 25px;
+            text-align: left;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .grid-item-content h3 {
+            font-size: 1.6em;
+            color: var(--dark-blue);
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+
+        .grid-item-content p {
+            font-size: 1em;
+            color: #555;
+            margin-bottom: 20px;
+        }
+
+        .grid-item-content .read-more {
+            display: inline-block;
+            color: var(--primary-blue);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            margin-top: auto; /* Push to bottom if content varies */
+        }
+
+        .grid-item-content .read-more:hover {
+            color: var(--dark-blue);
+            text-decoration: underline;
+        }
+
+        .featured-text {
+            background-color: var(--primary-blue);
+            color: var(--white);
+            padding: 20px 25px;
+            border-radius: var(--border-radius-card);
+            margin-top: 50px; /* Increased margin for separation */
+            text-align: center;
+            font-size: 1.1em;
+            font-weight: 400;
+            line-height: 1.6;
+            box-shadow: var(--shadow-light);
+            max-width: 900px; /* Constrain width for better readability */
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .featured-text strong {
+            font-weight: 700;
+        }
+
 
         /* Animations */
         @keyframes fadeInSlideRight {
@@ -226,31 +404,31 @@
         /* Responsive Design */
         @media (max-width: 1024px) {
             .header {
-                padding: 10px 30px;
+                padding: 15px 30px;
             }
 
             .nav-menu li {
-                margin-left: 25px;
+                margin-left: 30px;
             }
 
             .hero-section {
                 flex-direction: column;
-                padding: 50px 0;
+                padding: 60px 0;
             }
 
             .hero-content {
-                padding: 0 40px;
+                padding: 0 50px;
                 max-width: 90%;
                 text-align: center;
-                margin-bottom: 40px;
+                margin-bottom: 50px;
             }
 
             .hero-title {
-                font-size: 3.5em;
+                font-size: 3.8em;
             }
 
             .hero-subtitle {
-                font-size: 1.5em;
+                font-size: 1.6em;
             }
 
             .hero-description {
@@ -258,14 +436,28 @@
             }
 
             .hero-image-container {
-                padding-right: 40px;
-                padding-left: 40px;
+                padding-right: 50px;
+                padding-left: 50px;
                 width: 100%;
             }
 
             .hero-image {
                 width: 90%;
-                max-width: 500px;
+                max-width: 550px;
+            }
+
+            .grid-container {
+                grid-template-columns: 1fr; /* Single column on smaller screens */
+            }
+
+            /* Remove specific nth-child for single column on small screens */
+            .grid-item:nth-child(1) {
+                grid-column: auto;
+            }
+
+
+            .image-content-section {
+                padding: 60px 30px;
             }
         }
 
@@ -273,30 +465,31 @@
             .header {
                 flex-direction: column;
                 align-items: flex-start;
-                padding: 10px 20px;
+                padding: 15px 20px;
             }
 
             .nav-menu {
-                margin-top: 15px;
+                margin-top: 20px;
                 flex-wrap: wrap;
                 justify-content: center;
                 width: 100%;
             }
 
             .nav-menu li {
-                margin: 5px 15px;
+                margin: 8px 20px;
             }
 
             .nav-menu > li > a {
+                font-size: 1em;
                 padding: 10px 0;
             }
 
             .hero-title {
-                font-size: 2.8em;
+                font-size: 3em;
             }
 
             .hero-subtitle {
-                font-size: 1.3em;
+                font-size: 1.4em;
             }
 
             .hero-description {
@@ -306,18 +499,52 @@
             .dropdown-menu {
                 left: 50%;
                 transform: translateX(-50%) translateY(10px);
-                min-width: 180px;
+                min-width: 200px;
+            }
+
+            .image-content-section h2 {
+                font-size: 2.2em;
+            }
+
+            .grid-item img {
+                height: 200px;
             }
         }
 
         @media (max-width: 480px) {
             .header-left .logo {
-                height: 40px;
+                height: 45px;
             }
             .hero-title {
-                font-size: 2.2em;
+                font-size: 2.4em;
             }
             .hero-subtitle {
+                font-size: 1.2em;
+            }
+            .hero-description {
+                font-size: 0.95em;
+            }
+            .hero-image {
+                max-width: 90%;
+            }
+            .image-content-section {
+                padding: 40px 20px;
+            }
+            .image-content-section h2 {
+                font-size: 1.8em;
+                margin-bottom: 30px;
+            }
+            .grid-item-content {
+                padding: 15px;
+            }
+            .grid-item-content h3 {
+                font-size: 1.4em;
+            }
+            .grid-item-content p {
+                font-size: 0.95em;
+            }
+            .featured-text {
+                padding: 15px 20px;
                 font-size: 1em;
             }
         }
@@ -327,7 +554,7 @@
 
     <header class="header">
         <div class="header-left">
-            <a href="#"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Qu%E1%BB%B7_%C4%90%C3%B4n_H%C3%A0_N%E1%BB%99i.svg/1200px-Qu%E1%BB%B7_%C4%90%C3%B4n_H%C3%A0_N%E1%BB%99i.svg.png" alt="Logo" class="logo"></a>
+            <a href="#"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Qu%E1%BB%B3_%C4%90%C3%B4n_H%C3%A0_N%E1%BB%99i.svg/1200px-Qu%E1%BB%B3_%C4%90%C3%B4n_H%C3%A0_N%E1%BB%99i.svg.png" alt="Logo" class="logo"></a>
         </div>
         <nav>
             <ul class="nav-menu">
@@ -364,13 +591,54 @@
     <section class="hero-section">
         <div class="hero-content">
             <h1 class="hero-title">SỨC TRẺ THANH NIÊN</h1>
-            <h2 class="hero-subtitle">TRƯỜNG THPT CHUYÊN LÊ QUÝ ĐÔN, ĐIỆN BIÊN</h2>
+            <h2 class="hero-subtitle"><strong>TRƯỜNG THPT CHUYÊN LÊ QUÝ ĐÔN, ĐIỆN BIÊN</strong></h2>
             <p class="hero-description">
                 Sức Trẻ Thanh Niên là không gian kết nối, lan tỏa tinh thần nhiệt huyết, sáng tạo và trách nhiệm của thế hệ trẻ Việt Nam. Trang web cung cấp những thông tin cập nhật về các hoạt động Đoàn - Hội, câu chuyện truyền cảm hứng, kỹ năng sống và cơ hội phát triển toàn diện dành cho thanh thiếu niên trên khắp cả nước. Cùng đồng hành để viết tiếp hành trình tuổi trẻ đầy đam mê và cống hiến!
             </p>
         </div>
         <div class="hero-image-container">
-            <img src="https://i.imgur.com/v8tTq8C.jpg" alt="Thanh niên" class="hero-image">
+            <img src="image_7bba7e.jpg" alt="Thanh niên" class="hero-image">
+        </div>
+    </section>
+
+    <section class="image-content-section">
+        <h2>HOẠT ĐỘNG THANH NIÊN NỔI BẬT</h2>
+        <div class="grid-container">
+            <div class="grid-item">
+                <img src="image_7bba7e.jpg" alt="Đoàn trường hoạt động" style="object-position: 50% 10%;">
+                <div class="grid-item-content">
+                    <h3>Đoàn trường - người đồng hành cùng hành trình tuổi trẻ của bao thế hệ thanh niên THPT chuyên Lê Quý Đôn</h3>
+                    <p>Trong suốt 20 năm hình thành và phát triển, Đoàn trường THPT Chuyên Lê Quý Đôn đã luôn là mái nhà chung, nơi ươm mầm và chắp cánh cho những ước mơ, hoài bão của bao thế hệ học sinh.</p>
+                    <a href="#" class="read-more">Đọc thêm <i class="fas fa-angle-right"></i></a>
+                </div>
+            </div>
+            <div class="grid-item">
+                <img src="image_7bba7e.jpg" alt="Nhiệt liệt chào mừng" style="object-position: 50% 30%;">
+                <div class="grid-item-content">
+                    <h3>Nhiệt liệt chào mừng các vị đại biểu dự Đại hội Đại biểu Hội Liên hiệp Thanh niên Việt Nam tỉnh Điện Biên Phủ lần thứ V, nhiệm kỳ 2024 - 2029</h3>
+                    <p>Sự kiện trọng đại đánh dấu bước phát triển mới của công tác thanh niên, mở ra nhiều cơ hội và thách thức. Tuổi trẻ Lê Quý Đôn tự hào là một phần của sự kiện này, góp sức xây dựng tương lai.</p>
+                    <a href="#" class="read-more">Đọc thêm <i class="fas fa-angle-right"></i></a>
+                </div>
+            </div>
+            <div class="grid-item">
+                <img src="image_7bba7e.jpg" alt="Nhóm thanh niên vui vẻ" style="object-position: 50% 60%;">
+                <div class="grid-item-content">
+                    <h3>Sức sống mới: Những hoạt động tập thể sôi nổi</h3>
+                    <p>Các hoạt động ngoại khóa, tình nguyện luôn là tâm điểm, thu hút đông đảo học sinh tham gia. Từ các buổi giao lưu văn nghệ, thể thao đến những chuyến đi thiện nguyện, tất cả đều góp phần tạo nên một môi trường học tập và rèn luyện năng động, bổ ích.</p>
+                    <a href="#" class="read-more">Đọc thêm <i class="fas fa-angle-right"></i></a>
+                </div>
+            </div>
+            <div class="grid-item">
+                <img src="image_7bba7e.jpg" alt="Bản tin đoàn thanh niên" style="object-position: 50% 85%;">
+                <div class="grid-item-content">
+                    <h3>Bản tin Đoàn Thanh niên: Kết nối và lan tỏa</h3>
+                    <p>Bản tin Đoàn Thanh niên là kênh thông tin chính thức, cập nhật những tin tức, hoạt động mới nhất của Đoàn trường. Đây cũng là nơi chia sẻ những câu chuyện truyền cảm hứng, những gương mặt tiêu biểu và những bài viết ý nghĩa.</p>
+                    <a href="#" class="read-more">Đọc thêm <i class="fas fa-angle-right"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="featured-text">
+            <p><strong>NHƯ ẢNH ĐẦU LỮA ĐẦU TIÊN NHÓM LÊN TRONG TIM TUỔI TRẺ</strong>, Đoàn trường là người thầy, người bạn và người truyền lửa – giúp bao thế hệ học sinh chuyên Lê Quý Đôn vững bước, tự tin viết tiếp câu chuyện thanh xuân rực rỡ.</p>
         </div>
     </section>
 
