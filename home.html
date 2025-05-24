@@ -140,7 +140,6 @@
             padding-left: 25px;
         }
 
-        /* Dropdown arrow */
         .dropdown-arrow {
             display: inline-flex;
             align-items: center;
@@ -249,7 +248,7 @@
             opacity: 0.3;
         }
 
-        /* New Section - Content from Image */
+        /* Image Content Section */
         .image-content-section {
             padding: 80px 60px;
             background-color: var(--white);
@@ -280,8 +279,7 @@
 
         .grid-container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Responsive columns */
-            grid-auto-rows: minmax(250px, auto); /* Ensures minimum height for rows */
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 30px;
             max-width: 1200px;
             margin: 0 auto;
@@ -297,13 +295,6 @@
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
-        /* Styling for a more dynamic layout (example for staggered look) */
-        .grid-item:nth-child(1) {
-            grid-column: 1 / -1; /* First item spans all columns */
-        }
-        /* You can add more specific styling for other nth-child items here if you want
-           a more complex asymmetrical layout, e.g., making one taller or wider */
-
         .grid-item:hover {
             transform: translateY(-8px);
             box-shadow: var(--shadow-hover);
@@ -311,7 +302,7 @@
 
         .grid-item img {
             width: 100%;
-            height: 250px; /* Fixed height for consistency */
+            height: 250px;
             object-fit: cover;
             border-top-left-radius: var(--border-radius-card);
             border-top-right-radius: var(--border-radius-card);
@@ -325,58 +316,13 @@
         .grid-item-content {
             padding: 25px;
             text-align: left;
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-
-        .grid-item-content h3 {
-            font-size: 1.6em;
-            color: var(--dark-blue);
-            margin-top: 0;
-            margin-bottom: 15px;
         }
 
         .grid-item-content p {
             font-size: 1em;
             color: #555;
-            margin-bottom: 20px;
+            margin: 0;
         }
-
-        .grid-item-content .read-more {
-            display: inline-block;
-            color: var(--primary-blue);
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s ease;
-            margin-top: auto; /* Push to bottom if content varies */
-        }
-
-        .grid-item-content .read-more:hover {
-            color: var(--dark-blue);
-            text-decoration: underline;
-        }
-
-        .featured-text {
-            background-color: var(--primary-blue);
-            color: var(--white);
-            padding: 20px 25px;
-            border-radius: var(--border-radius-card);
-            margin-top: 50px; /* Increased margin for separation */
-            text-align: center;
-            font-size: 1.1em;
-            font-weight: 400;
-            line-height: 1.6;
-            box-shadow: var(--shadow-light);
-            max-width: 900px; /* Constrain width for better readability */
-            margin-left: auto;
-            margin-right: auto;
-        }
-        .featured-text strong {
-            font-weight: 700;
-        }
-
 
         /* Animations */
         @keyframes fadeInSlideRight {
@@ -447,14 +393,8 @@
             }
 
             .grid-container {
-                grid-template-columns: 1fr; /* Single column on smaller screens */
+                grid-template-columns: 1fr;
             }
-
-            /* Remove specific nth-child for single column on small screens */
-            .grid-item:nth-child(1) {
-                grid-column: auto;
-            }
-
 
             .image-content-section {
                 padding: 60px 30px;
@@ -515,43 +455,43 @@
             .header-left .logo {
                 height: 45px;
             }
+
             .hero-title {
                 font-size: 2.4em;
             }
+
             .hero-subtitle {
                 font-size: 1.2em;
             }
+
             .hero-description {
                 font-size: 0.95em;
             }
+
             .hero-image {
                 max-width: 90%;
             }
+
             .image-content-section {
                 padding: 40px 20px;
             }
+
             .image-content-section h2 {
                 font-size: 1.8em;
                 margin-bottom: 30px;
             }
+
             .grid-item-content {
                 padding: 15px;
             }
-            .grid-item-content h3 {
-                font-size: 1.4em;
-            }
-            .grid-item-content p {
-                font-size: 0.95em;
-            }
-            .featured-text {
-                padding: 15px 20px;
-                font-size: 1em;
+
+            .grid-item img {
+                height: 150px;
             }
         }
     </style>
 </head>
 <body>
-
     <header class="header">
         <div class="header-left">
             <a href="#"><img src="https://i.ibb.co/k2x779T4/unnamed-1.webp" alt="Logo" class="logo"></a>
@@ -562,9 +502,7 @@
                 <li>
                     <a href="#" class="dropdown-arrow">Giới thiệu chung <i class="fas fa-caret-down"></i></a>
                     <ul class="dropdown-menu">
-                        <li><a href="#">Về chúng tôi</a></li>
-                        <li><a href="#">Sứ mệnh & Tầm nhìn</a></li>
-                        <li><a href="#">Lịch sử hình thành</a></li>
+                        <li><a href="#">Về Đoàn trường chuyên THPT Lê Quý Đôn</a></li>
                     </ul>
                 </li>
                 <li>
@@ -582,7 +520,7 @@
                         <li><a href="#">Thông báo</a></li>
                     </ul>
                 </li>
-               <li>
+                <li>
                     <a href="#" class="dropdown-arrow">Sản phẩm <i class="fas fa-caret-down"></i></a>
                     <ul class="dropdown-menu">
                         <li><a href="#">Chatbox AI thanh niên</a></li>
@@ -599,55 +537,45 @@
         <div class="hero-content">
             <h1 class="hero-title">SỨC TRẺ THANH NIÊN</h1>
             <h2 class="hero-subtitle"><strong>TRƯỜNG THPT CHUYÊN LÊ QUÝ ĐÔN, ĐIỆN BIÊN</strong></h2>
-            <p class="hero-description">
-                Sức Trẻ Thanh Niên là không gian kết nối, lan tỏa tinh thần nhiệt huyết, sáng tạo và trách nhiệm của thế hệ trẻ Việt Nam. Trang web cung cấp những thông tin cập nhật về các hoạt động Đoàn - Hội, câu chuyện truyền cảm hứng, kỹ năng sống và cơ hội phát triển toàn diện dành cho thanh thiếu niên trên khắp cả nước. Cùng đồng hành để viết tiếp hành trình tuổi trẻ đầy đam mê và cống hiến!
-            </p>
+            <p class="hero-description">Sức Trẻ Thanh Niên là không gian kết nối, lan tỏa tinh thần nhiệt huyết, sáng tạo và trách nhiệm của thế hệ trẻ Việt Nam. Trang web cung cấp những thông tin cập nhật về các hoạt động Đoàn - Hội, câu chuyện truyền cảm hứng, kỹ năng sống và cơ hội phát triển toàn diện dành cho thanh thiếu niên trên khắp cả nước. Cùng đồng hành để viết tiếp hành trình tuổi trẻ đầy đam mê và cống hiến!</p>
         </div>
         <div class="hero-image-container">
-            <img src="https://i.ibb.co/zHLsgMrk/unnamed.webp" alt="Thanh niên" class="hero-image">
+            <img src="https://lh3.googleusercontent.com/VMyk2_pk9AV6G4Y6nmNUPhZaxc7mOh7WalpwEO_2QS06_O37mXvbcLOXtFzuIkmOiXXnYmgsGty5dfCHYiR4hlNA3jrUpQs=rw-w1035" alt="Thanh niên" class="hero-image">
         </div>
     </section>
 
     <section class="image-content-section">
-        <h2>HOẠT ĐỘNG THANH NIÊN NỔI BẬT</h2>
+        <h2 class="image-content-title">ĐOÀN TRƯỞNG - NGƯỜI ĐỒNG HÀNH CÙNG HÀNH TRÌNH TUỔI TRẺ CỦA BAO THẾ HỆ THANH NIÊN THPT CHUYÊN LÊ QUÝ ĐÔN</h2>
         <div class="grid-container">
             <div class="grid-item">
-                <img src="https://i.ibb.co/h18h1k8g/unnamed-2.webp" alt="Đoàn trường hoạt động" style="object-position: 50% 10%;">
-                <div class="grid-item-content">
-                    <h3>GIAO LƯU VĂN HÓA NGHỆ THUẬT VỚI CHỦ ĐỀ "THẮP SÁNG ƯỚC MƠ"</h3>
-                    <p>Chương trình giao lưu văn nghệ với những bài hát thật thiết tha, sâu lắng và đầy cảm xúc của các diễn viên Trung tâm nghệ thuật tình thương đã chạm đến trái tim, tâm hồn của cả thầy và trò nhà trường bởi ý chí, nghị lực và khát vọng vươn lên của các em.</p>
-                    <a href="#" class="read-more">Đọc thêm <i class="fas fa-angle-right"></i></a>
-                </div>
+                <img src="https://lh3.googleusercontent.com/bxvrassuYjA2PqOeQMUlvlp3pPNNMtb_MpsVJM6kawOa5apYwMJ1gc0zlQ_ulvW33w7WqkB6AAFu3sCMzP9jOqrBYQD1XaI=rw-w1035" alt="Ảnh 2">
             </div>
             <div class="grid-item">
-                <img src="https://i.ibb.co/KcVvBxkt/unnamed-3.webp" alt="Nhiệt liệt chào mừng" style="object-position: 50% 30%;">
-                <div class="grid-item-content">
-                    <h3>Lễ tiếp lửa</h3>
-                    <p>Sáng ngày 14/12/2024, trường THPT Chuyên Lê Quý Đôn long trọng tổ chức lễ tiếp lửa cho các em học sinh và các thầy cô giáo ôn luyện đội tuyển Học sinh giỏi Quốc gia năm học 2024 – 2025.</p>
-                    <a href="#" class="read-more">Đọc thêm <i class="fas fa-angle-right"></i></a>
-                </div>
+                <img src="https://lh3.googleusercontent.com/ZUR2_6M8NpxnZkjUz2TN9QAhsHdq5p4K-lNP-tr5Tu_G69h-efr5tjtKPstLzJR1Wjaenzhbu7o92SCI487P-PPyncQDVEq7=rw-w1152" alt="Ảnh 3">
             </div>
-            <div class="grid-item">
-                <img src="https://i.ibb.co/mCsmcyvc/unnamed-4.webp" alt="sf" style="object-position: 50% 60%;">
-                <div class="grid-item-content">
-                    <h3>Học bổng GEOL</h3>
-                    <p>GEOL cam kết cung cấp chương trình học chất lượng cao, giúp học viên chinh phục chứng chỉ quốc tế và lựa chọn công việc phù hợp tại Đức. Tỉ lệ học viên của GEOL đỗ chứng chỉ tiếng Đức B1 ngay từ lần thi đầu tiên đạt 70-80%, minh chứng cho chất lượng đào tạo của trung tâm.</p>
-                    <a href="#" class="read-more">Đọc thêm <i class="fas fa-angle-right"></i></a>
-                </div>
-            </div>
-            <div class="grid-item">
-                <img src="https://i.ibb.co/ksWnK5Gb/unnamed-5.webp" alt="vad" style="object-position: 50% 85%;">
-                <div class="grid-item-content">
-                    <h3>Trần Hữu Hưng – Nam sinh ưu tú trường THPT Lê Quý Đôn</h3>
-                    <p>Trần Hữu Hưng đã đạt được nhiều thành tích cả trong học tập như: Giải Nhì HSG môn Vật Lý lớp 11 cấp tỉnh năm học 2022-2023; Giải Khuyến khích HSG MTCT Vật Lý 11 năm học 2022-2023; Giải Ba HSG môn Vật Lý lớp 12 cấp tỉnh năm học 2023-2024; Đạt Danh hiệu học sinh giỏi năm học 2022-2023.</p>
-                    <a href="#" class="read-more">Đọc thêm <i class="fas fa-angle-right"></i></a>
-                </div>
-            </div>
+            
         </div>
-        <div class="featured-text">
-            <p><strong>NHƯ ẢNH ĐẦU LỮA ĐẦU TIÊN NHÓM LÊN TRONG TIM TUỔI TRẺ</strong>, Đoàn trường là người thầy, người bạn và người truyền lửa – giúp bao thế hệ học sinh chuyên Lê Quý Đôn vững bước, tự tin viết tiếp câu chuyện thanh xuân rực rỡ.</p>
-        </div>
-    </section>
 
+        <p class="content-description">Như ánh lửa đầu tiên nhóm lên trong tim tuổi trẻ, Đoàn trường là người thầy, người bạn và người truyền lửa – giúp bao thế hệ học sinh chuyên Lê Quý Đôn vững bước, tự tin viết tiếp câu chuyện thanh xuân rực rỡ.</p>
+ 
+        <h2 class="image-content-title">ĐOÀN TRƯỞNG KHÔNG CHỈ KHUẤY ĐỘNG PHONG TRÀO, MÀ CÒN KHƠI DẬY ĐAM MÊ. MỖI HOẠT ĐỘNG LÀ MỘT BƯỚC TIẾN, MỖI CƠ HỘI LÀ MỘT LỜI KHÍCH LỆ TUỔI TRẺ VƯƠN XA...</h2>
+        <p class="content-description">Đoàn trường không chỉ là nơi khởi xướng những phong trào sôi nổi, mà còn là nơi khơi dậy đam mê, nuôi dưỡng lý tưởng và đánh thức tiềm năng trong mỗi bạn trẻ. Từ những buổi sinh hoạt gần gũi, những chiến dịch đầy nhiệt huyết cho đến các hoạt động ngoại khóa sáng tạo và ý nghĩa – Đoàn đã mở ra những không gian để học sinh không chỉ học tập, mà còn được rèn luyện, thể hiện bản thân và sống trọn với thanh xuân. Mỗi chương trình, mỗi hoạt động không chỉ là một dấu ấn đẹp, mà còn là một nấc thang đưa các bạn tiến gần hơn đến sự tự tin, bản lĩnh và tinh thần cống hiến. Ở đó, tuổi trẻ được lắng nghe, được dẫn dắt và được truyền cảm hứng để vươn xa, dám ước mơ và dám hành động. Chính nhờ vai trò bền bỉ và âm thầm ấy, Đoàn trường đã trở thành người bạn đồng hành không thể thiếu trong hành trình trưởng thành của biết bao thế hệ học sinh – một nơi mà mỗi cá nhân đều có cơ hội tỏa sáng theo cách của riêng mình.</p>
+
+        <div class="grid-container">
+            <div class="grid-item">
+                <img src="https://lh3.googleusercontent.com/g0_Ra8xdYHtHUllVeIHPcTaGCflaG8KerN4NbULoH8MJ_ExPb62etXP3On1NjaPCMfzFjo4YlGT26jH7-P1-bVPamYc6apZD0w=rw-w1152" alt="Ảnh 4">
+            </div>
+            <div class="grid-item">
+                <img src="https://lh3.googleusercontent.com/xWqOwpPxaGF1QjRRunwsG6pytx1E5gUSYQ4X39K_VOVGJbitFulaJyogEKKUi543-yjICG6mubcyBUiYF0IpcTOI36g73rc=rw-w1035" alt="Ảnh 5">
+            </div>
+            <div class="grid-item">
+                <img src="https://lh3.googleusercontent.com/X-J2hX3BUz5Ekh9fOTKE1UBnfEGvnoXmfaU1ECitw2u1sFCXYrAB7tm1tbNqD1O32acj35zGyL0wAb0W3TnSvZdEScZz8FQ=rw-w1152" alt="Ảnh 6">
+            </div>
+            <div class="grid-item">
+                <img src="https://lh3.googleusercontent.com/Oz8iZLGIMS8ZJlfJshjN5uUXNm-PWDGZQbCH-Y2fN9WWuvsYxqLIdlIT8ReeiTjMiRG9V-nC2tQpuy75NkoGE2M2xXrwNnN-=rw-w1152" alt="Ảnh 7">
+            </div>
+        </div>
+
+    </section>
 </body>
 </html>
