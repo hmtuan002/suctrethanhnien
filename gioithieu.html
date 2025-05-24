@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GIỚI THIỆU CHUNG VỀ ĐOÀN TNCS HỒ CHÍ MINH TRƯỜNG THPT CHUYÊN LÊ QUÝ ĐÔN</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,700;1,400&display=swap');
+
+        :root {
+            --primary-blue: #0A6DFF;
+            --dark-blue: #0056b3;
+            --text-color: #2d2d2d;
+            --light-grey: #f4f6f9;
+            --white: #fff;
+            --shadow-light: 0 6px 12px rgba(0, 0, 0, 0.1);
+            --shadow-hover: 0 10px 20px rgba(0, 0, 0, 0.15);
+            --accent-orange: #ff6f61;
+            --border-radius-card: 15px;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--light-grey);
+            color: var(--text-color);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--white) 0%, #e8f0ff 100%);
+            padding: 15px 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: var(--shadow-light);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-left .logo {
+            height: 55px;
+            transition: transform 0.3s ease, filter 0.3s ease;
+        }
+
+        .header-left .logo:hover {
+            transform: scale(1.1);
+            filter: brightness(1.1);
+        }
+
+        .nav-menu {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-menu li {
+            position: relative;
+            margin-left: 45px;
+        }
+
+        .nav-menu > li > a {
+            text-decoration: none;
+            color: var(--text-color);
+            padding: 15px 0;
+            display: block;
+            font-weight: 500;
+            font-size: 1.1em;
+            transition: color 0.3s ease, transform 0.3s ease;
+            position: relative;
+        }
+
+        .nav-menu > li > a:hover {
+            color: var(--primary-blue);
+            transform: translateY(-2px);
+        }
+
+        .nav-menu > li > a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: var(--primary-blue);
+            transition: width 0.3s ease;
+        }
+
+        .nav-menu > li > a:hover::after {
+            width: 100%;
+        }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            background-color: var(--white);
+            min-width: 240px;
+            box-shadow: var(--shadow-light);
+            z-index: 1;
+            border-radius: 10px;
+            overflow: hidden;
+            top: 100%;
+            left: 0;
+            transform: translateY(10px);
+            opacity: 0;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+
+        .nav-menu li:hover > .dropdown-menu {
+            display: block;
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .dropdown-menu li {
+            margin: 0;
+        }
+
+        .dropdown-menu li a {
+            color: var(--text-color);
+            padding: 14px 20px;
+            text-decoration: none;
+            display: block;
+            white-space: nowrap;
+            transition: background-color 0.2s ease, color 0.2s ease, padding-left 0.3s ease;
+        }
+
+        .dropdown-menu li a:hover {
+            background-color: var(--primary-blue);
+            color: var(--white);
+            padding-left: 25px;
+        }
+
+        .dropdown-arrow {
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .dropdown-arrow i {
+            margin-left: 8px;
+            font-size: 0.8em;
+            transition: transform 0.3s ease;
+        }
+
+        .nav-menu li:hover .dropdown-arrow i {
+            transform: rotate(180deg);
+        }
+
+        .hero-section {
+            padding: 100px 0;
+            background: linear-gradient(120deg, var(--white) 50%, var(--light-grey) 100%);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 60px;
+            animation: fadeInSlideRight 1.2s ease-out forwards;
+            opacity: 0;
+            transform: translateX(-50px);
+        }
+
+        .hero-title {
+            font-size: 4.5em;
+            font-weight: 700;
+            color: var(--primary-blue);
+            margin-bottom: 20px;
+            line-height: 1.1;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .content-section {
+            padding: 80px 60px;
+            background-color: var(--white);
+            text-align: center;
+        }
+
+        .content-block {
+            max-width: 1200px;
+            margin: 0 auto 60px;
+            text-align: left;
+        }
+
+        .content-block h2 {
+            font-size: 2.8em;
+            color: var(--primary-blue);
+            margin-bottom: 50px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            text-align: center;
+        }
+
+        .content-block h2::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            bottom: -15px;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background-color: var(--accent-orange);
+            border-radius: 2px;
+        }
+
+        .content-block h3 {
+            font-size: 1.8em;
+            color: var(--dark-blue);
+            margin-top: 40px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .content-block p {
+            font-size: 1.2em;
+            line-height: 1.8;
+            color: #555;
+            margin-bottom: 30px;
+        }
+
+        .content-image {
+            width: 100%;
+            max-width: 800px;
+            margin: 30px auto;
+            display: block;
+            border-radius: var(--border-radius-card);
+            box-shadow: var(--shadow-light);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .content-image:hover {
+            transform: scale(1.05);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .image-grid img {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            border-radius: var(--border-radius-card);
+            box-shadow: var(--shadow-light);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .image-grid img:hover {
+            transform: scale(1.05);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .image-caption {
+            text-align: center;
+            margin-top: 10px;
+            font-size: 1.1em;
+            color: var(--dark-blue);
+            font-weight: 500;
+        }
+
+        .content-block ul {
+            list-style: none;
+            padding-left: 0;
+            font-size: 1.2em;
+            color: #555;
+        }
+
+        .content-block ul li {
+            margin-bottom: 15px;
+            position: relative;
+            padding-left: 25px;
+        }
+
+        .content-block ul li::before {
+            content: '•';
+            color: var(--accent-orange);
+            font-size: 1.5em;
+            position: absolute;
+            left: 0;
+            top: -2px;
+        }
+
+        @keyframes fadeInSlideRight {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .hero-title {
+                font-size: 3.8em;
+            }
+            .content-block h2 {
+                font-size: 2.2em;
+            }
+            .content-block p {
+                font-size: 1.1em;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 3em;
+            }
+            .content-block h2 {
+                font-size: 1.8em;
+            }
+            .content-block p {
+                font-size: 1em;
+            }
+            .image-grid img {
+                height: 250px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-left">
+            <a href="#"><img src="https://i.ibb.co/k2x779T/unnamed-1.webp" alt="Logo" class="logo"></a>
+        </div>
+        <nav>
+            <ul class="nav-menu">
+                <li><a href="#">Trang chủ</a></li>
+                <li>
+                    <a href="#" class="dropdown-arrow">Giới thiệu chung <i class="fas fa-caret-down"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Về Đoàn trường chuyên THPT Lê Quý Đôn</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#" class="dropdown-arrow">Hoạt động tiêu biểu <i class="fas fa-caret-down"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Sự kiện</a></li>
+                        <li><a href="#">Dự án cộng đồng</a></li>
+                        <li><a href="#">Thành tích</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#" class="dropdown-arrow">Tin tức <i class="fas fa-caret-down"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Tin tức mới</a></li>
+                        <li><a href="#">Thông báo</a></li>
+                    </ul>
+                </li>
+                <li><a href="#">Liên hệ</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero-section">
+        <div class="hero-content">
+            <h1 class="hero-title">GIỚI THIỆU CHUNG<br>VỀ ĐOÀN THANH NIÊN CỘNG SẢN HỒ CHÍ MINH</h1>
+        </div>
+    </section>
+
+    <section class="content-section">
+        <div class="content-block">
+            <h2>ĐẠI HỘI ĐOÀN TNCS HỒ CHÍ MINH TRƯỜNG THPT CHUYÊN LÊ QUÝ ĐÔN<br>NHIỆM KỲ 2024 – 2025<br>HÀNH TRÌNH KẾT NỐI VÀ PHÁT TRIỂN</h2>
+            <p>Chiều ngày 12/10/2024, Đoàn trường THPT Chuyên Lê Quý Đôn long trọng tổ chức Đại hội Đại biểu Đoàn TNCS Hồ Chí Minh nhiệm kỳ 2024-2025 với mục tiêu đề ra phương hướng hoạt động của công tác đoàn và phong trào thanh niên, bầu BCH Đoàn trường nhiệm kỳ 2024 – 2025.</p>
+            <img src="https://lh3.googleusercontent.com/J9A86AGboiWfIuZsX924QPOBEIA2F-2t3-4SGIDuc_GOtKz7w_HOKA25fdtTt_q0PcoozuQpn2dJAg9Ou1Z92nHCYN0zt8g=rw-w1380" alt="Đại hội Đoàn trường" class="content-image">
+        </div>
+
+        <div class="content-block">
+            <h2>TẠI ĐẠI HỘI ĐÃ BẦU RA BCH ĐOÀN TRƯỜNG NHƯ SAU</h2>
+            <div class="image-grid">
+                <div>
+                    <img src="https://lh3.googleusercontent.com/Y5ZNvym28Yi4RfijDBmeV5Lt3VoXTuVmMaaR-gWEi1YUakdGAF136yvsd-S5pmO2WTRx5CuVp2zkvwgpkrKPRKXdG1Qvkf4=rw-w1152" alt="Bí thư Lê Thúy Hòa">
+                    <p class="image-caption"><b>Bí thư Đoàn trường: Đồng chí Lê Thúy Hòa</b></p>
+                </div>
+                <div>
+                    <img src="https://lh3.googleusercontent.com/SWHaBfI8X4fG1uKagJd6d0jcZWhvBsyhFLMp5Nxw-9TWJZmpWnKvpPCaPhS532H0wWrS7h2_qxlfqpdoyewJGAdi4kC3i93LcA=rw-w960" alt="Phó Bí thư Lê Thị Huyền Trang">
+                    <p class="image-caption"><b>Phó Bí thư Đoàn trường: Đồng chí Lê Thị Huyền Trang</b></p>
+                </div>
+                <div>
+                    <img src="https://lh3.googleusercontent.com/QeSNSaTIbpiN7YFjlGlA6W7BIIbLN-JmB-wVGdq8xWCz6aaiDIHN6M4ds1g86muPFr_hNFQiRbwSccBPdp91fM_vQmEN55g=rw-w921" alt="Phó Bí thư Nguyễn Sông Thao">
+                    <p class="image-caption"><b>Phó Bí thư Đoàn trường: Đồng chí Nguyễn Sông Thao</b></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-block">
+            <h2>TRONG SUỐT 30 NĂM HÌNH THÀNH VÀ PHÁT TRIỂN</h2>
+            <p><b>Đoàn trường THPT Chuyên Lê Quý Đôn, Điện Biên đã đạt được những thành tích như sau:</b></p>
+            
+            <h3>I. DANH HIỆU THI ĐUA ĐÃ ĐẠT ĐƯỢC (TRONG 4 NĂM GẦN NHẤT)</h3>
+            <img src="https://lh3.googleusercontent.com/X4IaDKJ35IyfjkKjKaLtZOSQNhXcPVhQZP-tWi9vIBSt8Q9DOsOUbVmsZKXnhmy-Zg4T36rw944yj1qRgvXb3jnyEzi6I_tDvQ=rw-w1024" alt="Danh hiệu thi đua" class="content-image">
+            <img src="https://lh3.googleusercontent.com/BZDzbCI2XvZCEs_uvk1Uthpq6VWVfkTBsFRREDRF7KecF-39emmfYceFBVaOLX3OkffTnSEet0pf-IJ16xO6r6iYJKu3UGTb=rw-w1024" alt="Danh hiệu thi đua" class="content-image">
+
+            <h3>II. HÌNH THỨC KHEN THƯỞNG ĐÃ ĐẠT ĐƯỢC (TRONG 03 NĂM GẦN NHẤT)</h3>
+            <img src="https://lh3.googleusercontent.com/uhFj8RBDrSAHfV66raZ07-IWC8hq_qPjjLS84KepOyQyPVLsK1vGsJ1bAgO4hyX8raU_QUBFPLmC6ibg935mNJeeFrJ9220=rw-w1024" alt="Khen thưởng" class="content-image">
+            <img src="https://lh3.googleusercontent.com/949jtPaaQqE72ghUCnXKfBIRk6TYNJQ0Kkiss9cswr-IckoA_9rri_5oAv_cmdGWpHs5JG_9CFbmlb7l8pJwE1w_oQiwpwfA=rw-w1024" alt="Khen thưởng" class="content-image">
+            <img src="https://lh3.googleusercontent.com/xIjSQf-w_VR4U_fcR2GXRlWhihQWyLnuE1bbhHRDwQgyPp2EklN0-4B1hkbluNp29c9nYXMcG1TZMAdgmplLX05uW6ZVZnU=rw-w1024" alt="Khen thưởng" class="content-image">
+        </div>
+    </section>
+</body>
+</html>
