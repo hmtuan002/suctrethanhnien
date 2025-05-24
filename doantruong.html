@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GIỚI THIỆU CHUNG VỀ ĐOÀN TNCS HỒ CHÍ MINH</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,700;1,400&display=swap');
+
+        :root {
+            --primary-blue: #0A6DFF;
+            --dark-blue: #0056b3;
+            --text-color: #2d2d2d;
+            --light-grey: #f4f6f9;
+            --white: #fff;
+            --shadow-light: 0 6px 12px rgba(0, 0, 0, 0.1);
+            --shadow-hover: 0 10px 20px rgba(0, 0, 0, 0.15);
+            --accent-orange: #ff6f61;
+            --border-radius-card: 15px;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--light-grey);
+            color: var(--text-color);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        /* Header Styles */
+        .header {
+            background: linear-gradient(135deg, var(--white) 0%, #e8f0ff 100%);
+            padding: 15px 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: var(--shadow-light);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-left .logo {
+            height: 55px;
+            transition: transform 0.3s ease, filter 0.3s ease;
+        }
+
+        .header-left .logo:hover {
+            transform: scale(1.1);
+            filter: brightness(1.1);
+        }
+
+        /* Navigation Menu Styles */
+        .nav-menu {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-menu li {
+            position: relative;
+            margin-left: 45px;
+        }
+
+        .nav-menu > li > a {
+            text-decoration: none;
+            color: var(--text-color);
+            padding: 15px 0;
+            display: block;
+            font-weight: 500;
+            font-size: 1.1em;
+            transition: color 0.3s ease, transform 0.3s ease;
+            position: relative;
+        }
+
+        .nav-menu > li > a:hover {
+            color: var(--primary-blue);
+            transform: translateY(-2px);
+        }
+
+        .nav-menu > li > a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: var(--primary-blue);
+            transition: width 0.3s ease;
+        }
+
+        .nav-menu > li > a:hover::after {
+            width: 100%;
+        }
+
+        /* Dropdown Styles */
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            background-color: var(--white);
+            min-width: 240px;
+            box-shadow: var(--shadow-light);
+            z-index: 1;
+            border-radius: 10px;
+            overflow: hidden;
+            top: 100%;
+            left: 0;
+            transform: translateY(10px);
+            opacity: 0;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+
+        .nav-menu li:hover > .dropdown-menu {
+            display: block;
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .dropdown-menu li {
+            margin: 0;
+        }
+
+        .dropdown-menu li a {
+            color: var(--text-color);
+            padding: 14px 20px;
+            text-decoration: none;
+            display: block;
+            white-space: nowrap;
+            transition: background-color 0.2s ease, color 0.2s ease, padding-left 0.3s ease;
+        }
+
+        .dropdown-menu li a:hover {
+            background-color: var(--primary-blue);
+            color: var(--white);
+            padding-left: 25px;
+        }
+
+        .dropdown-arrow {
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .dropdown-arrow i {
+            margin-left: 8px;
+            font-size: 0.8em;
+            transition: transform 0.3s ease;
+        }
+
+        .nav-menu li:hover .dropdown-arrow i {
+            transform: rotate(180deg);
+        }
+
+        /* Hero Section Styles */
+        .hero-section {
+            padding: 100px 0;
+            background: linear-gradient(120deg, var(--white) 50%, var(--light-grey) 100%);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 60px;
+            animation: fadeInSlideRight 1.2s ease-out forwards;
+            opacity: 0;
+            transform: translateX(-50px);
+        }
+
+        .hero-title {
+            font-size: 4.5em;
+            font-weight: 700;
+            color: var(--primary-blue);
+            margin-bottom: 20px;
+            line-height: 1.1;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Video Section */
+        .video-section {
+            max-width: 1200px;
+            margin: 0 auto 60px;
+            padding: 0 60px;
+            text-align: center;
+        }
+
+        .video-section h2 {
+            font-size: 2em;
+            color: var(--dark-blue);
+            margin-bottom: 20px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .video-section iframe {
+            width: 100%;
+            height: 500px;
+            border-radius: var(--border-radius-card);
+            box-shadow: var(--shadow-light);
+        }
+
+        /* Content Section */
+        .content-section {
+            padding: 80px 60px;
+            background-color: var(--white);
+        }
+
+        .content-block {
+            max-width: 1200px;
+            margin: 0 auto 60px;
+            text-align: left;
+        }
+
+        .content-block h2 {
+            font-size: 2em;
+            color: var(--dark-blue);
+            margin-bottom: 20px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .content-block p {
+            font-size: 1.1em;
+            color: #555;
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+
+        .content-block p:last-child {
+            margin-bottom: 0;
+        }
+
+        .content-with-image {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+        }
+
+        .content-text {
+            flex: 1;
+            text-align: left;
+        }
+
+        .content-text p {
+            font-size: 1.1em;
+            color: #555;
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+
+        .content-text p:last-child {
+            margin-bottom: 0;
+        }
+
+        .content-image {
+            flex: 1;
+        }
+
+        .content-image img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            border-radius: var(--border-radius-card);
+            box-shadow: var(--shadow-light);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .content-image img:hover {
+            transform: scale(1.05);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .full-width-image {
+            max-width: 1200px;
+            margin: 30px auto;
+            text-align: center;
+        }
+
+        .full-width-image img {
+            width: 100%;
+            max-width: 800px;
+            height: auto; /* Sửa ở đây để hiển thị toàn bộ ảnh */
+            object-fit: contain; /* Đảm bảo ảnh không bị cắt mà vẫn giữ tỷ lệ */
+            border-radius: var(--border-radius-card);
+            box-shadow: var(--shadow-light);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .full-width-image img:hover {
+            transform: scale(1.05);
+            box-shadow: var(--shadow-hover);
+        }
+
+        /* Animations */
+        @keyframes fadeInSlideRight {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .header {
+                padding: 15px 30px;
+            }
+
+            .nav-menu li {
+                margin-left: 30px;
+            }
+
+            .hero-section {
+                padding: 60px 0;
+            }
+
+            .hero-content {
+                padding: 0 50px;
+            }
+
+            .hero-title {
+                font-size: 3.8em;
+            }
+
+            .video-section {
+                padding: 0 30px;
+            }
+
+            .video-section iframe {
+                height: 400px;
+            }
+
+            .content-section {
+                padding: 60px 30px;
+            }
+
+            .content-with-image {
+                flex-direction: column;
+                gap: 30px;
+            }
+
+            .content-image img {
+                height: 250px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 15px 20px;
+            }
+
+            .nav-menu {
+                margin-top: 20px;
+                flex-wrap: wrap;
+                justify-content: center;
+                width: 100%;
+            }
+
+            .nav-menu li {
+                margin: 8px 20px;
+            }
+
+            .nav-menu > li > a {
+                font-size: 1em;
+                padding: 10px 0;
+            }
+
+            .hero-title {
+                font-size: 3em;
+            }
+
+            .dropdown-menu {
+                left: 50%;
+                transform: translateX(-50%) translateY(10px);
+                min-width: 200px;
+            }
+
+            .video-section iframe {
+                height: 300px;
+            }
+
+            .content-block h2 {
+                font-size: 1.8em;
+            }
+
+            .content-block p {
+                font-size: 1em;
+            }
+
+            .content-text p {
+                font-size: 1em;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header-left .logo {
+                height: 45px;
+            }
+
+            .hero-title {
+                font-size: 2.4em;
+            }
+
+            .hero-content {
+                padding: 0 20px;
+            }
+
+            .video-section {
+                padding: 0 20px;
+            }
+
+            .video-section iframe {
+                height: 200px;
+            }
+
+            .content-section {
+                padding: 40px 20px;
+            }
+
+            .content-block h2 {
+                font-size: 1.5em;
+            }
+
+            .content-block p {
+                font-size: 0.95em;
+            }
+
+            .content-text p {
+                font-size: 0.95em;
+            }
+
+            .content-image img {
+                height: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-left">
+            <a href="#"><img src="https://i.ibb.co/k2x779T4/unnamed-1.webp" alt="Logo" class="logo"></a>
+        </div>
+        <nav>
+            <ul class="nav-menu">
+                <li><a href="#">Trang chủ</a></li>
+                <li>
+                    <a href="#" class="dropdown-arrow">Giới thiệu chung <i class="fas fa-caret-down"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Về Đoàn trường chuyên THPT Lê Quý Đôn</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#" class="dropdown-arrow">Hoạt động tiêu biểu <i class="fas fa-caret-down"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Sự kiện</a></li>
+                        <li><a href="#">Dự án cộng đồng</a></li>
+                        <li><a href="#">Thành tích</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#" class="dropdown-arrow">Tin tức <i class="fas fa-caret-down"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Tin tức mới</a></li>
+                        <li><a href="#">Thông báo</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#" class="dropdown-arrow">Sản phẩm <i class="fas fa-caret-down"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Chatbox AI thanh niên</a></li>
+                        <li><a href="#">Thử sức kiến thức Đoàn</a></li>
+                        <li><a href="#">Mô hình 3D trường</a></li>
+                    </ul>
+                </li>
+                <li><a href="#">Liên hệ</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero-section">
+        <div class="hero-content">
+            <h1 class="hero-title">GIỚI THIỆU CHUNG<br>VỀ ĐOÀN THANH NIÊN CỘNG SẢN HỒ CHÍ MINH</h1>
+        </div>
+    </section>
+
+    <div class="video-section">
+        <h2>Video lịch sử hình thành và phát triển của Đoàn TNCS Hồ Chí Minh</h2>
+        <iframe src="https://storage.googleapis.com/teko-gae.appspot.com/media/video/2025/4/25/16effb4e-cd48-4e71-986b-75c24a05cae4/snaptik_7225479755368336642.mp4#t=0.001" frameborder="0" allowfullscreen></iframe>
+    </div>
+
+    <section class="content-section">
+        <div class="content-block">
+            <h2>"Thanh niên làm theo lời Bác" – Khúc tráng ca rực lửa của tuổi trẻ Việt Nam!</h2>
+            <p>Mỗi khi tiếng nhạc hùng tráng của bài hát "Đoàn Ca – Thanh niên làm theo lời Bác" vang lên, trái tim hàng triệu đoàn viên như được tiếp thêm lửa – ngọn lửa của lý tưởng, khát vọng và tinh thần cống hiến không ngừng nghỉ. Không chỉ là bản ca chính thức của Đoàn Thanh niên Cộng sản Hồ Chí Minh, bài hát đã trở thành biểu tượng âm nhạc thiêng liêng, truyền cảm hứng mạnh mẽ cho các thế hệ thanh niên Việt Nam trên hành trình dựng xây và bảo vệ Tổ quốc.</p>
+            <p>Lời ca hùng tráng, nhịp điệu sôi nổi cùng thông điệp rõ ràng, sâu sắc – "Vì ngày mai, vươn vai lên đường!" – như lời hiệu triệu từ trái tim đến trái tim, thôi thúc mỗi bạn trẻ sống có lý tưởng, dám nghĩ, dám làm, dấn thân vì cộng đồng, đất nước. Đây không chỉ là âm nhạc, mà là tuyên ngôn hành động của tuổi trẻ Việt Nam: Tiên phong – Bản lĩnh – Đoàn kết – Sáng tạo – Phát triển.</p>
+            <p>"Thanh niên làm theo lời Bác" không chỉ là bài hát – đó là sức mạnh, là niềm tin, là ánh sáng soi đường cho tuổi trẻ Việt Nam hôm nay và mai sau!</p>
+        </div>
+
+        <div class="video-section">
+            <iframe src="https://storage.googleapis.com/teko-gae.appspot.com/media/video/2025/4/14/0ac16b65-e968-4351-a293-84cbde8f8fb8/%C4%90O%C3%80N%20CA%20%28Thanh%20Ni%C3%AAn%20L%C3%A0m%20Theo%20L%E1%BB%9Di%20B%C3%A1c%29%20-%20B%C3%A0i%20H%C3%A1t%20%C4%90o%C3%A0n%20Ca%20%C4%90o%C3%A0n%20Thanh%20Ni%C3%AAn%20C%E1%BB%99ng%20S%E1%BA%A3n%20H%E1%BB%93%20Ch%C3%AD%20Minh.mp4#t=0.001" frameborder="0" allowfullscreen></iframe>
+        </div>
+
+        <div class="content-block">
+            <h2>Đoàn trong trái tim mỗi thanh niên Việt Nam là?</h2>
+            <p>Đoàn Thanh niên Cộng sản Hồ Chí Minh không chỉ là tổ chức của tuổi trẻ, mà còn là ngọn lửa tiên phong thắp sáng lý tưởng sống đẹp và khơi dậy khát vọng vươn lên trong mỗi thanh niên Việt Nam. Từ khi thành lập, Đoàn luôn giữ vai trò là mái nhà chung của hàng triệu thế hệ thanh niên, nơi mỗi đoàn viên được rèn luyện, trưởng thành và cống hiến. Đoàn không chỉ khởi xướng các phong trào sôi nổi, mà còn là nơi định hướng lý tưởng sống, giáo dục đạo đức và lối sống cho thế hệ trẻ. Mỗi hoạt động của Đoàn là một cơ hội để tuổi trẻ thử thách bản thân, phát huy sáng tạo và tham gia vào các công tác xã hội đầy ý nghĩa. Từ đó, Đoàn đã giúp thanh niên phát triển toàn diện, đồng thời góp phần xây dựng một xã hội tiến bộ, văn minh. Trong mọi thời kỳ, Đoàn luôn là lực lượng xung kích, đi đầu trong các phong trào, khẳng định vai trò của mình trong việc dẫn dắt, truyền cảm hứng và lan tỏa tinh thần trách nhiệm, đoàn kết và sáng tạo.</p>
+        </div>
+
+        <div class="full-width-image">
+            <img src="https://lh3.googleusercontent.com/jtuIqAV3k4fniFYxajWHFR61H2CPw0_ItIB-PhhDFNjPbHwUMiodfSxmPoyZQGB65qndx7ZbiIlfBmQRzvDT4vNHR8zBMp_pnA=rw-w800" alt="Đoàn trong trái tim">
+        </div>
+
+        <div class="content-block">
+            <h2>Đôi nét giới thiệu về Đoàn TNCS Hồ Chí Minh</h2>
+            <p>Đoàn TNCS Hồ Chí Minh là tổ chức chính trị - xã hội của thanh niên Việt Nam do Đảng Cộng sản Việt Nam và Chủ tịch Hồ Chí Minh sáng lập, lãnh đạo và rèn luyện. Đoàn bao gồm những thanh niên tiên tiến, phấn đấu vì mục tiêu, lý tưởng của Đảng là độc lập dân tộc gắn liền với chủ nghĩa xã hội, dân giàu, nước mạnh, dân chủ, công bằng, văn minh.</p>
+            <p>Đoàn TNCS Hồ Chí Minh là đội dự bị tin cậy của Đảng Cộng sản Việt Nam, là lực lượng xung kích cách mạng, là trường học xã hội chủ nghĩa của thanh niên, đại diện chăm lo và bảo vệ quyền lợi hợp pháp, chính đáng của tuổi trẻ; phụ trách Đội Thiếu niên Tiền phong Hồ Chí Minh; là lực lượng nòng cốt chính trị trong phong trào thanh niên và trong các tổ chức thanh niên Việt Nam. Đoàn TNCS Hồ Chí Minh là thành viên của hệ thống chính trị, hoạt động trong khuôn khổ Hiến pháp và Pháp luật của nước Cộng hòa Xã hội Chủ nghĩa Việt Nam. Đoàn TNCS Hồ Chí Minh đoàn kết, phát triển quan hệ hữu nghị, hợp tác bình đẳng với các tổ chức thanh niên tiến bộ, thanh niên và nhân dân các nước trong cộng đồng quốc tế phấn đấu vì hòa bình, độc lập dân tộc, dân chủ và tiến bộ xã hội, vì tương lai và hạnh phúc của tuổi trẻ.</p>
+            <p>Đoàn TNCS Hồ Chí Minh tổ chức và hoạt động theo nguyên tắc tập trung dân chủ. Hệ thống tổ chức của Đoàn gồm 4 cấp: cấp Trung ương; cấp tỉnh; cấp huyện; cấp cơ sở (gồm Đoàn cơ sở và chi đoàn cơ sở).</p>
+            <p>Đoàn TNCS Hồ Chí Minh được thành lập ngày 26/3/1931, đến nay đã trải qua 10 kỳ Đại hội đại biểu toàn quốc. Bài hát chính thức của Đoàn TNCS Hồ Chí Minh là “Thanh niên làm theo lời Bác”, nhạc và lời: Hoàng Hòa. Cờ Đoàn nền đỏ; hình chữ nhật, chiều rộng bằng hai phần ba chiều dài; ở giữa có hình huy hiệu Đoàn; đường kính huy hiệu bằng hai phần năm chiều rộng cờ. Huy hiệu Đoàn có hình tròn, trên nền sọc xanh lá và trắng là hình ảnh một cánh tay nắm chắc lá cờ Tổ quốc đi lên; chạy xung quanh hình tròn lớn là dòng chữ “ĐOÀN THANH NIÊN CỘNG SẢN HỒ CHÍ MINH”; Huy hiệu có 4 màu: Xanh lá, đỏ cờ, vàng, trắng (không màu); Huy hiệu biểu thị sức mạnh, ý chí của thanh niên Việt Nam, tính xung kích của tuổi trẻ trong công cuộc xây dựng và bảo vệ Tổ quốc. Hiện nay, Đoàn TNCS Hồ Chí Minh có khoảng 5,7 triệu đoàn viên.</p>
+            <p>Được xây dựng, rèn luyện và trưởng thành qua các thời kỳ đấu tranh cách mạng, Đoàn đã tập hợp đông đảo thanh niên phát huy chủ nghĩa anh hùng cách mạng, cống hiến xuất sắc cho sự nghiệp giải phóng dân tộc, thống nhất đất nước, xây dựng và bảo vệ Tổ quốc. Bước vào thời kỳ mới, Đoàn tiếp tục phát huy những truyền thống quý báu của dân tộc và bản chất tốt đẹp của mình, xây dựng lớp thanh niên giàu lòng yêu nước, yêu chủ nghĩa xã hội, có bản lĩnh chính trị, ý thức chấp hành pháp luật, đạo đức cách mạng và lối sống đẹp, có ước mơ, hoài bão, khát vọng đưa đất nước vươn lên, có tri thức, sức khoẻ, kỹ năng xã hội, năng lực chuyên môn, làm chủ khoa học công nghệ hiện đại. Tiếp tục nâng cao chất lượng tổ chức Đoàn, mở rộng mặt trận đoàn kết tập hợp thanh niên; phát huy vai trò xung kích cùng toàn Đảng, toàn dân, toàn quân thực hiện thắng lợi công nghiệp hoá, hiện đại hoá đất nước, vì mục tiêu dân giàu, nước mạnh, dân chủ, công bằng, văn minh, góp phần đưa nước ta cơ bản trở thành nước công nghiệp theo hướng hiện đại vào năm 2020 với 2 phong trào hành động cách mạng của tuổi trẻ là “Xung kích, tình nguyện phát triển kinh tế - xã hội và bảo vệ Tổ quốc” và “Đồng hành với thanh niên lập thân, lập nghiệp” cùng 10 chương trình, đề án lớn đã được Đại hội đại biểu toàn quốc lần thứ X Đoàn TNCS Hồ Chí Minh nhiệm kỳ 2012 - 2017 thông qua.</p>
+        </div>
+
+        <div class="content-block">
+            <div class="content-with-image">
+                <div class="content-text">
+                    <p><b>Hội nghị lần thứ nhất Ban Chấp hành Trung ương Đoàn khóa XII, nhiệm kỳ 2022-2027 đã bầu Ban Thường vụ Trung ương Đoàn lần thứ XII gồm 33 đồng chí; Ban Bí thư Trung ương Đoàn lần thứ XII gồm 6 đồng chí.</b></p>
+                </div>
+                <div class="content-image">
+                    <img src="https://lh3.googleusercontent.com/b4NaFFD0qgIcnklJMqSfrc2YYPPw0HRwilcdJKsKfNVbTSgUb92__IGaRWCRTUAFotH0OTCXJIt_u4TPDWYli4jOJX9Ga0WO6g=rw-w640" alt="Hội nghị Ban Chấp hành">
+                </div>
+            </div>
+        </div>
+
+        <div class="content-block">
+            <div class="content-with-image">
+                <div class="content-text">
+                    <h2>Đồng chí Bùi Quang Huy Bí thư thứ nhất Trung ương Đoàn khóa XII</h2>
+                    <p>(sinh năm 1977, quê Nghệ An) trình độ Thạc sĩ Luật học, Cử nhân Luật, Cao cấp lý luận chính trị.</p>
+                </div>
+                <div class="content-image">
+                    <img src="https://lh3.googleusercontent.com/sZ1d5-zOdUh4PaqbQjWI-1LJY_8oIluIjWQtRgG8WlfbEINjePFB1g7cf7JRHVQ7341v5ifbMvgKjpbmFzsxj5uw6dv_u4pq=rw-w576" alt="Đồng chí Bùi Quang Huy">
+                </div>
+            </div>
+        </div>
+
+        <div class="content-block">
+            <h2>DANH SÁCH BAN BÍ THƯ, BAN THƯỜNG VỤ TRUNG ƯƠNG ĐOÀN KHÓA XII, NHIỆM KỲ 2022-2027</h2>
+            <p>Ngày 16/12, tại phiên làm việc thứ năm, Đại hội đại biểu toàn quốc Đoàn Thanh niên Cộng sản Hồ Chí Minh lần thứ XII, nhiệm kỳ 2022-2027 đã ra mắt Ban Chấp hành Trung ương Đoàn khóa XII.</p>
+            <p>Trước đó, chiều 15/12, tại phiên thứ tư, Đại hội đại biểu toàn quốc Đoàn Thanh niên Cộng sản Hồ Chí Minh lần thứ XII, nhiệm kỳ 2022-2027, đã bầu 144 đồng chí tham gia Ban Chấp hành Trung ương Đoàn khóa XII.</p>
+            <p>Chiều cùng ngày, Hội nghị lần thứ nhất Ban Chấp hành Trung ương Đoàn khóa XII, nhiệm kỳ 2022-2027, tiến hành bầu Ban Thường vụ Trung ương Đoàn, Ban Bí thư Trung ương Đoàn, Ủy ban Kiểm tra Trung ương Đoàn khóa XII.</p>
+            <p>Kết quả, Hội nghị đã bầu Ban Thường vụ Trung ương Đoàn lần thứ XII gồm 33 đồng chí; Ban Bí thư Trung ương Đoàn lần thứ XII gồm 6 đồng chí.</p>
+        </div>
+
+        <div class="full-width-image">
+            <img src="https://xdcs.cdnchinhphu.vn/446259493575335936/2022/12/16/banthuongvu-doan-web-1519-16711736844011035451716.jpg" alt="Hội nghị Ban Chấp hành">
+        </div>
+    </section>
+</body>
+</html>
