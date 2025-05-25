@@ -19,15 +19,7 @@
             --accent-orange: #ff6f61;
             --border-radius-card: 15px;
         }
-.header-left {
-    display: flex;
-    align-items: center;
-}
 
-.logo {
-    height: 50px;
-    margin-top: -5px;
-}
         body {
             font-family: 'Roboto', sans-serif;
             margin: 0;
@@ -43,11 +35,21 @@
             padding: 15px 60px;
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            justify-content: center; /* Căn giữa nội dung chính (menu) */
             box-shadow: var(--shadow-light);
             position: sticky;
             top: 0;
             z-index: 1000;
+            position: relative; /* Để logo có thể sử dụng position: absolute */
+        }
+
+        .header-left {
+            position: absolute;
+            left: 60px; /* Đặt logo ở góc trái */
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            align-items: center;
         }
 
         .header-left .logo {
@@ -66,6 +68,7 @@
             padding: 0;
             display: flex;
             align-items: center;
+            justify-content: center; /* Căn giữa menu */
         }
 
         .nav-menu li {
@@ -315,29 +318,107 @@
         }
 
         @media (max-width: 1024px) {
+            .header {
+                padding: 15px 30px;
+            }
+
+            .header-left {
+                left: 30px;
+            }
+
+            .nav-menu li {
+                margin-left: 30px;
+            }
+
             .hero-title {
                 font-size: 3.8em;
             }
+
             .content-block h2 {
                 font-size: 2.2em;
             }
+
             .content-block p {
                 font-size: 1.1em;
             }
         }
 
         @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                align-items: center;
+                padding: 15px 20px;
+            }
+
+            .header-left {
+                position: static;
+                transform: none;
+                margin-bottom: 10px;
+            }
+
+            .nav-menu {
+                margin-top: 10px;
+                flex-wrap: wrap;
+                justify-content: center;
+                width: 100%;
+            }
+
+            .nav-menu li {
+                margin: 8px 20px;
+            }
+
+            .nav-menu > li > a {
+                font-size: 1em;
+                padding: 10px 0;
+            }
+
+            .dropdown-menu {
+                left: 50%;
+                transform: translateX(-50%) translateY(10px);
+                min-width: 200px;
+            }
+
             .hero-title {
                 font-size: 3em;
             }
+
             .content-block h2 {
                 font-size: 1.8em;
             }
+
             .content-block p {
                 font-size: 1em;
             }
+
             .image-grid img {
                 height: 250px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header-left .logo {
+                height: 45px;
+            }
+
+            .nav-menu {
+                margin-top: 10px;
+                justify-content: center;
+            }
+
+            .nav-menu li {
+                margin: 8px 15px;
+            }
+
+            .hero-title {
+                font-size: 2.4em;
+            }
+
+            .content-block h2 {
+                font-size: 1.8em;
+            }
+
+            .content-block p {
+                font-size: 0.95em;
             }
         }
     </style>
@@ -345,7 +426,7 @@
 <body>
     <header class="header">
         <div class="header-left">
-            <a href="#"><img src="https://i.ibb.co/k2x779T/unnamed-1.webp" alt="Logo" class="logo"></a>
+            <a href="#"><img src="https://lh3.googleusercontent.com/nncDY_eP4-Py5kHcWjt8wFaXCUhKpwUgOMqQGT_ac7B3okxjXoWHgv_mj1D5O8emb1VAmuKGCdgQoR8XT1xNUkPJ9JCdwcvU=rw-w267" alt="Logo" class="logo"></a>
         </div>
         <nav>
             <ul class="nav-menu">
@@ -359,19 +440,19 @@
                 <li>
                     <a href="#" class="dropdown-arrow">Hoạt động tiêu biểu <i class="fas fa-caret-down"></i></a>
                     <ul class="dropdown-menu">
-                        <li><a href="#">Sự kiện</a></li>
-                        <li><a href="#">Dự án cộng đồng</a></li>
-                        <li><a href="#">Thành tích</a></li>
+                        <li><a href="#">Câu lạc bộ</a></li>
                     </ul>
                 </li>
                 <li>
                     <a href="#" class="dropdown-arrow">Tin tức <i class="fas fa-caret-down"></i></a>
                     <ul class="dropdown-menu">
-                        <li><a href="#">Tin tức mới</a></li>
-                        <li><a href="#">Thông báo</a></li>
+                        <li><a href="#">Giao lưu nghệ thuật</a></li>
+                        <li><a href="#">Lễ tiếp lửa</a></li>
+                        <li><a href="#">K16 tri ân</a></li>
+                        <li><a href="#">Học bổng GEOL</a></li>
+                        <li><a href="#">Trần Hữu Hưng - Nam sinh ưu tú trường THPT Lê Quý Đôn</a></li>
                     </ul>
                 </li>
-                <li><a href="#">Liên hệ</a></li>
             </ul>
         </nav>
     </header>
@@ -420,28 +501,29 @@
             <img src="https://lh3.googleusercontent.com/949jtPaaQqE72ghUCnXKfBIRk6TYNJQ0Kkiss9cswr-IckoA_9rri_5oAv_cmdGWpHs5JG_9CFbmlb7l8pJwE1w_oQiwpwfA=rw-w1024" alt="Khen thưởng" class="content-image">
             <img src="https://lh3.googleusercontent.com/xIjSQf-w_VR4U_fcR2GXRlWhihQWyLnuE1bbhHRDwQgyPp2EklN0-4B1hkbluNp29c9nYXMcG1TZMAdgmplLX05uW6ZVZnU=rw-w1024" alt="Khen thưởng" class="content-image">
         </div>
-        <footer style="background-color: #003366; color: white; padding: 20px 0;">
-  <div style="display: flex; justify-content: space-around; flex-wrap: wrap; text-align: left;">
-    <div style="flex: 1; min-width: 250px; padding: 10px;">
-      <div style="margin-bottom: 10px;">
-        <img src="https://lh3.googleusercontent.com/nncDY_eP4-Py5kHcWjt8wFaXCUhKpwUgOMqQGT_ac7B3okxjXoWHgv_mj1D5O8emb1VAmuKGCdgQoR8XT1xNUkPJ9JCdwcvU=rw-w267" alt="logo đoàn" class="content-image" style="height: 150px;">
-      </div>
-      <strong>SỨC TRẺ THANH NIÊN</strong><br>
-      Đoàn trường THPT chuyên Lê Quý Đôn - Điện Biên<br><br>
-      <em style="font-size: 14px;">Trang web đang trong quá trình dự thảo và đang chờ thẩm định nên chưa được cấp quyền sử dụng dưới mọi hình thức</em>
-    </div>
-    <div style="flex: 1; min-width: 250px; padding: 10px;">
-      <strong>Liên hệ</strong><br><br>
-      📞 Cô Lê Thùy Hoa – Bí thư Đoàn trường: <strong>0372632222</strong><br>
-      📞 Bạn Nguyễn Quang Minh – Quản trị viên Website: <strong>0849102558</strong><br>
-      📧 <a href="mailto:doantruongthptchuyenlqd@gmail.com" style="color: #99ccff;">doantruongthptchuyenlqd@gmail.com</a>
-    </div>
-    <div style="flex: 1; min-width: 250px; padding: 10px;">
-      <strong>Địa điểm</strong><br><br>
-      📍 Văn phòng Đoàn E103 - E104, Trường THPT Chuyên Lê Quý Đôn
-    </div>
-  </div>
-</footer>
     </section>
+
+    <footer style="background-color: #003366; color: white; padding: 20px 0;">
+        <div style="display: flex; justify-content: space-around; flex-wrap: wrap; text-align: left;">
+            <div style="flex: 1; min-width: 250px; padding: 10px;">
+                <div style="margin-bottom: 10px;">
+                    <img src="https://lh3.googleusercontent.com/nncDY_eP4-Py5kHcWjt8wFaXCUhKpwUgOMqQGT_ac7B3okxjXoWHgv_mj1D5O8emb1VAmuKGCdgQoR8XT1xNUkPJ9JCdwcvU=rw-w267" alt="logo đoàn" class="content-image" style="height: 150px;">
+                </div>
+                <strong>SỨC TRẺ THANH NIÊN</strong><br>
+                Đoàn trường THPT chuyên Lê Quý Đôn - Điện Biên<br><br>
+                <em style="font-size: 14px;">Trang web đang trong quá trình dự thảo và đang chờ thẩm định nên chưa được cấp quyền sử dụng dưới mọi hình thức</em>
+            </div>
+            <div style="flex: 1; min-width: 250px; padding: 10px;">
+                <strong>Liên hệ</strong><br><br>
+                📞 Cô Lê Thùy Hoa – Bí thư Đoàn trường: <strong>0372632222</strong><br>
+                📞 Bạn Nguyễn Quang Minh – Quản trị viên Website: <strong>0849102558</strong><br>
+                📧 <a href="mailto:doantruongthptchuyenlqd@gmail.com" style="color: #99ccff;">doantruongthptchuyenlqd@gmail.com</a>
+            </div>
+            <div style="flex: 1; min-width: 250px; padding: 10px;">
+                <strong>Địa điểm</strong><br><br>
+                📍 Văn phòng Đoàn E103 - E104, Trường THPT Chuyên Lê Quý Đôn
+            </div>
+        </div>
+    </footer>
 </body>
 </html>
