@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lễ Trao Học Bổng GEOL</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,700;1,400&display=swap');
+
+        :root {
+            --primary-blue: #0A6DFF;
+            --dark-blue: #0056b3;
+            --text-color: #2d2d2d;
+            --light-grey: #f4f6f9;
+            --white: #fff;
+            --shadow-light: 0 6px 12px rgba(0, 0, 0, 0.1);
+            --shadow-hover: 0 10px 20px rgba(0, 0, 0, 0.15);
+            --accent-orange: #ff6f61;
+            --border-radius-card: 15px;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--light-grey);
+            color: var(--text-color);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--white) 0%, #e8f0ff 100%);
+            padding: 15px 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: var(--shadow-light);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-left .logo {
+            height: 55px;
+            transition: transform 0.3s ease, filter 0.3s ease;
+        }
+
+        .header-left .logo:hover {
+            transform: scale(1.1);
+            filter: brightness(1.1);
+        }
+
+        .nav-menu {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-menu li {
+            margin-left: 45px;
+        }
+
+        .nav-menu li a {
+            text-decoration: none;
+            color: var(--text-color);
+            padding: 15px 0;
+            display: block;
+            font-weight: 500;
+            font-size: 1.1em;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+
+        .nav-menu li a:hover {
+            color: var(--primary-blue);
+            transform: translateY(-2px);
+        }
+
+        .main-section {
+            padding: 60px 60px;
+            background-color: var(--white);
+            text-align: center;
+        }
+
+        .main-section h1 {
+            font-size: 2.5em;
+            color: var(--primary-blue);
+            margin-bottom: 40px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+        }
+
+        .main-section h1::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            bottom: -10px;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 4px;
+            background-color: var(--accent-orange);
+            border-radius: 2px;
+        }
+
+        .content-section {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: left;
+        }
+
+        .content-section p {
+            font-size: 1em;
+            color: #555;
+            margin: 20px 0;
+        }
+
+        .content-section p strong {
+            color: var(--text-color);
+        }
+
+        .content-with-image {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .content-with-image img {
+            width: 100%;
+            max-width: 400px;
+            height: 250px;
+            object-fit: cover;
+            border-radius: var(--border-radius-card);
+            box-shadow: var(--shadow-light);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .content-with-image img:hover {
+            transform: scale(1.05);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .content-with-image p {
+            flex: 1;
+            margin: 0;
+        }
+
+        @media (max-width: 1024px) {
+            .header {
+                padding: 15px 30px;
+            }
+            .nav-menu li {
+                margin-left: 30px;
+            }
+            .main-section {
+                padding: 50px 30px;
+            }
+            .content-with-image img {
+                max-width: 350px;
+                height: 220px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                padding: 15px 20px;
+            }
+            .nav-menu {
+                margin-top: 20px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            .nav-menu li {
+                margin: 8px 20px;
+            }
+            .main-section h1 {
+                font-size: 2em;
+            }
+            .content-with-image {
+                flex-direction: column !important;
+                align-items: center;
+                text-align: center;
+            }
+            .content-with-image img {
+                max-width: 100%;
+                height: 200px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header-left .logo {
+                height: 45px;
+            }
+            .main-section {
+                padding: 40px 20px;
+            }
+            .main-section h1 {
+                font-size: 1.6em;
+            }
+            .content-with-image img {
+                height: 150px;
+            }
+            .content-section p {
+                font-size: 0.9em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-left">
+            <a href="#"><img src="logo.png" alt="Logo" class="logo"></a>
+        </div>
+        <nav>
+            <ul class="nav-menu">
+                <li><a href="#">Trang chủ</a></li>
+                <li><a href="#">Giới thiệu</a></li>
+                <li><a href="#">Hoạt động tiêu biểu</a></li>
+                <li><a href="#">Tin tức</a></li>
+                <li><a href="#">Liên hệ</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="main-section">
+        <h1>LỄ TRAO HỌC BỔNG GEOL</h1>
+        <div class="content-section">
+            <p>Trung tâm Đào tạo và Du học Đức GEOL là đơn vị hàng đầu trong lĩnh vực đào tạo tiếng Đức và tư vấn du học nghề, đại học, cao học tại Đức. Hiện tại, GEOL có 16 cơ sở tại Việt Nam và một văn phòng đại diện tại Đức. Với tầm nhìn trở thành công ty tư vấn du học và đào tạo tiếng Đức hàng đầu Việt Nam, GEOL cam kết cung cấp chương trình học chất lượng cao, giúp học viên chinh phục chứng chỉ quốc tế và lựa chọn công việc phù hợp tại Đức. Tỉ lệ học viên của GEOL đỗ chứng chỉ tiếng Đức B1 ngay từ lần thi đầu tiên đạt 70-80%, minh chứng cho chất lượng đào tạo của trung tâm.</p>
+
+            <p>Hai nhà lãnh đạo của GEOL – <strong>Anh Vũ Anh Tuấn (Chairman)</strong> và <strong>Anh Lại Huy Toàn (CEO)</strong> – đều là những người có bề dày kinh nghiệm trong lĩnh vực giáo dục và công nghệ. Anh Vũ Anh Tuấn là Tiến sĩ Toán học, hiện đang định cư tại Đức từ năm 2011. Xuất thân trong một gia đình có truyền thống giáo dục, anh mong muốn mang đến cơ hội học tập và phát triển cho thế hệ trẻ Việt Nam thông qua việc đào tạo và tư vấn du học. Anh Lại Huy Toàn có gần hai thập kỷ hoạt động trong các lĩnh vực IT, bảo hiểm, kinh doanh công nghệ và giáo dục. Với kiến thức sâu rộng và tầm nhìn chiến lược, anh đã góp phần đưa GEOL trở thành đơn vị đào tạo tiếng Đức và tư vấn du học uy tín tại Việt Nam.</p>
+
+            <div class="content-with-image">
+                <img src="https://lh3.googleusercontent.com/OeYjQcjjsKmKk0Ogx5BP44K_gQ6SNSfmSVkwTObs_s66Hiaub_QPJ-tOX5F0wag0h4ziVSpv3dlj9DV6QZbxEkcMNqQbQpI=rw-w1350" alt="Image 1">
+                <p>Học bổng lần này được trao cho hai em học sinh có hoàn cảnh khó khăn nhưng luôn nỗ lực vươn lên trong học tập: <strong>em Lại Nguyễn Kiều Anh (lớp 10A4)</strong> và <strong>em Hoàng An Chi (lớp 10A9)</strong>. Mỗi suất học bổng trị giá 1 triệu đồng/tháng, được cấp đến khi hai em hoàn thành chương trình lớp 12. Đây là sự ghi nhận những nỗ lực học tập của các em cũng như động lực để các em tiếp tục cố gắng trên hành trình chinh phục tri thức.</p>
+            </div>
+
+            <p>Đại diện GEOL nhấn mạnh: "Chúng tôi tin rằng, với sự hỗ trợ này, các em học sinh sẽ có thêm điều kiện thuận lợi để theo đuổi ước mơ, mở ra những cơ hội học tập và phát triển bản thân trong tương lai."</p>
+
+            <p>Học bổng GEOL không chỉ là sự hỗ trợ tài chính mà còn là niềm động viên lớn lao dành cho các bạn học sinh có đam mê du học. Với sự đồng hành của GEOL, các em học sinh của nhà trường sẽ có thêm cơ hội hiện thực hóa ước mơ học tập, mở ra tương lai tươi sáng phía trước. Buổi lễ trao học bổng khép lại với nhiều cảm xúc và kỳ vọng. Hy vọng rằng, trong tương lai, sẽ có thêm nhiều học sinh tài năng được tiếp cận với cơ hội học bổng ý nghĩa từ GEOL, tiếp tục vững bước trên con đường chinh phục kho tàng tri thức và hội nhập quốc tế.</p>
+        </div>
+        <footer style="background-color: #003366; color: white; padding: 20px 0;">
+  <div style="display: flex; justify-content: space-around; flex-wrap: wrap; text-align: left;">
+    <div style="flex: 1; min-width: 250px; padding: 10px;">
+      <div style="margin-bottom: 10px;">
+        <img src="https://lh3.googleusercontent.com/nncDY_eP4-Py5kHcWjt8wFaXCUhKpwUgOMqQGT_ac7B3okxjXoWHgv_mj1D5O8emb1VAmuKGCdgQoR8XT1xNUkPJ9JCdwcvU=rw-w267" alt="logo đoàn" class="content-image" style="height: 150px;">
+      </div>
+      <strong>SỨC TRẺ THANH NIÊN</strong><br>
+      Đoàn trường THPT chuyên Lê Quý Đôn - Điện Biên<br><br>
+      <em style="font-size: 14px;">Trang web đang trong quá trình dự thảo và đang chờ thẩm định nên chưa được cấp quyền sử dụng dưới mọi hình thức</em>
+    </div>
+    <div style="flex: 1; min-width: 250px; padding: 10px;">
+      <strong>Liên hệ</strong><br><br>
+      📞 Cô Lê Thùy Hoa – Bí thư Đoàn trường: <strong>0372632222</strong><br>
+      📞 Bạn Nguyễn Quang Minh – Quản trị viên Website: <strong>0849102558</strong><br>
+      📧 <a href="mailto:doantruongthptchuyenlqd@gmail.com" style="color: #99ccff;">doantruongthptchuyenlqd@gmail.com</a>
+    </div>
+    <div style="flex: 1; min-width: 250px; padding: 10px;">
+      <strong>Địa điểm</strong><br><br>
+      📍 Văn phòng Đoàn E103 - E104, Trường THPT Chuyên Lê Quý Đôn
+    </div>
+  </div>
+</footer>
+    </section>
+</body>
+</html>
