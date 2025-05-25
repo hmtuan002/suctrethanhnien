@@ -30,16 +30,25 @@
             overflow-x: hidden;
         }
 
+        /* Header Styles */
         .header {
             background: linear-gradient(135deg, var(--white) 0%, #e8f0ff 100%);
             padding: 15px 60px;
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            justify-content: center; /* Căn giữa nội dung chính (menu) */
             box-shadow: var(--shadow-light);
             position: sticky;
             top: 0;
             z-index: 1000;
+            position: relative; /* Để logo có thể sử dụng position: absolute */
+        }
+
+        .header-left {
+            position: absolute;
+            left: 60px; /* Đặt logo ở góc trái với khoảng cách từ mép */
+            top: 50%;
+            transform: translateY(-50%);
         }
 
         .header-left .logo {
@@ -52,19 +61,22 @@
             filter: brightness(1.1);
         }
 
+        /* Navigation Menu Styles */
         .nav-menu {
             list-style: none;
             margin: 0;
             padding: 0;
             display: flex;
             align-items: center;
+            justify-content: center; /* Căn giữa menu */
         }
 
         .nav-menu li {
+            position: relative;
             margin-left: 45px;
         }
 
-        .nav-menu li a {
+        .nav-menu > li > a {
             text-decoration: none;
             color: var(--text-color);
             padding: 15px 0;
@@ -72,11 +84,84 @@
             font-weight: 500;
             font-size: 1.1em;
             transition: color 0.3s ease, transform 0.3s ease;
+            position: relative;
         }
 
-        .nav-menu li a:hover {
+        .nav-menu > li > a:hover {
             color: var(--primary-blue);
             transform: translateY(-2px);
+        }
+
+        .nav-menu > li > a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: var(--primary-blue);
+            transition: width 0.3s ease;
+        }
+
+        .nav-menu > li > a:hover::after {
+            width: 100%;
+        }
+
+        /* Dropdown Styles */
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            background-color: var(--white);
+            min-width: 240px;
+            box-shadow: var(--shadow-light);
+            z-index: 1;
+            border-radius: 10px;
+            overflow: hidden;
+            top: 100%;
+            left: 0;
+            transform: translateY(10px);
+            opacity: 0;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+
+        .nav-menu li:hover > .dropdown-menu {
+            display: block;
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .dropdown-menu li {
+            margin: 0;
+        }
+
+        .dropdown-menu li a {
+            color: var(--text-color);
+            padding: 14px 20px;
+            text-decoration: none;
+            display: block;
+            white-space: nowrap;
+            transition: background-color 0.2s ease, color 0.2s ease, padding-left 0.3s ease;
+        }
+
+        .dropdown-menu li a:hover {
+            background-color: var(--primary-blue);
+            color: var(--white);
+            padding-left: 25px;
+        }
+
+        .dropdown-arrow {
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .dropdown-arrow i {
+            margin-left: 8px;
+            font-size: 0.8em;
+            transition: transform 0.3s ease;
+        }
+
+        .nav-menu li:hover .dropdown-arrow i {
+            transform: rotate(180deg);
         }
 
         .main-section {
@@ -151,13 +236,20 @@
             margin: 0;
         }
 
+        /* Responsive Design */
         @media (max-width: 1024px) {
             .header {
                 padding: 15px 30px;
             }
+
+            .header-left {
+                left: 30px; 
+            }
+
             .nav-menu li {
                 margin-left: 30px;
             }
+
             .main-section {
                 padding: 50px 30px;
             }
@@ -170,19 +262,42 @@
         @media (max-width: 768px) {
             .header {
                 flex-direction: column;
+                align-items: center;
                 padding: 15px 20px;
             }
+
+            .header-left {
+                position: static; /* Logo không cần absolute trên màn hình nhỏ */
+                transform: none;
+                margin-bottom: 10px;
+            }
+
             .nav-menu {
-                margin-top: 20px;
+                margin-top: 10px;
                 flex-wrap: wrap;
                 justify-content: center;
+                width: 100%;
             }
+
             .nav-menu li {
                 margin: 8px 20px;
             }
+
+            .nav-menu > li > a {
+                font-size: 1em;
+                padding: 10px 0;
+            }
+
+            .dropdown-menu {
+                left: 50%;
+                transform: translateX(-50%) translateY(10px);
+                min-width: 200px;
+            }
+
             .main-section h1 {
                 font-size: 2em;
             }
+
             .content-with-image {
                 flex-direction: column !important;
                 align-items: center;
@@ -216,15 +331,33 @@
 <body>
     <header class="header">
         <div class="header-left">
-            <a href="#"><img src="logo.png" alt="Logo" class="logo"></a>
+            <a href="#"><img src="https://i.ibb.co/k2x779T4/unnamed-1.webp" alt="Logo" class="logo"></a>
         </div>
         <nav>
             <ul class="nav-menu">
                 <li><a href="#">Trang chủ</a></li>
-                <li><a href="#">Giới thiệu</a></li>
-                <li><a href="#">Hoạt động tiêu biểu</a></li>
-                <li><a href="#">Tin tức</a></li>
-                <li><a href="#">Liên hệ</a></li>
+                <li>
+                    <a href="#" class="dropdown-arrow">Giới thiệu chung <i class="fas fa-caret-down"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Về Đoàn trường chuyên THPT Lê Quý Đôn</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#" class="dropdown-arrow">Hoạt động tiêu biểu <i class="fas fa-caret-down"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Câu lạc bộ</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#" class="dropdown-arrow">Tin tức <i class="fas fa-caret-down"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Giao lưu nghệ thuật</a></li>
+                        <li><a href="#">Lễ tiếp lửa</a></li>
+                        <li><a href="#">K16 tri ân</a></li>
+                        <li><a href="#">Học bổng GEOL</a></li>
+                        <li><a href="#">Trần Hữu Hưng - Nam sinh ưu tú trường THPT Lê Quý Đôn</a></li>
+                    </ul>
+                </li>
             </ul>
         </nav>
     </header>
@@ -236,12 +369,12 @@
 
             <div class="content-with-image">
                 <img src="https://lh3.googleusercontent.com/xyrP4of1uBSQ4iHdFpZyFor59RH6JKcNEZlVxi_j0zMVCrCkEMVHPN7dg_sgYVXwQmhmnzsVUfHn81BF8iMBaofP2FGiCYY=rw-w500" alt="Image 1">
-                <p>Ngoài những thành tích nổi trội trong học tập, em <strong>Trần Hữu Hưng</strong> còn đạt nhiều thành tích trong các hoạt động phong trào như: Giải Nhì cuộc thi NCKH Kĩ thuật học sinh trung học cấp tỉnh năm học 2022-2023; Giải Khuyến khích cuộc thi Sáng tạo thanh thiếu niên thành phố Điện Biên Phủ năm 2023; Đạt giải bài viết xuất sắc trong cuộc thi “Những kỷ niệm sâu sắc về thầy cô và mái trường” năm học 2023-2024; Tham gia với vai trò BTC, Leader các chương trình của Đoàn trường: Tiếp sức kì thi vào 10 năm học 2022-2023, Tiếp sức kì thi TN THPT QG năm học 2022-2023, Chương trình Miss And Mister II, Chương trình MissBoys Season 6, BAB Season 7,... </p>
+                <p>Ngoài những thành tích nổi trội trong học tập, em <strong>Trần Hữu Hưng</strong> còn đạt nhiều thành tích trong các hoạt động phong trào như: Giải Nhì cuộc thi NCKH Kĩ thuật học sinh trung học cấp tỉnh năm học 2022-2023; Giải Khuyến khích cuộc thi Sáng tạo thanh thiếu niên thành phố Điện Biên Phủ năm 2023; Đạt giải bài viết xuất sắc trong cuộc thi "Những kỷ niệm sâu sắc về thầy cô và mái trường" năm học 2023-2024; Tham gia với vai trò BTC, Leader các chương trình của Đoàn trường: Tiếp sức kì thi vào 10 năm học 2022-2023, Tiếp sức kì thi TN THPT QG năm học 2022-2023, Chương trình Miss And Mister II, Chương trình MissBoys Season 6, BAB Season 7,... </p>
             </div>
 
             <p>Với sự nhiệt huyết trong các phong trào Đoàn trường, lớp, em <strong>Trần Hữu Hưng</strong> đã đạt danh hiệu Học sinh 3 Tốt cấp tỉnh năm 2022-2023; được BCH Đoàn Thành phố Điện Biên Phủ tặng giấy khen Đã có thành tích xuất sắc trong Tháng Thanh niên năm 2023 (ngày 06/04/2023); Đoàn trường THPT chuyên Lê Quý Đôn tặng Giấy khen có nhiều đóng góp trong công tác đoàn và phong trào thanh niên trường học nhiệm kì 2022-2023 (ngày 20/11/2023); Đoàn trường THPT chuyên Lê Quý Đôn tặng Giấy khen có thành tích xuất sắc trong công tác đoàn và phong trào thanh niên trường học năm học 2022-2023 (ngày 22/05/2023); Đoàn trường THPT chuyên Lê Quý Đôn tặng Giấy khen là thành viên CLB MCC có thành tích xuất sắc trong công tác đoàn và phong trào thanh niên trường học Học kì I, năm học 2022-2023 (ngày 16/01/2023); Đoàn trường THPT chuyên Lê Quý Đôn tặng Giấy khen có nhiều đóng góp trong Game show Âm vang Điện Biên năm 2023 (ngày 09/10/2023).</p>
 
-            <p>Em <strong>Trần Hữu Hưng</strong> cho hay “Lê Quý Đôn 2023 trong mình có lẽ là một năm của sự thành công về mọi mặt của tập thể thầy và trò trường. Năm 2023 vừa qua, trong mình, ắt hẳn là một năm đáng nhớ nhất, với thật nhiều kỉ niệm qua bao cung bậc cảm xúc, cùng “Chuyên Lê” vượt qua bao khó khăn, thử thách để đạt được nhiều thành công - bản thân mình cũng thấy mình đã luôn cố gắng hết mình đóng góp cho trường bằng những thành tích cụ thể. Năm vừa qua, bản thân mình được học hỏi và trưởng thành trong tổ chức Đoàn trường THPT chuyên Lê Quý Đôn, mình thấy rõ hơn hẳn tinh thần tuổi trẻ xung kích của thanh niên trường đã đóng góp rất nhiều cho sự thành công của việc thực hiện phong trào thanh niên trường học. Mình mong, trong năm 2024, “chuyên Lê“ vẫn sẽ luôn như vậy, vẫn luôn là một Chuyên Lê thành công!.”</p>
+            <p>Em <strong>Trần Hữu Hưng</strong> cho hay "Lê Quý Đôn 2023 trong mình có lẽ là một năm của sự thành công về mọi mặt của tập thể thầy và trò trường. Năm 2023 vừa qua, trong mình, ắt hẳn là một năm đáng nhớ nhất, với thật nhiều kỉ niệm qua bao cung bậc cảm xúc, cùng "Chuyên Lê" vượt qua bao khó khăn, thử thách để đạt được nhiều thành công - bản thân mình cũng thấy mình đã luôn cố gắng hết mình đóng góp cho trường bằng những thành tích cụ thể. Năm vừa qua, bản thân mình được học hỏi và trưởng thành trong tổ chức Đoàn trường THPT chuyên Lê Quý Đôn, mình thấy rõ hơn hẳn tinh thần tuổi trẻ xung kích của thanh niên trường đã đóng góp rất nhiều cho sự thành công của việc thực hiện phong trào thanh niên trường học. Mình mong, trong năm 2024, "chuyên Lê" vẫn sẽ luôn như vậy, vẫn luôn là một Chuyên Lê thành công!."</p>
 
             <p>Hi vọng em sẽ còn tiến cao, tiến xa hơn nữa trong học tập, trong các phong trào hoạt động của thanh thiếu niên và được mọi người tin yêu, quý mến, luôn là tấm gương sáng để các bạn học tập, sẵn sàng theo đuổi những mục tiêu to lớn hơn và biến ước mơ của mình thành sự thật./.</p>
         </div>
