@@ -178,9 +178,6 @@
         </div>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://unpkg.com/photo-sphere-viewer@4/dist/photo-sphere-viewer.min.js"></script>
-
     <script>
         // Data structure for multiple buildings, their markers, floors, and rooms
         const allBuildingsData = {
@@ -295,21 +292,13 @@
             document.querySelector('#roomsModal .modal-content h2').textContent = `Chọn Phòng cho ${currentBuildingName} - ${floor}`;
         }
 
-        // Load 360-degree viewer
+        // Load 360-degree viewer - Hàm này KHÔNG cần thay đổi, vì việc tải thư viện đã được xử lý ở ngoài
         function load360Viewer(imagePath) {
             openModal('viewerModal');
             document.getElementById('viewerMessage').classList.remove('hidden'); // Show loading message
 
-            // Kiểm tra xem PhotoSphereViewer đã được định nghĩa chưa
-            if (typeof PhotoSphereViewer === 'undefined' || typeof PhotoSphereViewer.Viewer === 'undefined') {
-                console.warn("Thư viện PhotoSphereViewer chưa sẵn sàng. Đang thử lại...");
-                // Thử lại sau một khoảng thời gian ngắn
-                setTimeout(() => load360Viewer(imagePath), 200); // Thử lại sau 200ms
-                return;
-            }
-
+            // Lúc này, PhotoSphereViewer đã được đảm bảo tải, không cần kiểm tra lại
             try {
-                // Initialize Photo Sphere Viewer
                 viewer = new PhotoSphereViewer.Viewer({
                     container: 'viewer',
                     panorama: imagePath,
@@ -359,7 +348,21 @@
             }
         });
 
-        // Hàm khởi tạo chính, sẽ chạy khi DOMContentLoaded
+        // Hàm để tải script động
+        function loadScript(src, callback) {
+            const script = document.createElement('script');
+            script.src = src;
+            script.onload = () => {
+                console.log(`Script ${src} đã tải thành công.`);
+                if (callback) callback();
+            };
+            script.onerror = () => {
+                console.error(`Lỗi khi tải script: ${src}. Vui lòng kiểm tra đường dẫn hoặc kết nối mạng.`);
+            };
+            document.head.appendChild(script);
+        }
+
+        // Hàm khởi tạo chính của bản đồ
         function initializeMap() {
             const mapContainer = document.querySelector('.map-container');
 
@@ -383,22 +386,32 @@
 
             // Gỡ bỏ các dòng debug này sau khi mọi thứ hoạt động
             if (typeof THREE === 'undefined') {
-                console.error("Lỗi: Three.js không được định nghĩa SAU DOMContentLoaded.");
+                console.error("Lỗi: Three.js không được định nghĩa SAU khi tải động.");
             } else {
-                console.log("Three.js đã được định nghĩa SAU DOMContentLoaded.");
+                console.log("Three.js đã được định nghĩa SAU khi tải động.");
             }
 
             if (typeof PhotoSphereViewer === 'undefined') {
-                console.error("Lỗi: PhotoSphereViewer không được định nghĩa SAU DOMContentLoaded.");
+                console.error("Lỗi: PhotoSphereViewer không được định nghĩa SAU khi tải động.");
             } else if (typeof PhotoSphereViewer.Viewer === 'undefined') {
-                console.error("Lỗi: PhotoSphereViewer đã được định nghĩa, nhưng PhotoSphereViewer.Viewer không phải là một hàm tạo SAU DOMContentLoaded.");
+                console.error("Lỗi: PhotoSphereViewer đã được định nghĩa, nhưng PhotoSphereViewer.Viewer không phải là một hàm tạo SAU khi tải động.");
             } else {
-                console.log("PhotoSphereViewer và PhotoSphereViewer.Viewer đã được định nghĩa SAU DOMContentLoaded.");
+                console.log("PhotoSphereViewer và PhotoSphereViewer.Viewer đã được định nghĩa SAU khi tải động.");
             }
         }
 
-        // Chạy hàm khởi tạo chính khi DOM đã tải hoàn chỉnh
-        document.addEventListener('DOMContentLoaded', initializeMap);
+        // --- QUY TRÌNH TẢI THƯ VIỆN ĐỘNG ---
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log("DOMContentLoaded đã kích hoạt. Bắt đầu tải các thư viện...");
+            loadScript("https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js", () => {
+                // Three.js đã tải, bây giờ tải Photo Sphere Viewer
+                loadScript("https://unpkg.com/photo-sphere-viewer@4/dist/photo-sphere-viewer.min.js", () => {
+                    // Cả hai thư viện đã tải xong, bây giờ khởi tạo bản đồ
+                    console.log("Cả Three.js và PhotoSphereViewer đều đã tải xong. Khởi tạo bản đồ.");
+                    initializeMap();
+                });
+            });
+        });
     </script>
 </body>
 </html>
