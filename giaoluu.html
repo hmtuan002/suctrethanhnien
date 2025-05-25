@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giao Lưu Văn Hóa Nghệ Thuật</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,700;1,400&display=swap');
+
+        :root {
+            --primary-blue: #0A6DFF;
+            --dark-blue: #0056b3;
+            --text-color: #2d2d2d;
+            --light-grey: #f4f6f9;
+            --white: #fff;
+            --shadow-light: 0 6px 12px rgba(0, 0, 0, 0.1);
+            --shadow-hover: 0 10px 20px rgba(0, 0, 0, 0.15);
+            --accent-orange: #ff6f61;
+            --border-radius-card: 15px;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--light-grey);
+            color: var(--text-color);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--white) 0%, #e8f0ff 100%);
+            padding: 15px 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: var(--shadow-light);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-left .logo {
+            height: 55px;
+            transition: transform 0.3s ease, filter 0.3s ease;
+        }
+
+        .header-left .logo:hover {
+            transform: scale(1.1);
+            filter: brightness(1.1);
+        }
+
+        .nav-menu {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-menu li {
+            margin-left: 45px;
+        }
+
+        .nav-menu li a {
+            text-decoration: none;
+            color: var(--text-color);
+            padding: 15px 0;
+            display: block;
+            font-weight: 500;
+            font-size: 1.1em;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+
+        .nav-menu li a:hover {
+            color: var(--primary-blue);
+            transform: translateY(-2px);
+        }
+
+        .main-section {
+            padding: 60px 60px;
+            background-color: var(--white);
+            text-align: center;
+        }
+
+        .main-section h1 {
+            font-size: 2.5em;
+            color: var(--primary-blue);
+            margin-bottom: 40px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+        }
+
+        .main-section h1::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            bottom: -10px;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 4px;
+            background-color: var(--accent-orange);
+            border-radius: 2px;
+        }
+
+        .image-gallery {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+
+        .image-gallery img {
+            width: 100%;
+            max-width: 350px;
+            height: 200px;
+            object-fit: cover;
+            border-radius: var(--border-radius-card);
+            box-shadow: var(--shadow-light);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .image-gallery img:hover {
+            transform: scale(1.05);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .content-section {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: left;
+        }
+
+        .content-section p {
+            font-size: 1em;
+            color: #555;
+            margin: 15px 0;
+        }
+
+        .content-section p strong {
+            color: var(--text-color);
+        }
+
+        @media (max-width: 1024px) {
+            .header {
+                padding: 15px 30px;
+            }
+            .nav-menu li {
+                margin-left: 30px;
+            }
+            .main-section {
+                padding: 50px 30px;
+            }
+            .image-gallery img {
+                max-width: 300px;
+                height: 180px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                padding: 15px 20px;
+            }
+            .nav-menu {
+                margin-top: 20px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            .nav-menu li {
+                margin: 8px 20px;
+            }
+            .main-section h1 {
+                font-size: 2em;
+            }
+            .image-gallery {
+                flex-direction: column;
+                align-items: center;
+            }
+            .image-gallery img {
+                max-width: 100%;
+                height: 200px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header-left .logo {
+                height: 45px;
+            }
+            .main-section {
+                padding: 40px 20px;
+            }
+            .main-section h1 {
+                font-size: 1.6em;
+            }
+            .image-gallery img {
+                height: 150px;
+            }
+            .content-section p {
+                font-size: 0.9em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-left">
+            <a href="#"><img src="logo.png" alt="Logo" class="logo"></a>
+        </div>
+        <nav>
+            <ul class="nav-menu">
+                <li><a href="#">Trang chủ</a></li>
+                <li><a href="#">Giới thiệu</a></li>
+                <li><a href="#">Hoạt động tiêu biểu</a></li>
+                <li><a href="#">Tin tức</a></li>
+                <li><a href="#">Liên hệ</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="main-section">
+        <h1>GIAO LƯU VĂN HÓA NGHỆ THUẬT<br>VỚI CHỦ ĐỀ "THẮP SÁNG ƯỚC MƠ"</h1>
+        <div class="image-gallery">
+            <img src="https://lh3.googleusercontent.com/9fiXLFsbBhC04M8jsmio3oWmhkumiN1wt1wzlctSaUZJ-kST-_RpWtsMzSsNFGp0hl8-TyA8TF_3yE_g7MgXW6t4b5sxCGyQYw=rw-w1387" alt="Image 1">
+            <img src="https://lh3.googleusercontent.com/M1WvqOR5QiP87gIhEoDDXMEM8cx8YHvMqcQNTdiU9qXHS8GeBMf8dQjT4sQStWfwjTZY6pB0FS2X5gX_Nz5Tx47PKdXlh-tK=rw-w1387" alt="Image 2">
+            
+        </div>
+        <div class="content-section">
+            <p>Tham dự buổi giao lưu có <strong>Nhà giáo Bùi Thị Anh – Bí thư Đảng bộ, Hiệu trưởng nhà trường</strong> cùng toàn thể các thầy cô giáo, các em học sinh trường THPT Chuyên Lê Quý Đôn và các thành viên trung tâm nghệ thuật tình thương do <strong>NSND Trương Tường Vy</strong> sáng lập.</p>
+            <p>Chương trình giao lưu văn nghệ với những bài hát thật thiết tha, sâu lắng và đầy cảm xúc của các diễn viên Trung tâm nghệ thuật tình thương đã chạm đến trái tim, tâm hồn của cả thầy và trò nhà trường bởi ý chí, nghị lực và khát vọng vươn lên của các em.</p>
+            <p>Với truyền thống tương thân tương ái, lá lành đùm lá rách, nhân dịp buổi giao lưu, nhà trường đã kêu gọi thầy cô và các em học sinh cùng chung tay chia sẻ, ủng hộ, giúp đỡ đoàn Trung tâm nghệ thuật tình thương với tổng số tiền quyên góp: <strong>14.188.000 (Mười bốn triệu một trăm tám mươi tám nghìn đồng)</strong>.</p>
+            <p>Số tiền tuy không lớn nhưng là trái tim, tấm lòng của thầy và trò nhà trường thể hiện sự thấu cảm và chia sẻ với những hoàn cảnh, số phận thiếu may mắn trong cuộc sống.</p>
+        </div>
+        <footer style="background-color: #003366; color: white; padding: 20px 0;">
+  <div style="display: flex; justify-content: space-around; flex-wrap: wrap; text-align: left;">
+    <div style="flex: 1; min-width: 250px; padding: 10px;">
+      <div style="margin-bottom: 10px;">
+        <img src="https://lh3.googleusercontent.com/nncDY_eP4-Py5kHcWjt8wFaXCUhKpwUgOMqQGT_ac7B3okxjXoWHgv_mj1D5O8emb1VAmuKGCdgQoR8XT1xNUkPJ9JCdwcvU=rw-w267" alt="logo đoàn" class="content-image" style="height: 150px;">
+      </div>
+      <strong>SỨC TRẺ THANH NIÊN</strong><br>
+      Đoàn trường THPT chuyên Lê Quý Đôn - Điện Biên<br><br>
+      <em style="font-size: 14px;">Trang web đang trong quá trình dự thảo và đang chờ thẩm định nên chưa được cấp quyền sử dụng dưới mọi hình thức</em>
+    </div>
+    <div style="flex: 1; min-width: 250px; padding: 10px;">
+      <strong>Liên hệ</strong><br><br>
+      📞 Cô Lê Thùy Hoa – Bí thư Đoàn trường: <strong>0372632222</strong><br>
+      📞 Bạn Nguyễn Quang Minh – Quản trị viên Website: <strong>0849102558</strong><br>
+      📧 <a href="mailto:doantruongthptchuyenlqd@gmail.com" style="color: #99ccff;">doantruongthptchuyenlqd@gmail.com</a>
+    </div>
+    <div style="flex: 1; min-width: 250px; padding: 10px;">
+      <strong>Địa điểm</strong><br><br>
+      📍 Văn phòng Đoàn E103 - E104, Trường THPT Chuyên Lê Quý Đôn
+    </div>
+  </div>
+</footer>
+    </section>
+</body>
+</html>
