@@ -6,22 +6,38 @@
     <title>Danh sách Câu lạc bộ</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,700;1,400&display=swap');
+
+        :root {
+            --primary-blue: #0A6DFF;
+            --dark-blue: #0056b3;
+            --text-color: #2d2d2d;
+            --light-grey: #f4f6f9;
+            --white: #fff;
+            --shadow-light: 0 6px 12px rgba(0, 0, 0, 0.1);
+            --shadow-hover: 0 10px 20px rgba(0, 0, 0, 0.15);
+            --accent-orange: #ff6f61;
+            --border-radius-card: 15px;
+        }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Roboto', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f5f7fa;
-            color: #333;
+            background-color: var(--light-grey);
+            color: var(--text-color);
+            line-height: 1.7;
+            overflow-x: hidden;
         }
 
         /* Header Styles */
-        .header-nav {
-            background: linear-gradient(135deg, #ffffff 0%, #e8f0ff 100%);
+        .header {
+            background: linear-gradient(135deg, var(--white) 0%, #e8f0ff 100%);
             padding: 15px 60px;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            box-shadow: var(--shadow-light);
             position: sticky;
             top: 0;
             z-index: 1000;
@@ -62,17 +78,17 @@
 
         .nav-menu > li > a {
             text-decoration: none;
-            color: #333;
+            color: var(--text-color);
             padding: 15px 0;
             display: block;
             font-weight: 500;
-            font-size: 16px;
+            font-size: 1.1em;
             transition: color 0.3s ease, transform 0.3s ease;
             position: relative;
         }
 
         .nav-menu > li > a:hover {
-            color: #1e90ff;
+            color: var(--primary-blue);
             transform: translateY(-2px);
         }
 
@@ -83,7 +99,7 @@
             height: 2px;
             bottom: 0;
             left: 0;
-            background-color: #1e90ff;
+            background-color: var(--primary-blue);
             transition: width 0.3s ease;
         }
 
@@ -95,9 +111,9 @@
         .dropdown-menu {
             display: none;
             position: absolute;
-            background-color: #fff;
+            background-color: var(--white);
             min-width: 240px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            box-shadow: var(--shadow-light);
             z-index: 1;
             border-radius: 10px;
             overflow: hidden;
@@ -119,18 +135,17 @@
         }
 
         .dropdown-menu li a {
-            color: #333;
+            color: var(--text-color);
             padding: 14px 20px;
             text-decoration: none;
             display: block;
             white-space: nowrap;
-            font-size: 14px;
             transition: background-color 0.2s ease, color 0.2s ease, padding-left 0.3s ease;
         }
 
         .dropdown-menu li a:hover {
-            background-color: #1e90ff;
-            color: #fff;
+            background-color: var(--primary-blue);
+            color: var(--white);
             padding-left: 25px;
         }
 
@@ -152,7 +167,7 @@
         /* Container Styles */
         .container {
             max-width: 1300px;
-            margin: 80px auto 40px; /* Tăng margin-top để tránh chồng lấn với header */
+            margin: 80px auto 40px;
             padding: 0 20px;
         }
 
@@ -163,7 +178,7 @@
 
         .header h1 {
             font-size: 36px;
-            color: #1e90ff;
+            color: var(--primary-blue);
             margin: 0;
             text-transform: uppercase;
             letter-spacing: 2px;
@@ -182,7 +197,7 @@
 
         .intro h2 {
             font-size: 20px;
-            color: #333;
+            color: var(--text-color);
             margin: 10px 0;
             text-align: center;
         }
@@ -197,9 +212,9 @@
 
         .club {
             width: calc(25% - 25px);
-            background-color: #fff;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            background-color: var(--white);
+            border-radius: var(--border-radius-card);
+            box-shadow: var(--shadow-light);
             padding: 15px;
             box-sizing: border-box;
             text-align: center;
@@ -208,7 +223,7 @@
 
         .club:hover {
             transform: translateY(-5px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+            box-shadow: var(--shadow-hover);
         }
 
         .club img {
@@ -229,7 +244,7 @@
         .club-content h3 {
             margin: 0 0 10px 0;
             font-size: 18px;
-            color: #333;
+            color: var(--text-color);
             font-weight: 600;
         }
 
@@ -237,8 +252,8 @@
             display: inline-block;
             margin-top: 15px;
             padding: 10px 20px;
-            background-color: #1e90ff;
-            color: #fff;
+            background-color: var(--primary-blue);
+            color: var(--white);
             text-decoration: none;
             border-radius: 25px;
             font-size: 14px;
@@ -247,7 +262,7 @@
         }
 
         .club-link:hover {
-            background-color: #0d6efd;
+            background-color: var(--dark-blue);
         }
 
         .club-grid:last-child .club {
@@ -265,7 +280,7 @@
         }
 
         @media (max-width: 1024px) {
-            .header-nav {
+            .header {
                 padding: 15px 30px;
             }
 
@@ -283,7 +298,7 @@
         }
 
         @media (max-width: 768px) {
-            .header-nav {
+            .header {
                 flex-direction: column;
                 align-items: center;
                 padding: 15px 20px;
@@ -307,7 +322,7 @@
             }
 
             .nav-menu > li > a {
-                font-size: 14px;
+                font-size: 1em;
                 padding: 10px 0;
             }
 
@@ -376,32 +391,32 @@
             <a href="#"><img src="https://i.ibb.co/k2x779T4/unnamed-1.webp" alt="Logo" class="logo"></a>
         </div>
         <nav>
-    <ul class="nav-menu">
-        <li><a href="/suctrethanhnien/home">Trang chủ</a></li>
-        <li>
-            <a href="/suctrethanhnien/doantruong" class="dropdown-arrow">Giới thiệu chung <i class="fas fa-caret-down"></i></a>
-            <ul class="dropdown-menu">
-                <li><a href="/suctrethanhnien/gioithieu">Về Đoàn trường chuyên THPT Lê Quý Đôn</a></li>
+            <ul class="nav-menu">
+                <li><a href="/suctrethanhnien/home">Trang chủ</a></li>
+                <li>
+                    <a href="/suctrethanhnien/doantruong" class="dropdown-arrow">Giới thiệu chung <i class="fas fa-caret-down"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/suctrethanhnien/gioithieu">Về Đoàn trường chuyên THPT Lê Quý Đôn</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="/suctrethanhnien/hoatdong" class="dropdown-arrow">Hoạt động tiêu biểu <i class="fas fa-caret-down"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/suctrethanhnien/clb">Câu lạc bộ</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="/suctrethanhnien/tintuc" class="dropdown-arrow">Tin tức <i class="fas fa-caret-down"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/suctrethanhnien/giaoluu">Giao lưu nghệ thuật</a></li>
+                        <li><a href="/suctrethanhnien/tieplua">Lễ tiếp lửa</a></li>
+                        <li><a href="/suctrethanhnien/k16">K16 tri ân</a></li>
+                        <li><a href="/suctrethanhnien/hocbong">Học bổng GEOL</a></li>
+                        <li><a href="/suctrethanhnien/huuhung">Trần Hữu Hưng - Nam sinh ưu tú trường THPT Lê Quý Đôn</a></li>
+                    </ul>
+                </li>
             </ul>
-        </li>
-        <li>
-            <a href="/suctrethanhnien/hoatdong" class="dropdown-arrow">Hoạt động tiêu biểu <i class="fas fa-caret-down"></i></a>
-            <ul class="dropdown-menu">
-                <li><a href="/suctrethanhnien/clb">Câu lạc bộ</a></li>
-            </ul>
-        </li>
-        <li>
-            <a href="/suctrethanhnien/tintuc" class="dropdown-arrow">Tin tức <i class="fas fa-caret-down"></i></a>
-            <ul class="dropdown-menu">
-                <li><a href="/suctrethanhnien/giaoluu">Giao lưu nghệ thuật</a></li>
-                <li><a href="/suctrethanhnien/tieplua">Lễ tiếp lửa</a></li>
-                <li><a href="/suctrethanhnien/k16">K16 tri ân</a></li>
-                <li><a href="/suctrethanhnien/hocbong">Học bổng GEOL</a></li>
-                <li><a href="/suctrethanhnien/huuhung">Trần Hữu Hưng - Nam sinh ưu tú trường THPT Lê Quý Đôn</a></li>
-            </ul>
-        </li>
-    </ul>
-</nav>
+        </nav>
     </header>
 
     <div class="container">
@@ -581,23 +596,23 @@
         <div style="display: flex; justify-content: space-around; flex-wrap: wrap; text-align: left;">
             <div style="flex: 1; min-width: 250px; padding: 10px;">
                 <div style="margin-bottom: 10px;">
-                    <img src="https://lh3.googleuserconten3t.com/nncDY_eP4-Py5kHcWjt8wFaXCUhKpwUgOMqQGT_ac7B3okxjXoWHgv_mj1D5O8emb1VAmuKGCdgQoR8XT1xNUkPJ9JCdwcvU=rw-w267" alt="logo đoàn" class="content-image" style="height: 150px;">
+                    <img src="https://lh3.googleusercontent.com/nncDY_eP4-Py5kHcWjt8wFaXCUhKpwUgOMqQGT_ac7B3okxjXoWHgv_mj1D5O8emb1VAmuKGCdgQoR8XT1xNUkPJ9JCdwcvU=rw-w267" alt="logo đoàn" class="content-image" style="height: 150px;">
                 </div>
                 <strong>SỨC TRẺ THANH NIÊN</strong><br>
-                Đoàn trường THPT chuyên Lê Quý Chí Minh - Điện Biên<br><br>
+                Đoàn trường THPT chuyên Lê Quý Đôn - Điện Biên<br><br>
                 <em style="font-size: 14px;">Trang web đang trong quá trình dự thảo và đang chờ thẩm định nên chưa được cấp phép sử dụng dưới mọi hình thức</em>
             </div>
             <div style="flex: 1; min-width: 250px; padding: 10px;">
                 <strong>Liên hệ</strong><br><br>
-                    📞 Cô Lê Thùy Hòa – Bí thư Đoàn trường: <strong>0372632222</strong><br>
-                    📞 Bạn Nguyễn Quang Minh – Quản trị viên Website: <strong>0849102558</strong><br>
-                    📧 <a href="mailto:doantruongthptchuyenlqd@gmail.com" style="color: #99ccff;">doantruongthptchuyenlqd@gmail.com</a>
-                </div>
-                <div style="flex: 1; min-width: 250px; padding: 10px;">
-                    <strong>Địa điểm</strong><br><br>
-                    📍 Văn phòng Đoàn E103 - E104, Trường THPT Chuyên Lê Quý Đôn
-                </div>
+                📞 Cô Lê Thùy Hoa – Bí thư Đoàn trường: <strong>0372632222</strong><br>
+                📞 Bạn Nguyễn Quang Minh – Quản trị viên Website: <strong>0849102558</strong><br>
+                📧 <a href="mailto:doantruongthptchuyenlqd@gmail.com" style="color: #99ccff;">doantruongthptchuyenlqd@gmail.com</a>
             </div>
+            <div style="flex: 1; min-width: 250px; padding: 10px;">
+                <strong>Địa điểm</strong><br><br>
+                📍 Văn phòng Đoàn E103 - E104, Trường THPT Chuyên Lê Quý Đôn
+            </div>
+        </div>
     </footer>
 </body>
 </html>
