@@ -30,6 +30,141 @@
             overflow-x: hidden;
         }
 
+        /* Header Styles */
+        .header {
+            background: linear-gradient(135deg, var(--white) 0%, #e8f0ff 100%);
+            padding: 15px 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center; /* Căn giữa nội dung chính (menu) */
+            box-shadow: var(--shadow-light);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            position: relative; /* Để logo có thể sử dụng position: absolute */
+        }
+
+        .header-left {
+            position: absolute;
+            left: 60px; /* Đặt logo ở góc trái */
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .header-left .logo {
+            height: 55px;
+            transition: transform 0.3s ease, filter 0.3s ease;
+        }
+
+        .header-left .logo:hover {
+            transform: scale(1.1);
+            filter: brightness(1.1);
+        }
+
+        /* Navigation Menu Styles */
+        .nav-menu {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center; /* Căn giữa menu */
+        }
+
+        .nav-menu li {
+            position: relative;
+            margin-left: 45px;
+        }
+
+        .nav-menu > li > a {
+            text-decoration: none;
+            color: var(--text-color);
+            padding: 15px 0;
+            display: block;
+            font-weight: 500;
+            font-size: 1.1em;
+            transition: color 0.3s ease, transform 0.3s ease;
+            position: relative;
+        }
+
+        .nav-menu > li > a:hover {
+            color: var(--primary-blue);
+            transform: translateY(-2px);
+        }
+
+        .nav-menu > li > a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: var(--primary-blue);
+            transition: width 0.3s ease;
+        }
+
+        .nav-menu > li > a:hover::after {
+            width: 100%;
+        }
+
+        /* Dropdown Styles */
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            background-color: var(--white);
+            min-width: 240px;
+            box-shadow: var(--shadow-light);
+            z-index: 1;
+            border-radius: 10px;
+            overflow: hidden;
+            top: 100%;
+            left: 0;
+            transform: translateY(10px);
+            opacity: 0;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+
+        .nav-menu li:hover > .dropdown-menu {
+            display: block;
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .dropdown-menu li {
+            margin: 0;
+        }
+
+        .dropdown-menu li a {
+            color: var(--text-color);
+            padding: 14px 20px;
+            text-decoration: none;
+            display: block;
+            white-space: nowrap;
+            transition: background-color 0.2s ease, color 0.2s ease, padding-left 0.3s ease;
+        }
+
+        .dropdown-menu li a:hover {
+            background-color: var(--primary-blue);
+            color: var(--white);
+            padding-left: 25px;
+        }
+
+        .dropdown-arrow {
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .dropdown-arrow i {
+            margin-left: 8px;
+            font-size: 0.8em;
+            transition: transform 0.3s ease;
+        }
+
+        .nav-menu li:hover .dropdown-arrow i {
+            transform: rotate(180deg);
+        }
+
+        /* Container Styles */
         .container {
             max-width: 1200px;
             margin: 0 auto;
@@ -119,7 +254,60 @@
             width: 50%;
         }
 
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .header {
+                padding: 15px 30px;
+            }
+
+            .header-left {
+                left: 30px;
+            }
+
+            .nav-menu li {
+                margin-left: 30px;
+            }
+
+            .container {
+                padding: 60px 30px;
+            }
+        }
+
         @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                align-items: center;
+                padding: 15px 20px;
+            }
+
+            .header-left {
+                position: static;
+                transform: none;
+                margin-bottom: 10px;
+            }
+
+            .nav-menu {
+                margin-top: 10px;
+                flex-wrap: wrap;
+                justify-content: center;
+                width: 100%;
+            }
+
+            .nav-menu li {
+                margin: 8px 20px;
+            }
+
+            .nav-menu > li > a {
+                font-size: 1em;
+                padding: 10px 0;
+            }
+
+            .dropdown-menu {
+                left: 50%;
+                transform: translateX(-50%) translateY(10px);
+                min-width: 200px;
+            }
+
             .container {
                 padding: 40px 20px;
             }
@@ -150,6 +338,10 @@
         }
 
         @media (max-width: 480px) {
+            .header-left .logo {
+                height: 45px;
+            }
+
             h1 {
                 font-size: 2em;
             }
@@ -169,6 +361,39 @@
     </style>
 </head>
 <body>
+    <header class="header">
+        <div class="header-left">
+            <a href="#"><img src="https://lh3.googleusercontent.com/nncDY_eP4-Py5kHcWjt8wFaXCUhKpwUgOMqQGT_ac7B3okxjXoWHgv_mj1D5O8emb1VAmuKGCdgQoR8XT1xNUkPJ9JCdwcvU=rw-w267" alt="Logo" class="logo"></a>
+        </div>
+        <nav>
+            <ul class="nav-menu">
+                <li><a href="#">Trang chủ</a></li>
+                <li>
+                    <a href="#" class="dropdown-arrow">Giới thiệu chung <i class="fas fa-caret-down"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Về Đoàn trường chuyên THPT Lê Quý Đôn</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#" class="dropdown-arrow">Hoạt động tiêu biểu <i class="fas fa-caret-down"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Câu lạc bộ</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#" class="dropdown-arrow">Tin tức <i class="fas fa-caret-down"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Giao lưu nghệ thuật</a></li>
+                        <li><a href="#">Lễ tiếp lửa</a></li>
+                        <li><a href="#">K16 tri ân</a></li>
+                        <li><a href="#">Học bổng GEOL</a></li>
+                        <li><a href="#">Trần Hữu Hưng - Nam sinh ưu tú trường THPT Lê Quý Đôn</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
     <div class="container">
         <h1>MỘT SỐ HÌNH ẢNH HOẠT ĐỘNG TIÊU BIỂU</h1>
         <h2>CỦA ĐOÀN TRƯỜNG THPT CHUYÊN LÊ QUÝ ĐÔN</h2>
@@ -257,7 +482,7 @@
                 <div class="text-content">
                     <p>“Áo ấm mùa đông” là dự án thiện nguyện đầy ấm áp do CLB BBL phối hợp cùng Đoàn trường THPT chuyên Lê Quý Đôn tổ chức, với sứ mệnh mang hơi ấm yêu thương đến với những em nhỏ nơi vùng cao lạnh giá. Thông qua hoạt động quyên góp quần áo, đồ dùng học tập và các nhu yếu phẩm thiết yếu, dự án kêu gọi sự chung tay của toàn thể học sinh, giáo viên và cộng đồng để sẻ chia khó khăn, tiếp thêm nghị lực và niềm tin cho các em nhỏ còn thiếu thốn. Mỗi món quà trao đi là một bàn tay nắm lấy hy vọng, một ngọn lửa thắp sáng giữa mùa đông giá lạnh. “Áo ấm mùa đông” không chỉ là hành trình thiện nguyện, mà còn là hành trình trưởng thành của tuổi trẻ – khi ta biết sống vì người khác, biết trao đi để nhận lại những giá trị sâu sắc nhất của tình người và trách nhiệm công dân.</p>
                 </div>
-                <img src="https://lh3.googleusercontent.com/WVKFMjgxCMoFseXE8GXANuyNExVy1-P3LxPTmB_gISg0f3zx3HyltsTPog-BMs4bozDgGHqv0euVjpOLd2Bv2bigOY3mFvnSWQ=rw-w1152" alt="Ảnh Áo ấm mùa đông" id="image-8" class="image-placeholder">
+                <img src="https://lh3.googleusercontent.com/WVKfMjgxCMoRseXe8GXsbN7uyNExVy2uP3LxPTmB0_g_bISg0f3zx3Hylgts0TPog-BMs4bozRpGHgq6v0euVjpjOLd2Bv2bigOY3m7FvnSWQ=rw-w1152" alt="Ảnh Áo ấm mùa đông" id="image-8" class="image-placeholder">
             </div>
         </div>
 
@@ -268,49 +493,48 @@
                 <div class="text-content">
                     <p>"Đổi giấy lấy cây" là dự án môi trường đầy ý nghĩa do CLB EAS phối hợp cùng Đoàn trường THPT chuyên Lê Quý Đôn tổ chức, hướng tới xây dựng lối sống xanh, văn minh và có trách nhiệm trong cộng đồng học sinh. Thông qua hoạt động thu gom và quy đổi các loại rác thải vô cơ có khả năng tái sử dụng – như giấy, chai nhựa, lon, vỏ hộp… – lấy những chậu cây xanh, dự án lan tỏa thông điệp: mỗi hành động nhỏ hôm nay có thể tạo nên sự thay đổi lớn cho ngày mai. Mỗi cây xanh được trao đi không chỉ là phần thưởng, mà còn là lời nhắn nhủ về ý thức bảo vệ môi trường, về một thế hệ trẻ biết yêu thiên nhiên và hành động vì tương lai bền vững. "Đổi giấy lấy cây" không chỉ là một chương trình đổi vật phẩm – mà là nơi tuổi trẻ cùng nhau gieo những mầm xanh của hy vọng, hành động và ý nghĩa.</p>
                 </div>
-                <img src="https://lh3.googleusercontent.com/qvqXNz3Jv3DyMT_5VYJAnlU3OpO20CGiwlVXi8DNqcfnYLq6fFxhlBYK-1DkuQ4u9H1har79tIlzdjJlUIpkuvWTcl45xSmL=rw-w1152" alt="Ảnh Đổi giấy lấy cây" id="image-9" class="image-placeholder">
+                <img src="https://lh3.googleusercontent.com/qvqXNz3Jv3DyMT_5VYJAnlU3OpO20CGiwlwVXi8DNqcfnYLq6fFxhlBYK-1DkuQ4u9H1har79tIlzdjJlUIpkuvWTcl45xSmL=rw-w1152" alt="Ảnh Đổi giấy lấy cây" id="image-9" class="image-placeholder">
             </div>
         </div>
     </div>
-<footer style="background-color: #003366; color: white; padding: 20px 0;">
-  <div style="display: flex; justify-content: space-around; flex-wrap: wrap; text-align: left;">
-    <div style="flex: 1; min-width: 250px; padding: 10px;">
-      <div style="margin-bottom: 10px;">
-        <img src="https://lh3.googleusercontent.com/nncDY_eP4-Py5kHcWjt8wFaXCUhKpwUgOMqQGT_ac7B3okxjXoWHgv_mj1D5O8emb1VAmuKGCdgQoR8XT1xNUkPJ9JCdwcvU=rw-w267" alt="logo đoàn" class="content-image" style="height: 150px;">
-      </div>
-      <strong>SỨC TRẺ THANH NIÊN</strong><br>
-      Đoàn trường THPT chuyên Lê Quý Đôn - Điện Biên<br><br>
-      <em style="font-size: 14px;">Trang web đang trong quá trình dự thảo và đang chờ thẩm định nên chưa được cấp quyền sử dụng dưới mọi hình thức</em>
-    </div>
-    <div style="flex: 1; min-width: 250px; padding: 10px;">
-      <strong>Liên hệ</strong><br><br>
-      📞 Cô Lê Thùy Hoa – Bí thư Đoàn trường: <strong>0372632222</strong><br>
-      📞 Bạn Nguyễn Quang Minh – Quản trị viên Website: <strong>0849102558</strong><br>
-      📧 <a href="mailto:doantruongthptchuyenlqd@gmail.com" style="color: #99ccff;">doantruongthptchuyenlqd@gmail.com</a>
-    </div>
-    <div style="flex: 1; min-width: 250px; padding: 10px;">
-      <strong>Địa điểm</strong><br><br>
-      📍 Văn phòng Đoàn E103 - E104, Trường THPT Chuyên Lê Quý Đôn
-    </div>
-  </div>
-</footer>
+
+    <footer style="background-color: #003366; color: white; padding: 20px 0;">
+        <div style="display: flex; justify-content: space-around; flex-wrap: wrap; text-align: left;">
+            <div style="flex: 1; min-width: 250px; padding: 10px;">
+                <div style="margin-bottom: 10px;">
+                    <img src="https://lh3.googleusercontent.com/nncDY_eP4-Py5kHcWjt8wFaXCUhKpwUgOMqQGT_ac7B3okxjXoWHgv_mj1D5O8emb1VAmuKGCdgQoR8XT1xNUkPJ9JCdwcvU=rw-w267" alt="logo đoàn" class="content-image" style="height: 150px;">
+                </div>
+                <strong>SỨC TRẺ THANH NIÊN</strong><br>
+                Đoàn trường THPT chuyên Lê Quý Đôn - Điện Biên<br><br>
+                <em style="font-size: 14px;">Trang web đang trong quá trình dự thảo và đang chờ thẩm định nên chưa được cấp quyền sử dụng dưới mọi hình thức</em>
+            </div>
+            <div style="flex: 1; min-width: 250px; padding: 10px;">
+                <strong>Liên hệ</strong><br><br>
+                📞 Cô Lê Thùy Hoa – Bí thư Đoàn trường: <strong>0372632222</strong><br>
+                📞 Bạn Nguyễn Quang Minh – Quản trị viên Website: <strong>0849102558</strong><br>
+                📧 <a href="mailto:doantruongthptchuyenlqd@gmail.com" style="color: #99ccff;">doantruongthptchuyenlqd@gmail.com</a>
+            </div>
+            <div style="flex: 1; min-width: 250px; padding: 10px;">
+                <strong>Địa điểm</strong><br><br>
+                📍 Văn phòng Đoàn E103 - E104, Trường THPT Chuyên Lê Quý Đôn
+            </div>
+        </div>
+    </footer>
+
     <script>
-        
         document.addEventListener('DOMContentLoaded', function() {
-            
             const imageSizes = [
-                { id: 'image-1', width: '50%', height: '500px' }, 
-                { id: 'image-2', width: '45%', height: '400px' }, 
-                { id: 'image-3', width: '55%', height: '700px' }, 
-                { id: 'image-4', width: '50%', height: '600px' }, 
-                { id: 'image-5', width: '48%', height: '400px' },
+                { id: 'image-1', width: '50%', height: '500px' },
+                { id: 'image-2', width: '45%', height: '400px' },
+                { id: 'image-3', width: '55%', height: '700px' },
+                { id: 'image-4', width: '50%', height: '600px' },
+                { id: 'image-5', width: '46%', height: '600px' },
                 { id: 'image-6', width: '52%', height: '400px' },
-                { id: 'image-7', width: '50%', height: '400px' },
+                { id: 'image-7', width: '50%', height: '600px' },
                 { id: 'image-8', width: '47%', height: '400px' },
-                { id: 'image-9', width: '53%', height: '400px' }  
+                { id: 'image-9', width: '53%', height: '400px' }
             ];
 
-         
             imageSizes.forEach(size => {
                 const image = document.getElementById(size.id);
                 if (image) {
@@ -318,9 +542,7 @@
                     image.style.height = size.height;
                 }
             });
-            
         });
-        
     </script>
 </body>
 </html>
