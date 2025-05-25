@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bản đồ tòa nhà</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photo-sphere-viewer@4/dist/photo-sphere-viewer.min.css" />
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6; /* Light gray background */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+        .map-container {
+            position: relative;
+            max-width: 900px; /* Max width for the map container */
+            width: 100%;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            background-color: #ffffff;
+            padding: 1rem;
+        }
+        .map-image {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+        .marker {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background-color: #ef4444; /* Red marker */
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            color: white;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            transform: translate(-50%, -50%); /* Center the marker on the given coordinates */
+            transition: transform 0.2s ease-in-out;
+        }
+        .marker:hover {
+            transform: translate(-50%, -50%) scale(1.1);
+        }
+
+        /* Modal styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        .modal-content {
+            background-color: #ffffff;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            max-width: 500px;
+            width: 90%;
+            transform: translateY(-20px);
+            transition: transform 0.3s ease;
+            position: relative;
+        }
+        .modal-overlay.active .modal-content {
+            transform: translateY(0);
+        }
+        .close-button {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #6b7280;
+            transition: color 0.2s;
+        }
+        .close-button:hover {
+            color: #1f2937;
+        }
+        .list-item {
+            padding: 0.75rem 1rem;
+            margin-bottom: 0.5rem;
+            background-color: #f9fafb;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 1.1rem;
+            color: #374151;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+        .list-item:hover {
+            background-color: #e5e7eb;
+            transform: translateX(5px);
+        }
+        .list-item:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Photo Sphere Viewer container */
+        #viewer {
+            width: 100%;
+            height: 60vh; /* Adjust height as needed */
+            border-radius: 12px;
+            overflow: hidden;
+            background-color: #000;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .modal-content {
+                padding: 1.5rem;
+            }
+            .list-item {
+                font-size: 1rem;
+            }
+            .map-container {
+                padding: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="map-container">
+        <img src="ht.png" alt="Bản đồ tòa nhà" class="map-image">
+        <div id="buildingMarker" class="marker" style="left: 50%; top: 50%;">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
+                <path fill-rule="evenodd" d="m11.54 22.351.07.04.028.016a.76.76 0 0 0 .723 0l.028-.015.071-.041a16.975 16.975 0 0 0 1.144-.742 19.58 19.58 0 0 0 2.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 0 0-16.5 0c0 3.846 2.02 6.837 3.963 8.827a19.58 19.58 0 0 0 2.682 2.282 16.975 16.975 0 0 0 1.145.742ZM12 13.5a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" clip-rule="evenodd" />
+            </svg>
+        </div>
+    </div>
+
+    <div id="floorsModal" class="modal-overlay">
+        <div class="modal-content">
+            <button class="close-button" onclick="closeModal('floorsModal')">&times;</button>
+            <h2 class="text-2xl font-semibold mb-4 text-gray-800">Chọn Tầng</h2>
+            <div id="floorsList" class="space-y-3">
+                </div>
+        </div>
+    </div>
+
+    <div id="roomsModal" class="modal-overlay">
+        <div class="modal-content">
+            <button class="close-button" onclick="closeModal('roomsModal')">&times;</button>
+            <h2 class="text-2xl font-semibold mb-4 text-gray-800">Chọn Phòng</h2>
+            <div id="roomsList" class="space-y-3">
+                </div>
+        </div>
+    </div>
+
+    <div id="viewerModal" class="modal-overlay">
+        <div class="modal-content">
+            <button class="close-button" onclick="closeModal('viewerModal')">&times;</button>
+            <h2 class="text-2xl font-semibold mb-4 text-gray-800">Xem ảnh 360 độ</h2>
+            <div id="viewer"></div>
+            <p id="viewerMessage" class="text-center text-gray-600 mt-4 hidden">Đang tải ảnh 360 độ...</p>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/photo-sphere-viewer@4/dist/photo-sphere-viewer.min.js"></script>
+
+    <script>
+        // Data structure for building floors and rooms
+        const buildingData = {
+            "Tầng 1": {
+                "Phòng A101": "https://placehold.co/1920x960/000000/FFFFFF?text=Phòng+A101+360", // Placeholder for other rooms
+                "Phòng A102": "https://placehold.co/1920x960/000000/FFFFFF?text=Phòng+A102+360",
+                "Phòng A103": "https://placehold.co/1920x960/000000/FFFFFF?text=Phòng+A103+360"
+            },
+            "Tầng 2": {
+                "Phòng B201": "Hs.jpg", // The specific 360 image
+                "Phòng B202": "https://placehold.co/1920x960/000000/FFFFFF?text=Phòng+B202+360",
+                "Phòng B203": "https://placehold.co/1920x960/000000/FFFFFF?text=Phòng+B203+360"
+            },
+            "Tầng 3": {
+                "Phòng C301": "https://placehold.co/1920x960/000000/FFFFFF?text=Phòng+C301+360",
+                "Phòng C302": "https://placehold.co/1920x960/000000/FFFFFF?text=Phòng+C302+360"
+            }
+        };
+
+        let currentFloor = '';
+        let viewer = null; // Photo Sphere Viewer instance
+
+        // Function to open a modal
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.add('active');
+        }
+
+        // Function to close a modal
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+            // Stop the viewer if it's active
+            if (modalId === 'viewerModal' && viewer) {
+                viewer.destroy();
+                viewer = null;
+                document.getElementById('viewer').innerHTML = ''; // Clear viewer content
+                document.getElementById('viewerMessage').classList.add('hidden');
+            }
+        }
+
+        // Display floors list
+        function displayFloors() {
+            const floorsList = document.getElementById('floorsList');
+            floorsList.innerHTML = ''; // Clear previous list
+            Object.keys(buildingData).forEach(floor => {
+                const floorItem = document.createElement('div');
+                floorItem.classList.add('list-item');
+                floorItem.textContent = floor;
+                floorItem.onclick = () => {
+                    currentFloor = floor;
+                    closeModal('floorsModal');
+                    displayRooms(floor);
+                    openModal('roomsModal');
+                };
+                floorsList.appendChild(floorItem);
+            });
+            openModal('floorsModal');
+        }
+
+        // Display rooms list for a given floor
+        function displayRooms(floor) {
+            const roomsList = document.getElementById('roomsList');
+            roomsList.innerHTML = ''; // Clear previous list
+            const rooms = buildingData[floor];
+            Object.keys(rooms).forEach(room => {
+                const roomItem = document.createElement('div');
+                roomItem.classList.add('list-item');
+                roomItem.textContent = room;
+                roomItem.onclick = () => {
+                    closeModal('roomsModal');
+                    load360Viewer(rooms[room]);
+                };
+                roomsList.appendChild(roomItem);
+            });
+        }
+
+        // Load 360-degree viewer
+        function load360Viewer(imagePath) {
+            openModal('viewerModal');
+            document.getElementById('viewerMessage').classList.remove('hidden'); // Show loading message
+
+            // Initialize Photo Sphere Viewer
+            viewer = new PhotoSphereViewer.Viewer({
+                container: 'viewer',
+                panorama: imagePath,
+                loadingImg: 'https://cdn.jsdelivr.net/npm/photo-sphere-viewer@4/assets/loader.gif', // Default loader
+                navbar: [
+                    'zoom',
+                    'move',
+                    'caption',
+                    'fullscreen',
+                ],
+                caption: 'Ảnh 360 độ',
+                touchmoveTwoFingers: true, // Enable two-finger touch for pan
+                mousewheel: true, // Enable mouse wheel for zoom
+                defaultZoomLvl: 50,
+            });
+
+            viewer.once('ready', () => {
+                document.getElementById('viewerMessage').classList.add('hidden'); // Hide loading message
+            });
+
+            viewer.once('error', (e) => {
+                document.getElementById('viewer').innerHTML = '<p class="text-center text-red-500">Không thể tải ảnh 360 độ. Vui lòng kiểm tra đường dẫn.</p>';
+                document.getElementById('viewerMessage').classList.add('hidden');
+                console.error("Photo Sphere Viewer error:", e);
+            });
+        }
+
+        // Event listener for the building marker
+        document.getElementById('buildingMarker').addEventListener('click', displayFloors);
+
+        // Close modals if clicking outside
+        document.getElementById('floorsModal').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('floorsModal')) {
+                closeModal('floorsModal');
+            }
+        });
+        document.getElementById('roomsModal').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('roomsModal')) {
+                closeModal('roomsModal');
+            }
+        });
+        document.getElementById('viewerModal').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('viewerModal')) {
+                closeModal('viewerModal');
+            }
+        });
+
+        // Initial setup for marker position (you will adjust this)
+        window.onload = () => {
+            const mapImage = document.querySelector('.map-image');
+            const marker = document.getElementById('buildingMarker');
+
+            // This is a placeholder. You need to adjust these percentages
+            // based on where your building marker should be on ht.png
+            // For example, if the building is at 30% from left and 60% from top:
+            // marker.style.left = '30%';
+            // marker.style.top = '60%';
+            // Currently set to 50%, 50% for demonstration.
+        };
+
+    </script>
+</body>
+</html>
