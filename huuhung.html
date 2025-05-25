@@ -36,17 +36,17 @@
             padding: 15px 60px;
             display: flex;
             align-items: center;
-            justify-content: center; /* Căn giữa nội dung chính (menu) */
+            justify-content: center;
             box-shadow: var(--shadow-light);
             position: sticky;
             top: 0;
             z-index: 1000;
-            position: relative; /* Để logo có thể sử dụng position: absolute */
+            position: relative;
         }
 
         .header-left {
             position: absolute;
-            left: 60px; /* Đặt logo ở góc trái với khoảng cách từ mép */
+            left: 60px;
             top: 50%;
             transform: translateY(-50%);
         }
@@ -68,7 +68,7 @@
             padding: 0;
             display: flex;
             align-items: center;
-            justify-content: center; /* Căn giữa menu */
+            justify-content: center;
         }
 
         .nav-menu li {
@@ -171,13 +171,22 @@
         }
 
         .main-section h1 {
-            font-size: 2.5em;
+            font-size: 2.8em;
             color: var(--primary-blue);
             margin-bottom: 40px;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 1.5px;
+            text-align: center;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
             position: relative;
+            padding: 15px 0;
+            transition: transform 0.3s ease, text-shadow 0.3s ease;
+        }
+
+        .main-section h1:hover {
+            transform: scale(1.05);
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.2);
         }
 
         .main-section h1::after {
@@ -186,7 +195,7 @@
             left: 50%;
             bottom: -10px;
             transform: translateX(-50%);
-            width: 60px;
+            width: 80px;
             height: 4px;
             background-color: var(--accent-orange);
             border-radius: 2px;
@@ -267,7 +276,7 @@
             }
 
             .header-left {
-                position: static; /* Logo không cần absolute trên màn hình nhỏ */
+                position: static;
                 transform: none;
                 margin-bottom: 10px;
             }
@@ -295,7 +304,7 @@
             }
 
             .main-section h1 {
-                font-size: 2em;
+                font-size: 2.2em;
             }
 
             .content-with-image {
@@ -317,7 +326,7 @@
                 padding: 40px 20px;
             }
             .main-section h1 {
-                font-size: 1.6em;
+                font-size: 1.8em;
             }
             .content-with-image img {
                 height: 150px;
@@ -329,39 +338,40 @@
     </style>
 </head>
 <body>
-<header class="header">
+    <header class="header">
         <div class="header-left">
             <a href="#"><img src="https://i.ibb.co/k2x779T4/unnamed-1.webp" alt="Logo" class="logo"></a>
         </div>
         <nav>
-    <ul class="nav-menu">
-        <li><a href="/suctrethanhnien/home">Trang chủ</a></li>
-        <li>
-            <a href="/suctrethanhnien/doantruong" class="dropdown-arrow">Giới thiệu chung <i class="fas fa-caret-down"></i></a>
-            <ul class="dropdown-menu">
-                <li><a href="/suctrethanhnien/gioithieu">Về Đoàn trường chuyên THPT Lê Quý Đôn</a></li>
+            <ul class="nav-menu">
+                <li><a href="/suctrethanhnien/home">Trang chủ</a></li>
+                <li>
+                    <a href="/suctrethanhnien/doantruong" class="dropdown-arrow">Giới thiệu chung <i class="fas fa-caret-down"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/suctrethanhnien/gioithieu">Về Đoàn trường chuyên THPT Lê Quý Đôn</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="/suctrethanhnien/hoatdong" class="dropdown-arrow">Hoạt động tiêu biểu <i class="fas fa-caret-down"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/suctrethanhnien/clb">Câu lạc bộ</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="/suctrethanhnien/tintuc" class="dropdown-arrow">Tin tức <i class="fas fa-caret-down"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/suctrethanhnien/giaoluu">Giao lưu nghệ thuật</a></li>
+                        <li><a href="/suctrethanhnien/tieplua">Lễ tiếp lửa</a></li>
+                        <li><a href="/suctrethanhnien/k16">K16 tri ân</a></li>
+                        <li><a href="/suctrethanhnien/hocbong">Học bổng GEOL</a></li>
+                        <li><a href="/suctrethanhnien/huuhung">Trần Hữu Hưng - Nam sinh ưu tú trường THPT Lê Quý Đôn</a></li>
+                    </ul>
+                </li>
             </ul>
-        </li>
-        <li>
-            <a href="/suctrethanhnien/hoatdong" class="dropdown-arrow">Hoạt động tiêu biểu <i class="fas fa-caret-down"></i></a>
-            <ul class="dropdown-menu">
-                <li><a href="/suctrethanhnien/clb">Câu lạc bộ</a></li>
-            </ul>
-        </li>
-        <li>
-            <a href="/suctrethanhnien/tintuc" class="dropdown-arrow">Tin tức <i class="fas fa-caret-down"></i></a>
-            <ul class="dropdown-menu">
-                <li><a href="/suctrethanhnien/giaoluu">Giao lưu nghệ thuật</a></li>
-                <li><a href="/suctrethanhnien/tieplua">Lễ tiếp lửa</a></li>
-                <li><a href="/suctrethanhnien/k16">K16 tri ân</a></li>
-                <li><a href="/suctrethanhnien/hocbong">Học bổng GEOL</a></li>
-                <li><a href="/suctrethanhnien/huuhung">Trần Hữu Hưng - Nam sinh ưu tú trường THPT Lê Quý Đôn</a></li>
-            </ul>
-        </li>
-    </ul>
-</nav>
+        </nav>
     </header>
 
+    <section class="main-section">
         <h1>THÀNH TÍCH TRẦN HỮU HƯNG</h1>
         <div class="content-section">
             <p>Được sự dìu dắt của thầy và cô trường THPT chuyên Lê Quý Đôn, em <strong>Trần Hữu Hưng</strong> đã đạt được nhiều thành tích cả trong học tập như: Giải Nhì HSG môn Vật Lý lớp 11 cấp tỉnh năm học 2022-2023; Giải Khuyến khích HSG MTCT Vật Lý 11 năm học 2022-2023; Giải Ba HSG môn Vật Lý lớp 12 cấp tỉnh năm học 2023-2024; Đạt Danh hiệu học sinh giỏi năm học 2022-2023.</p>
@@ -377,28 +387,29 @@
 
             <p>Hi vọng em sẽ còn tiến cao, tiến xa hơn nữa trong học tập, trong các phong trào hoạt động của thanh thiếu niên và được mọi người tin yêu, quý mến, luôn là tấm gương sáng để các bạn học tập, sẵn sàng theo đuổi những mục tiêu to lớn hơn và biến ước mơ của mình thành sự thật./.</p>
         </div>
-        <footer style="background-color: #003366; color: white; padding: 20px 0;">
-  <div style="display: flex; justify-content: space-around; flex-wrap: wrap; text-align: left;">
-    <div style="flex: 1; min-width: 250px; padding: 10px;">
-      <div style="margin-bottom: 10px;">
-        <img src="https://lh3.googleusercontent.com/nncDY_eP4-Py5kHcWjt8wFaXCUhKpwUgOMqQGT_ac7B3okxjXoWHgv_mj1D5O8emb1VAmuKGCdgQoR8XT1xNUkPJ9JCdwcvU=rw-w267" alt="logo đoàn" class="content-image" style="height: 150px;">
-      </div>
-      <strong>SỨC TRẺ THANH NIÊN</strong><br>
-      Đoàn trường THPT chuyên Lê Quý Đôn - Điện Biên<br><br>
-      <em style="font-size: 14px;">Trang web đang trong quá trình dự thảo và đang chờ thẩm định nên chưa được cấp quyền sử dụng dưới mọi hình thức</em>
-    </div>
-    <div style="flex: 1; min-width: 250px; padding: 10px;">
-      <strong>Liên hệ</strong><br><br>
-      📞 Cô Lê Thùy Hoa – Bí thư Đoàn trường: <strong>0372632222</strong><br>
-      📞 Bạn Nguyễn Quang Minh – Quản trị viên Website: <strong>0849102558</strong><br>
-      📧 <a href="mailto:doantruongthptchuyenlqd@gmail.com" style="color: #99ccff;">doantruongthptchuyenlqd@gmail.com</a>
-    </div>
-    <div style="flex: 1; min-width: 250px; padding: 10px;">
-      <strong>Địa điểm</strong><br><br>
-      📍 Văn phòng Đoàn E103 - E104, Trường THPT Chuyên Lê Quý Đôn
-    </div>
-  </div>
-</footer>
     </section>
+
+    <footer style="background-color: #003366; color: white; padding: 20px 0;">
+        <div style="display: flex; justify-content: space-around; flex-wrap: wrap; text-align: left;">
+            <div style="flex: 1; min-width: 250px; padding: 10px;">
+                <div style="margin-bottom: 10px;">
+                    <img src="https://lh3.googleusercontent.com/nncDY_eP4-Py5kHcWjt8wFaXCUhKpwUgOMqQGT_ac7B3okxjXoWHgv_mj1D5O8emb1VAmuKGCdgQoR8XT1xNUkPJ9JCdwcvU=rw-w267" alt="logo đoàn" class="content-image" style="height: 150px;">
+                </div>
+                <strong>SỨC TRẺ THANH NIÊN</strong><br>
+                Đoàn trường THPT chuyên Lê Quý Đôn - Điện Biên<br><br>
+                <em style="font-size: 14px;">Trang web đang trong quá trình dự thảo và đang chờ thẩm định nên chưa được cấp quyền sử dụng dưới mọi hình thức</em>
+            </div>
+            <div style="flex: 1; min-width: 250px; padding: 10px;">
+                <strong>Liên hệ</strong><br><br>
+                📞 Cô Lê Thùy Hoa – Bí thư Đoàn trường: <strong>0372632222</strong><br>
+                📞 Bạn Nguyễn Quang Minh – Quản trị viên Website: <strong>0849102558</strong><br>
+                📧 <a href="mailto:doantruongthptchuyenlqd@gmail.com" style="color: #99ccff;">doantruongthptchuyenlqd@gmail.com</a>
+            </div>
+            <div style="flex: 1; min-width: 250px; padding: 10px;">
+                <strong>Địa điểm</strong><br><br>
+                📍 Văn phòng Đoàn E103 - E104, Trường THPT Chuyên Lê Quý Đôn
+            </div>
+        </div>
+    </footer>
 </body>
 </html>
