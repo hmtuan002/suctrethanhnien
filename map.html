@@ -3,403 +3,294 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bản đồ tòa nhà</title>
+    <title>Bản đồ Tòa nhà</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photo-sphere-viewer@4/dist/photo-sphere-viewer.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photo-sphere-viewer@4/dist/photo-sphere-viewer.min.css">
     <style>
         body {
             font-family: 'Inter', sans-serif;
             background-color: #f3f4f6; /* Light gray background */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            padding: 20px;
         }
-        .map-container {
-            position: relative;
-            max-width: 900px; /* Max width for the map container */
-            width: 100%;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-            background-color: #ffffff;
-            padding: 1rem;
-        }
-        .map-image {
-            width: 100%;
-            height: auto;
-            border-radius: 8px;
-        }
+        /* Custom styles for markers */
         .marker {
             position: absolute;
-            width: 30px;
+            width: 30px; /* Kích thước điểm đánh dấu */
             height: 30px;
-            background-color: #ef4444; /* Red marker */
-            border-radius: 50%;
+            background-color: #ef4444; /* Màu đỏ */
+            border-radius: 50%; /* Hình tròn */
             cursor: pointer;
             display: flex;
-            justify-content: center;
             align-items: center;
-            font-weight: bold;
+            justify-content: center;
             color: white;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-            transform: translate(-50%, -50%); /* Center the marker on the given coordinates */
-            transition: transform 0.2s ease-in-out;
+            font-weight: bold;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease-in-out, background-color 0.2s ease-in-out;
+            transform: translate(-50%, -50%); /* Căn giữa điểm đánh dấu trên tọa độ */
+            z-index: 10;
         }
         .marker:hover {
             transform: translate(-50%, -50%) scale(1.1);
+            background-color: #dc2626;
         }
-
-        /* Modal styles */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
+        /* Style for the 360 viewer container */
+        #photosphere {
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.6);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.3s ease, visibility 0.3s ease;
+            border-radius: 0.5rem; /* Match modal's rounded corners */
+            overflow: hidden; /* Ensure content stays within rounded corners */
         }
-        .modal-overlay.active {
-            opacity: 1;
-            visibility: visible;
-        }
-        .modal-content {
-            background-color: #ffffff;
-            padding: 2rem;
-            border-radius: 12px;
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
-            max-width: 500px;
-            width: 90%;
-            transform: translateY(-20px);
-            transition: transform 0.3s ease;
-            position: relative;
-        }
-        .modal-overlay.active .modal-content {
-            transform: translateY(0);
-        }
-        .close-button {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: #6b7280;
-            transition: color 0.2s;
-        }
-        .close-button:hover {
-            color: #1f2937;
-        }
-        .list-item {
-            padding: 0.75rem 1rem;
-            margin-bottom: 0.5rem;
-            background-color: #f9fafb;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background-color 0.2s, transform 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            font-size: 1.1rem;
-            color: #374151;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-        }
-        .list-item:hover {
-            background-color: #e5e7eb;
-            transform: translateX(5px);
-        }
-        .list-item:last-child {
-            margin-bottom: 0;
-        }
-
-        /* Photo Sphere Viewer container */
-        #viewer {
-            width: 100%;
-            height: 60vh; /* Adjust height as needed */
-            border-radius: 12px;
-            overflow: hidden;
-            background-color: #000;
-        }
-
-        /* Responsive adjustments */
-        @media (max-width: 768px) {
-            .modal-content {
-                padding: 1.5rem;
-            }
-            .list-item {
-                font-size: 1rem;
-            }
-            .map-container {
-                padding: 0.5rem;
-            }
+        /* Ensure the modal content scrolls if it's too long */
+        #modalContent {
+            max-height: 70vh; /* Giới hạn chiều cao để nội dung có thể cuộn */
+            overflow-y: auto; /* Cho phép cuộn dọc */
         }
     </style>
 </head>
-<body>
+<body class="p-4">
 
-    <div class="map-container">
-        <img src="ht.png" alt="Bản đồ tòa nhà" class="map-image">
-    </div>
+    <h1 class="text-4xl font-extrabold text-center text-gray-900 mb-8">Bản đồ Tòa nhà & Xem Phòng 360°</h1>
 
-    <div id="floorsModal" class="modal-overlay">
-        <div class="modal-content">
-            <button class="close-button" onclick="closeModal('floorsModal')">&times;</button>
-            <h2 class="text-2xl font-semibold mb-4 text-gray-800">Chọn Tầng</h2>
-            <div id="floorsList" class="space-y-3">
+    <div class="relative w-full max-w-5xl mx-auto bg-white rounded-xl shadow-2xl overflow-hidden">
+        <img id="mapImage" src="ht.png" alt="Bản đồ tòa nhà" class="w-full h-auto rounded-xl">
+        <div id="markersContainer" class="absolute top-0 left-0 w-full h-full">
             </div>
+    </div>
+
+    <div id="detailsModal" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center p-4 z-50 hidden">
+        <div class="bg-white p-6 rounded-xl shadow-2xl w-full max-w-md mx-auto transform transition-all duration-300 scale-95 opacity-0" id="detailsModalContent">
+            <h2 id="modalTitle" class="text-3xl font-bold text-gray-800 mb-6 text-center"></h2>
+            <div id="modalContent" class="space-y-4 text-lg">
+                </div>
+            <button id="closeModal" class="mt-8 w-full px-6 py-3 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 transition duration-200 ease-in-out shadow-md">
+                Đóng
+            </button>
         </div>
     </div>
 
-    <div id="roomsModal" class="modal-overlay">
-        <div class="modal-content">
-            <button class="close-button" onclick="closeModal('roomsModal')">&times;</button>
-            <h2 class="text-2xl font-semibold mb-4 text-gray-800">Chọn Phòng</h2>
-            <div id="roomsList" class="space-y-3">
-            </div>
+    <div id="viewerModal" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center p-4 z-50 hidden">
+        <div class="relative bg-gray-900 rounded-xl shadow-2xl w-full max-w-4xl h-3/4 transform transition-all duration-300 scale-95 opacity-0" id="viewerModalContent">
+            <div id="photosphere" class="w-full h-full"></div>
+            <button id="closeViewer" class="absolute top-4 right-4 px-6 py-3 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 transition duration-200 ease-in-out shadow-md z-10">
+                Đóng
+            </button>
         </div>
     </div>
 
-    <div id="viewerModal" class="modal-overlay">
-        <div class="modal-content">
-            <button class="close-button" onclick="closeModal('viewerModal')">&times;</button>
-            <h2 class="text-2xl font-semibold mb-4 text-gray-800">Xem ảnh 360 độ</h2>
-            <div id="viewer"></div>
-            <p id="viewerMessage" class="text-center text-gray-600 mt-4 hidden">Đang tải ảnh 360 độ...</p>
-        </div>
-    </div>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://unpkg.com/photo-sphere-viewer@4/dist/photo-sphere-viewer.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.137.0/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/photo-sphere-viewer@4/dist/photo-sphere-viewer.min.js"></script>
 
     <script>
-        // Đảm bảo DOM đã tải đầy đủ trước khi chạy script
-        document.addEventListener('DOMContentLoaded', () => {
-            // Cấu trúc dữ liệu cho nhiều tòa nhà, điểm đánh dấu, tầng và phòng
-            const allBuildingsData = {
-                "Tòa nhà A": {
-                    markerCoords: { left: '50%', top: '50%' }, // Tọa độ ví dụ cho Tòa nhà A
-                    floors: {
-                        "Tầng 1": {
-                            "Phòng A101": "https://placehold.co/1920x960/000000/FFFFFF?text=Tòa+nhà+A+Phòng+A101+360",
-                            "Phòng A102": "https://placehold.co/1920x960/000000/FFFFFF?text=Tòa+nhà+A+Phòng+A102+360",
-                            "Phòng A103": "https://placehold.co/1920x960/000000/FFFFFF?text=Tòa+nhà+A+Phòng+A103+360"
-                        },
-                        "Tầng 2": {
-                            "Phòng A201": "Hs.jpg", // Đường dẫn ảnh 360 cụ thể của bạn
-                            "Phòng A202": "https://placehold.co/1920x960/000000/FFFFFF?text=Tòa+nhà+A+Phòng+A202+360",
-                            "Phòng A203": "https://placehold.co/1920x960/000000/FFFFFF?text=Tòa+nhà+A+Phòng+A203+360"
-                        }
+        // Dữ liệu giả định cho các tòa nhà, tầng và phòng
+        // Bạn sẽ cần cập nhật tọa độ (x, y) của marker để phù hợp với bản đồ 'ht.png' của bạn.
+        // Tọa độ (x, y) là phần trăm từ góc trên bên trái của ảnh bản đồ.
+        const buildingsData = [
+            {
+                id: 'building1',
+                name: 'Tòa nhà A',
+                marker: { x: 30, y: 40 }, // Tọa độ ví dụ (30% từ trái, 40% từ trên)
+                floors: [
+                    {
+                        id: 'floor1_A',
+                        name: 'Tầng 1',
+                        rooms: [
+                            { id: 'room101_A', name: 'Phòng 101', image: 'https://placehold.co/1000x500/000/FFF?text=Phong+101' },
+                            { id: 'room102_A', name: 'Phòng 102', image: 'Hs.jpg' }, // Sử dụng 'Hs.jpg' như yêu cầu
+                            { id: 'room103_A', name: 'Phòng 103', image: 'https://placehold.co/1000x500/000/FFF?text=Phong+103' }
+                        ]
+                    },
+                    {
+                        id: 'floor2_A',
+                        name: 'Tầng 2',
+                        rooms: [
+                            { id: 'room201_A', name: 'Phòng 201', image: 'https://placehold.co/1000x500/000/FFF?text=Phong+201' },
+                            { id: 'room202_A', name: 'Phòng 202', image: 'https://placehold.co/1000x500/000/FFF?text=Phong+202' }
+                        ]
                     }
-                },
-                "Tòa nhà B": {
-                    markerCoords: { left: '25%', top: '70%' }, // Tọa độ ví dụ cho Tòa nhà B
-                    floors: {
-                        "Tầng Trệt": {
-                            "Phòng B001": "https://placehold.co/1920x960/000000/FFFFFF?text=Tòa+nhà+B+Phòng+B001+360",
-                            "Phòng B002": "https://placehold.co/1920x960/000000/FFFFFF?text=Tòa+nhà+B+Phòng+B002+360"
-                        },
-                        "Tầng 1": {
-                            "Phòng B101": "https://placehold.co/1920x960/000000/FFFFFF?text=Tòa+nhà+B+Phòng+B101+360",
-                            "Phòng B102": "https://placehold.co/1920x960/000000/FFFFFF?text=Tòa+nhà+B+Phòng+B102+360"
-                        }
+                ]
+            },
+            {
+                id: 'building2',
+                name: 'Tòa nhà B',
+                marker: { x: 70, y: 25 }, // Tọa độ ví dụ khác
+                floors: [
+                    {
+                        id: 'floor1_B',
+                        name: 'Tầng Trệt',
+                        rooms: [
+                            { id: 'roomB01', name: 'Phòng B01', image: 'https://placehold.co/1000x500/000/FFF?text=Phong+B01' }
+                        ]
+                    },
+                    {
+                        id: 'floor2_B',
+                        name: 'Tầng 1',
+                        rooms: [
+                            { id: 'roomB11', name: 'Phòng B11', image: 'https://placehold.co/1000x500/000/FFF?text=Phong+B11' },
+                            { id: 'roomB12', name: 'Phòng B12', image: 'https://placehold.co/1000x500/000/FFF?text=Phong+B12' }
+                        ]
                     }
-                },
-                "Tòa nhà C": {
-                    markerCoords: { left: '75%', top: '30%' }, // Tọa độ ví dụ cho Tòa nhà C
-                    floors: {
-                        "Tầng 1": {
-                            "Phòng C101": "https://placehold.co/1920x960/000000/FFFFFF?text=Tòa+nhà+C+Phòng+C101+360",
-                            "Phòng C102": "https://placehold.co/1920x960/000000/FFFFFF?text=Tòa+nhà+C+Phòng+C102+360"
-                        }
-                    }
-                }
-            };
-
-            let currentBuildingName = '';
-            let currentFloorData = {}; // Lưu trữ dữ liệu tầng cho tòa nhà hiện được chọn
-            let viewer = null; // Thể hiện của Photo Sphere Viewer
-
-            // Hàm mở modal
-            function openModal(modalId) {
-                document.getElementById(modalId).classList.add('active');
+                ]
             }
+            // Thêm các tòa nhà khác tại đây
+        ];
 
-            // Hàm đóng modal
-            function closeModal(modalId) {
-                document.getElementById(modalId).classList.remove('active');
-                // Dừng viewer nếu nó đang hoạt động
-                if (modalId === 'viewerModal' && viewer) {
-                    viewer.destroy(); // Hủy bỏ thể hiện của viewer
-                    viewer = null;
-                    document.getElementById('viewer').innerHTML = ''; // Xóa nội dung viewer
-                    document.getElementById('viewerMessage').classList.add('hidden');
-                }
-            }
+        // Lấy các phần tử DOM
+        const mapImage = document.getElementById('mapImage');
+        const markersContainer = document.getElementById('markersContainer');
+        const detailsModal = document.getElementById('detailsModal');
+        const detailsModalContent = document.getElementById('detailsModalContent');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalContent = document.getElementById('modalContent');
+        const closeModalBtn = document.getElementById('closeModal');
+        const viewerModal = document.getElementById('viewerModal');
+        const viewerModalContent = document.getElementById('viewerModalContent');
+        const closeViewerBtn = document.getElementById('closeViewer');
+        const photosphereContainer = document.getElementById('photosphere');
 
-            // Hiển thị danh sách tầng cho một tòa nhà nhất định
-            function displayFloors(buildingName) {
-                currentBuildingName = buildingName;
-                const building = allBuildingsData[buildingName];
-                if (!building) {
-                    console.error(`Không tìm thấy dữ liệu tòa nhà cho: ${buildingName}`);
-                    return;
-                }
-                currentFloorData = building.floors; // Đặt dữ liệu tầng hiện tại
+        let currentViewer = null; // Biến để lưu trữ thể hiện PhotoSphereViewer
 
-                const floorsList = document.getElementById('floorsList');
-                floorsList.innerHTML = ''; // Xóa danh sách trước đó
-                Object.keys(currentFloorData).forEach(floor => {
-                    const floorItem = document.createElement('div');
-                    floorItem.classList.add('list-item');
-                    floorItem.textContent = floor;
-                    floorItem.onclick = () => {
-                        closeModal('floorsModal');
-                        displayRooms(floor);
-                        openModal('roomsModal');
-                    };
-                    floorsList.appendChild(floorItem);
-                });
-                // Cập nhật tiêu đề modal
-                document.querySelector('#floorsModal .modal-content h2').textContent = `Chọn Tầng cho ${buildingName}`;
-                openModal('floorsModal');
-            }
+        // Hàm hiển thị modal
+        function showModal(modalElement, contentElement) {
+            modalElement.classList.remove('hidden');
+            // Kích hoạt hiệu ứng chuyển đổi
+            setTimeout(() => {
+                contentElement.classList.remove('scale-95', 'opacity-0');
+                contentElement.classList.add('scale-100', 'opacity-100');
+            }, 10);
+        }
 
-            // Hiển thị danh sách phòng cho một tầng nhất định trong tòa nhà hiện tại
-            function displayRooms(floor) {
-                const roomsList = document.getElementById('roomsList');
-                roomsList.innerHTML = ''; // Xóa danh sách trước đó
-                const rooms = currentFloorData[floor]; // Sử dụng currentFloorData
-                if (!rooms) {
-                    console.error(`Không tìm thấy phòng cho tầng: ${floor} trong tòa nhà: ${currentBuildingName}`);
-                    return;
-                }
-                Object.keys(rooms).forEach(room => {
-                    const roomItem = document.createElement('div');
-                    roomItem.classList.add('list-item');
-                    roomItem.textContent = room;
-                    roomItem.onclick = () => {
-                        closeModal('roomsModal');
-                        load360Viewer(rooms[room]);
-                    };
-                    roomsList.appendChild(roomItem);
-                });
-                // Cập nhật tiêu đề modal
-                document.querySelector('#roomsModal .modal-content h2').textContent = `Chọn Phòng cho ${currentBuildingName} - ${floor}`;
-            }
+        // Hàm ẩn modal
+        function hideModal(modalElement, contentElement) {
+            // Kích hoạt hiệu ứng chuyển đổi ngược
+            contentElement.classList.remove('scale-100', 'opacity-100');
+            contentElement.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => {
+                modalElement.classList.add('hidden');
+            }, 300); // Thời gian khớp với thời gian chuyển đổi CSS
+        }
 
-            // Tải trình xem ảnh 360 độ
-            function load360Viewer(imagePath) {
-                openModal('viewerModal');
-                document.getElementById('viewerMessage').classList.remove('hidden'); // Hiển thị thông báo tải
-
-                // Xóa nội dung viewer cũ trước khi khởi tạo viewer mới
-                document.getElementById('viewer').innerHTML = '';
-
-                // Kiểm tra rõ ràng xem PhotoSphereViewer có được định nghĩa và hàm tạo Viewer có sẵn không
-                if (typeof PhotoSphereViewer === 'undefined' || typeof PhotoSphereViewer.Viewer === 'undefined') {
-                    console.error("Lỗi: PhotoSphereViewer.Viewer không phải là một hàm tạo. Thư viện có thể không tải đúng cách hoặc có xung đột môi trường.");
-                    document.getElementById('viewer').innerHTML = '<p class="text-center text-red-500">Không thể tải trình xem ảnh 360 độ. Vui lòng kiểm tra console để biết chi tiết lỗi (có thể do lỗi tải thư viện).</p>';
-                    document.getElementById('viewerMessage').classList.add('hidden');
-                    return; // Thoát nếu viewer không có sẵn
-                }
-
-                try {
-                    // Khởi tạo Photo Sphere Viewer
-                    viewer = new PhotoSphereViewer.Viewer({
-                        container: 'viewer',
-                        panorama: imagePath,
-                        loadingImg: 'https://cdn.jsdelivr.net/npm/photo-sphere-viewer@4/assets/loader.gif', // Bộ tải mặc định
-                        navbar: [
-                            'zoom',
-                            'move',
-                            // 'caption', // Bỏ caption nếu không muốn hiển thị tiêu đề ảnh
-                            'fullscreen',
-                        ],
-                        // caption: 'Ảnh 360 độ', // Bỏ caption nếu không muốn hiển thị tiêu đề ảnh
-                        touchmoveTwoFingers: true, // Cho phép chạm hai ngón tay để kéo
-                        mousewheel: true, // Cho phép con lăn chuột để phóng to
-                        defaultZoomLvl: 50,
-                    });
-
-                    viewer.once('ready', () => {
-                        document.getElementById('viewerMessage').classList.add('hidden'); // Ẩn thông báo tải
-                    });
-
-                    viewer.once('error', (e) => {
-                        document.getElementById('viewer').innerHTML = '<p class="text-center text-red-500">Không thể tải ảnh 360 độ. Vui lòng kiểm tra đường dẫn hoặc định dạng ảnh.</p>';
-                        document.getElementById('viewerMessage').classList.add('hidden');
-                        console.error("Lỗi Photo Sphere Viewer:", e);
-                    });
-                } catch (e) {
-                    console.error("Lỗi khi khởi tạo PhotoSphereViewer:", e);
-                    document.getElementById('viewer').innerHTML = '<p class="text-center text-red-500">Không thể khởi tạo trình xem ảnh 360 độ. Vui lòng kiểm tra console để biết chi tiết lỗi.</p>';
-                    document.getElementById('viewerMessage').classList.add('hidden');
-                }
-            }
-
-            // Đóng modal nếu nhấp chuột bên ngoài
-            document.getElementById('floorsModal').addEventListener('click', (e) => {
-                if (e.target === document.getElementById('floorsModal')) {
-                    closeModal('floorsModal');
-                }
-            });
-            document.getElementById('roomsModal').addEventListener('click', (e) => {
-                if (e.target === document.getElementById('roomsModal')) {
-                    closeModal('roomsModal');
-                }
-            });
-            document.getElementById('viewerModal').addEventListener('click', (e) => {
-                if (e.target === document.getElementById('viewerModal')) {
-                    closeModal('viewerModal');
-                }
-            });
-
-            // Tạo các điểm đánh dấu động khi DOMContentLoaded
-            const mapContainer = document.querySelector('.map-container');
-
-            // Tạo điểm đánh dấu động dựa trên allBuildingsData
-            for (const buildingName in allBuildingsData) {
-                const building = allBuildingsData[buildingName];
+        // Hàm tạo và hiển thị các điểm đánh dấu trên bản đồ
+        function createMarkers() {
+            // Đảm bảo container trống trước khi thêm marker mới
+            markersContainer.innerHTML = '';
+            buildingsData.forEach(building => {
                 const marker = document.createElement('div');
-                marker.id = `marker-${buildingName.replace(/\s/g, '-')}`;
                 marker.classList.add('marker');
-                marker.style.left = building.markerCoords.left;
-                marker.style.top = building.markerCoords.top;
-                marker.setAttribute('data-building-name', buildingName); // Lưu tên tòa nhà
-                marker.innerHTML = `
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
-                        <path fill-rule="evenodd" d="m11.54 22.351.07.04.028.016a.76.76 0 0 0 .723 0l.028-.015.071-.041a16.975 16.975 0 0 0 1.144-.742 19.58 19.58 0 0 0 2.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 0 0-16.5 0c0 3.846 2.02 6.837 3.963 8.827a19.58 19.58 0 0 0 2.682 2.282 16.975 16.975 0 0 0 1.145.742ZM12 13.5a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" clip-rule="evenodd" />
-                    </svg>
-                `;
-                marker.addEventListener('click', () => displayFloors(buildingName));
-                mapContainer.appendChild(marker);
+                marker.textContent = building.name.charAt(0); // Hiển thị chữ cái đầu tiên của tên tòa nhà
+                // Tính toán vị trí dựa trên phần trăm của ảnh
+                marker.style.left = `${building.marker.x}%`;
+                marker.style.top = `${building.marker.y}%`;
+
+                marker.addEventListener('click', () => {
+                    displayFloors(building);
+                });
+                markersContainer.appendChild(marker);
+            });
+        }
+
+        // Hàm hiển thị danh sách các tầng của một tòa nhà
+        function displayFloors(building) {
+            modalTitle.textContent = `Tòa nhà: ${building.name}`;
+            modalContent.innerHTML = ''; // Xóa nội dung cũ
+
+            building.floors.forEach(floor => {
+                const floorItem = document.createElement('button');
+                floorItem.classList.add('w-full', 'p-4', 'bg-blue-500', 'text-white', 'rounded-lg', 'shadow-md', 'hover:bg-blue-600', 'transition', 'duration-200', 'ease-in-out', 'font-medium');
+                floorItem.textContent = floor.name;
+                floorItem.addEventListener('click', () => {
+                    displayRooms(floor);
+                });
+                modalContent.appendChild(floorItem);
+            });
+            showModal(detailsModal, detailsModalContent);
+        }
+
+        // Hàm hiển thị danh sách các phòng của một tầng
+        function displayRooms(floor) {
+            modalTitle.textContent = `Tầng: ${floor.name}`;
+            modalContent.innerHTML = ''; // Xóa nội dung cũ
+
+            floor.rooms.forEach(room => {
+                const roomItem = document.createElement('button');
+                roomItem.classList.add('w-full', 'p-4', 'bg-green-500', 'text-white', 'rounded-lg', 'shadow-md', 'hover:bg-green-600', 'transition', 'duration-200', 'ease-in-out', 'font-medium');
+                roomItem.textContent = room.name;
+                roomItem.addEventListener('click', () => {
+                    open360Viewer(room.image);
+                });
+                modalContent.appendChild(roomItem);
+            });
+        }
+
+        // Hàm mở trình xem ảnh 360 độ
+        function open360Viewer(imagePath) {
+            hideModal(detailsModal, detailsModalContent); // Ẩn modal chi tiết trước
+
+            // Giải phóng trình xem cũ nếu có
+            if (currentViewer) {
+                currentViewer.destroy();
+                currentViewer = null;
             }
 
-            // Gỡ lỗi PhotoSphereViewer và Three.js có sẵn khi tải
-            if (typeof THREE === 'undefined') {
-                console.error("Lỗi: Thư viện Three.js không được định nghĩa. Vui lòng kiểm tra kết nối mạng hoặc đường dẫn CDN.");
-            } else {
-                console.log("Three.js đã được định nghĩa.");
-            }
+            // Khởi tạo PhotoSphereViewer
+            currentViewer = new PhotoSphereViewer.Viewer({
+                container: photosphereContainer,
+                panorama: imagePath,
+                caption: 'Ảnh 360 độ',
+                loadingImg: 'https://cdn.jsdelivr.net/npm/photo-sphere-viewer@4/dist/loader.gif', // Hình ảnh tải
+                navbar: [
+                    'zoom',
+                    'move',
+                    'fullscreen',
+                    'caption',
+                    'autorotate',
+                ],
+                plugins: [
+                    PhotoSphereViewer.AutorotatePlugin,
+                ],
+            });
 
-            if (typeof PhotoSphereViewer === 'undefined') {
-                console.error("Lỗi: Thư viện PhotoSphereViewer không được định nghĩa. Vui lòng kiểm tra kết nối mạng hoặc đường dẫn CDN.");
-            } else if (typeof PhotoSphereViewer.Viewer === 'undefined') {
-                console.error("Lỗi: PhotoSphereViewer đã được định nghĩa, nhưng PhotoSphereViewer.Viewer không phải là một hàm tạo. Có thể do xung đột môi trường hoặc thư viện không tương thích.");
-            } else {
-                console.log("PhotoSphereViewer và PhotoSphereViewer.Viewer đã được định nghĩa.");
+            showModal(viewerModal, viewerModalContent);
+        }
+
+        // Đóng modal chi tiết
+        closeModalBtn.addEventListener('click', () => {
+            hideModal(detailsModal, detailsModalContent);
+        });
+
+        // Đóng modal xem 360 độ
+        closeViewerBtn.addEventListener('click', () => {
+            hideModal(viewerModal, viewerModalContent);
+            if (currentViewer) {
+                currentViewer.destroy(); // Hủy trình xem khi đóng modal
+                currentViewer = null;
             }
         });
+
+        // Khởi tạo các điểm đánh dấu khi ảnh bản đồ được tải
+        mapImage.onload = createMarkers;
+        // Nếu ảnh đã được tải (ví dụ: từ bộ nhớ cache), gọi ngay lập tức
+        if (mapImage.complete) {
+            createMarkers();
+        }
+
+        // Đóng modal khi nhấp ra bên ngoài (cho cả hai modal)
+        detailsModal.addEventListener('click', (event) => {
+            if (event.target === detailsModal) {
+                hideModal(detailsModal, detailsModalContent);
+            }
+        });
+
+        viewerModal.addEventListener('click', (event) => {
+            if (event.target === viewerModal) {
+                hideModal(viewerModal, viewerModalContent);
+                if (currentViewer) {
+                    currentViewer.destroy();
+                    currentViewer = null;
+                }
+            }
+        });
+
     </script>
 </body>
 </html>
