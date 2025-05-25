@@ -178,8 +178,8 @@
         </div>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://unpkg.com/photo-sphere-viewer@4/dist/photo-sphere-viewer.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script>
+    <script src="https://unpkg.com/photo-sphere-viewer@4/dist/photo-sphere-viewer.min.js" defer></script>
 
     <script>
         // Ensure the DOM is fully loaded before running the script
@@ -383,10 +383,11 @@
             }
 
             // Debugging PhotoSphereViewer and Three.js availability on load
+            // (Bạn có thể giữ hoặc xóa các dòng này sau khi lỗi được khắc phục)
             if (typeof THREE === 'undefined') {
                 console.error("Lỗi: Thư viện Three.js không được định nghĩa. Vui lòng kiểm tra kết nối mạng hoặc đường dẫn CDN.");
             } else {
-                console.log("Three.js đã được định nghĩa.");
+                console.log("Three.js đã được định nghĩa và sẵn sàng.");
             }
 
             if (typeof PhotoSphereViewer === 'undefined') {
@@ -394,7 +395,7 @@
             } else if (typeof PhotoSphereViewer.Viewer === 'undefined') {
                 console.error("Lỗi: PhotoSphereViewer đã được định nghĩa, nhưng PhotoSphereViewer.Viewer không phải là một hàm tạo. Có thể do xung đột môi trường hoặc thư viện không tương thích.");
             } else {
-                console.log("PhotoSphereViewer và PhotoSphereViewer.Viewer đã được định nghĩa.");
+                console.log("PhotoSphereViewer và PhotoSphereViewer.Viewer đã được định nghĩa và sẵn sàng.");
             }
         });
     </script>
