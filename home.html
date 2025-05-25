@@ -36,11 +36,19 @@
             padding: 15px 60px;
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            justify-content: center; /* Căn giữa nội dung chính (menu) */
             box-shadow: var(--shadow-light);
             position: sticky;
             top: 0;
             z-index: 1000;
+            position: relative; /* Để logo có thể sử dụng position: absolute */
+        }
+
+        .header-left {
+            position: absolute;
+            left: 60px; /* Đặt logo ở góc trái với khoảng cách từ mép */
+            top: 50%;
+            transform: translateY(-50%);
         }
 
         .header-left .logo {
@@ -60,6 +68,7 @@
             padding: 0;
             display: flex;
             align-items: center;
+            justify-content: center; /* Căn giữa menu */
         }
 
         .nav-menu li {
@@ -353,6 +362,10 @@
                 padding: 15px 30px;
             }
 
+            .header-left {
+                left: 30px; /* Giảm khoảng cách từ mép trái */
+            }
+
             .nav-menu li {
                 margin-left: 30px;
             }
@@ -404,12 +417,18 @@
         @media (max-width: 768px) {
             .header {
                 flex-direction: column;
-                align-items: flex-start;
+                align-items: center;
                 padding: 15px 20px;
             }
 
+            .header-left {
+                position: static; /* Logo không cần absolute trên màn hình nhỏ */
+                transform: none;
+                margin-bottom: 10px;
+            }
+
             .nav-menu {
-                margin-top: 20px;
+                margin-top: 10px;
                 flex-wrap: wrap;
                 justify-content: center;
                 width: 100%;
@@ -424,6 +443,12 @@
                 padding: 10px 0;
             }
 
+            .dropdown-menu {
+                left: 50%;
+                transform: translateX(-50%) translateY(10px);
+                min-width: 200px;
+            }
+
             .hero-title {
                 font-size: 3em;
             }
@@ -434,12 +459,6 @@
 
             .hero-description {
                 font-size: 1em;
-            }
-
-            .dropdown-menu {
-                left: 50%;
-                transform: translateX(-50%) translateY(10px);
-                min-width: 200px;
             }
 
             .image-content-section h2 {
@@ -454,6 +473,15 @@
         @media (max-width: 480px) {
             .header-left .logo {
                 height: 45px;
+            }
+
+            .nav-menu {
+                margin-top: 10px;
+                justify-content: center;
+            }
+
+            .nav-menu li {
+                margin: 8px 15px;
             }
 
             .hero-title {
@@ -508,27 +536,19 @@
                 <li>
                     <a href="#" class="dropdown-arrow">Hoạt động tiêu biểu <i class="fas fa-caret-down"></i></a>
                     <ul class="dropdown-menu">
-                        <li><a href="#">Sự kiện</a></li>
-                        <li><a href="#">Dự án cộng đồng</a></li>
-                        <li><a href="#">Thành tích</a></li>
+                        <li><a href="#">Câu lạc bộ</a></li>
                     </ul>
                 </li>
                 <li>
                     <a href="#" class="dropdown-arrow">Tin tức <i class="fas fa-caret-down"></i></a>
                     <ul class="dropdown-menu">
-                        <li><a href="#">Tin tức mới</a></li>
-                        <li><a href="#">Thông báo</a></li>
+                        <li><a href="#">Giao lưu nghệ thuật</a></li>
+                        <li><a href="#">Lễ tiếp lửa</a></li>
+                        <li><a href="#">K16 tri ân</a></li>
+                        <li><a href="#">Học bổng GEOL</a></li>
+                        <li><a href="#">Trần Hữu Hưng - Nam sinh ưu tú trường THPT Lê Quý Đôn</a></li>
                     </ul>
                 </li>
-                <li>
-                    <a href="#" class="dropdown-arrow">Sản phẩm <i class="fas fa-caret-down"></i></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="#">Chatbox AI thanh niên</a></li>
-                        <li><a href="#">Thử sức kiến thức Đoàn</a></li>
-                        <li><a href="#">Mô hình 3D trường</a></li>
-                    </ul>
-                </li>
-                <li><a href="#">Liên hệ</a></li>
             </ul>
         </nav>
     </header>
@@ -545,7 +565,7 @@
     </section>
 
     <section class="image-content-section">
-        <h2 class="image-content-title">ĐOÀN TRƯỞNG - NGƯỜI ĐỒNG HÀNH CÙNG HÀNH TRÌNH TUỔI TRẺ CỦA BAO THẾ HỆ THANH NIÊN THPT CHUYÊN LÊ QUÝ ĐÔN</h2>
+        <h2 class="image-content-title">ĐOÀN TRƯỜNG - NGƯỜI ĐỒNG HÀNH CÙNG HÀNH TRÌNH TUỔI TRẺ CỦA BAO THẾ HỆ THANH NIÊN THPT CHUYÊN LÊ QUÝ ĐÔN</h2>
         <div class="grid-container">
             <div class="grid-item">
                 <img src="https://lh3.googleusercontent.com/bxvrassuYjA2PqOeQMUlvlp3pPNNMtb_MpsVJM6kawOa5apYwMJ1gc0zlQ_ulvW33w7WqkB6AAFu3sCMzP9jOqrBYQD1XaI=rw-w1035" alt="Ảnh 2">
@@ -553,12 +573,11 @@
             <div class="grid-item">
                 <img src="https://lh3.googleusercontent.com/ZUR2_6M8NpxnZkjUz2TN9QAhsHdq5p4K-lNP-tr5Tu_G69h-efr5tjtKPstLzJR1Wjaenzhbu7o92SCI487P-PPyncQDVEq7=rw-w1152" alt="Ảnh 3">
             </div>
-            
         </div>
 
         <p class="content-description">Như ánh lửa đầu tiên nhóm lên trong tim tuổi trẻ, Đoàn trường là người thầy, người bạn và người truyền lửa – giúp bao thế hệ học sinh chuyên Lê Quý Đôn vững bước, tự tin viết tiếp câu chuyện thanh xuân rực rỡ.</p>
- 
-        <h2 class="image-content-title">ĐOÀN TRƯỞNG KHÔNG CHỈ KHUẤY ĐỘNG PHONG TRÀO, MÀ CÒN KHƠI DẬY ĐAM MÊ. MỖI HOẠT ĐỘNG LÀ MỘT BƯỚC TIẾN, MỖI CƠ HỘI LÀ MỘT LỜI KHÍCH LỆ TUỔI TRẺ VƯƠN XA...</h2>
+
+        <h2 class="image-content-title">ĐOÀN TRƯỜNG KHÔNG CHỈ KHUẤY ĐỘNG PHONG TRÀO, MÀ CÒN KHƠI DẬY ĐAM MÊ. MỖI HOẠT ĐỘNG LÀ MỘT BƯỚC TIẾN, MỖI CƠ HỘI LÀ MỘT LỜI KHÍCH LỆ TUỔI TRẺ VƯƠN XA...</h2>
         <p class="content-description">Đoàn trường không chỉ là nơi khởi xướng những phong trào sôi nổi, mà còn là nơi khơi dậy đam mê, nuôi dưỡng lý tưởng và đánh thức tiềm năng trong mỗi bạn trẻ. Từ những buổi sinh hoạt gần gũi, những chiến dịch đầy nhiệt huyết cho đến các hoạt động ngoại khóa sáng tạo và ý nghĩa – Đoàn đã mở ra những không gian để học sinh không chỉ học tập, mà còn được rèn luyện, thể hiện bản thân và sống trọn với thanh xuân. Mỗi chương trình, mỗi hoạt động không chỉ là một dấu ấn đẹp, mà còn là một nấc thang đưa các bạn tiến gần hơn đến sự tự tin, bản lĩnh và tinh thần cống hiến. Ở đó, tuổi trẻ được lắng nghe, được dẫn dắt và được truyền cảm hứng để vươn xa, dám ước mơ và dám hành động. Chính nhờ vai trò bền bỉ và âm thầm ấy, Đoàn trường đã trở thành người bạn đồng hành không thể thiếu trong hành trình trưởng thành của biết bao thế hệ học sinh – một nơi mà mỗi cá nhân đều có cơ hội tỏa sáng theo cách của riêng mình.</p>
 
         <div class="grid-container">
@@ -575,28 +594,29 @@
                 <img src="https://lh3.googleusercontent.com/Oz8iZLGIMS8ZJlfJshjN5uUXNm-PWDGZQbCH-Y2fN9WWuvsYxqLIdlIT8ReeiTjMiRG9V-nC2tQpuy75NkoGE2M2xXrwNnN-=rw-w1152" alt="Ảnh 7">
             </div>
         </div>
-<footer style="background-color: #003366; color: white; padding: 20px 0;">
-  <div style="display: flex; justify-content: space-around; flex-wrap: wrap; text-align: left;">
-    <div style="flex: 1; min-width: 250px; padding: 10px;">
-      <div style="margin-bottom: 10px;">
-        <img src="https://lh3.googleusercontent.com/nncDY_eP4-Py5kHcWjt8wFaXCUhKpwUgOMqQGT_ac7B3okxjXoWHgv_mj1D5O8emb1VAmuKGCdgQoR8XT1xNUkPJ9JCdwcvU=rw-w267" alt="logo đoàn" class="content-image" style="height: 150px;">
-      </div>
-      <strong>SỨC TRẺ THANH NIÊN</strong><br>
-      Đoàn trường THPT chuyên Lê Quý Đôn - Điện Biên<br><br>
-      <em style="font-size: 14px;">Trang web đang trong quá trình dự thảo và đang chờ thẩm định nên chưa được cấp quyền sử dụng dưới mọi hình thức</em>
-    </div>
-    <div style="flex: 1; min-width: 250px; padding: 10px;">
-      <strong>Liên hệ</strong><br><br>
-      📞 Cô Lê Thùy Hoa – Bí thư Đoàn trường: <strong>0372632222</strong><br>
-      📞 Bạn Nguyễn Quang Minh – Quản trị viên Website: <strong>0849102558</strong><br>
-      📧 <a href="mailto:doantruongthptchuyenlqd@gmail.com" style="color: #99ccff;">doantruongthptchuyenlqd@gmail.com</a>
-    </div>
-    <div style="flex: 1; min-width: 250px; padding: 10px;">
-      <strong>Địa điểm</strong><br><br>
-      📍 Văn phòng Đoàn E103 - E104, Trường THPT Chuyên Lê Quý Đôn
-    </div>
-  </div>
-</footer>
     </section>
+
+    <footer style="background-color: #003366; color: white; padding: 20px 0;">
+        <div style="display: flex; justify-content: space-around; flex-wrap: wrap; text-align: left;">
+            <div style="flex: 1; min-width: 250px; padding: 10px;">
+                <div style="margin-bottom: 10px;">
+                    <img src="https://lh3.googleusercontent.com/nncDY_eP4-Py5kHcWjt8wFaXCUhKpwUgOMqQGT_ac7B3okxjXoWHgv_mj1D5O8emb1VAmuKGCdgQoR8XT1xNUkPJ9JCdwcvU=rw-w267" alt="logo đoàn" class="content-image" style="height: 150px;">
+                </div>
+                <strong>SỨC TRẺ THANH NIÊN</strong><br>
+                Đoàn trường THPT chuyên Lê Quý Đôn - Điện Biên<br><br>
+                <em style="font-size: 14px;">Trang web đang trong quá trình dự thảo và đang chờ thẩm định nên chưa được cấp quyền sử dụng dưới mọi hình thức</em>
+            </div>
+            <div style="flex: 1; min-width: 250px; padding: 10px;">
+                <strong>Liên hệ</strong><br><br>
+                📞 Cô Lê Thùy Hoa – Bí thư Đoàn trường: <strong>0372632222</strong><br>
+                📞 Bạn Nguyễn Quang Minh – Quản trị viên Website: <strong>0849102558</strong><br>
+                📧 <a href="mailto:doantruongthptchuyenlqd@gmail.com" style="color: #99ccff;">doantruongthptchuyenlqd@gmail.com</a>
+            </div>
+            <div style="flex: 1; min-width: 250px; padding: 10px;">
+                <strong>Địa điểm</strong><br><br>
+                📍 Văn phòng Đoàn E103 - E104, Trường THPT Chuyên Lê Quý Đôn
+            </div>
+        </div>
+    </footer>
 </body>
 </html>
