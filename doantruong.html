@@ -36,11 +36,19 @@
             padding: 15px 60px;
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            justify-content: center; /* Căn giữa nội dung chính (menu) */
             box-shadow: var(--shadow-light);
             position: sticky;
             top: 0;
             z-index: 1000;
+            position: relative; /* Để logo có thể sử dụng position: absolute */
+        }
+
+        .header-left {
+            position: absolute;
+            left: 60px; /* Đặt logo ở góc trái */
+            top: 50%;
+            transform: translateY(-50%);
         }
 
         .header-left .logo {
@@ -60,6 +68,7 @@
             padding: 0;
             display: flex;
             align-items: center;
+            justify-content: center; /* Căn giữa menu */
         }
 
         .nav-menu li {
@@ -286,8 +295,8 @@
         .full-width-image img {
             width: 100%;
             max-width: 800px;
-            height: auto; /* Sửa ở đây để hiển thị toàn bộ ảnh */
-            object-fit: contain; /* Đảm bảo ảnh không bị cắt mà vẫn giữ tỷ lệ */
+            height: auto;
+            object-fit: contain;
             border-radius: var(--border-radius-card);
             box-shadow: var(--shadow-light);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -314,6 +323,10 @@
         @media (max-width: 1024px) {
             .header {
                 padding: 15px 30px;
+            }
+
+            .header-left {
+                left: 30px;
             }
 
             .nav-menu li {
@@ -357,12 +370,18 @@
         @media (max-width: 768px) {
             .header {
                 flex-direction: column;
-                align-items: flex-start;
+                align-items: center;
                 padding: 15px 20px;
             }
 
+            .header-left {
+                position: static;
+                transform: none;
+                margin-bottom: 10px;
+            }
+
             .nav-menu {
-                margin-top: 20px;
+                margin-top: 10px;
                 flex-wrap: wrap;
                 justify-content: center;
                 width: 100%;
@@ -377,14 +396,14 @@
                 padding: 10px 0;
             }
 
-            .hero-title {
-                font-size: 3em;
-            }
-
             .dropdown-menu {
                 left: 50%;
                 transform: translateX(-50%) translateY(10px);
                 min-width: 200px;
+            }
+
+            .hero-title {
+                font-size: 3em;
             }
 
             .video-section iframe {
@@ -450,7 +469,7 @@
 <body>
     <header class="header">
         <div class="header-left">
-            <a href="#"><img src="https://i.ibb.co/k2x779T4/unnamed-1.webp" alt="Logo" class="logo"></a>
+            <a href="#"><img src="https://lh3.googleusercontent.com/nncDY_eP4-Py5kHcWjt8wFaXCUhKpwUgOMqQGT_ac7B3okxjXoWHgv_mj1D5O8emb1VAmuKGCdgQoR8XT1xNUkPJ9JCdwcvU=rw-w267" alt="Logo" class="logo"></a>
         </div>
         <nav>
             <ul class="nav-menu">
@@ -464,27 +483,19 @@
                 <li>
                     <a href="#" class="dropdown-arrow">Hoạt động tiêu biểu <i class="fas fa-caret-down"></i></a>
                     <ul class="dropdown-menu">
-                        <li><a href="#">Sự kiện</a></li>
-                        <li><a href="#">Dự án cộng đồng</a></li>
-                        <li><a href="#">Thành tích</a></li>
+                        <li><a href="#">Câu lạc bộ</a></li>
                     </ul>
                 </li>
                 <li>
                     <a href="#" class="dropdown-arrow">Tin tức <i class="fas fa-caret-down"></i></a>
                     <ul class="dropdown-menu">
-                        <li><a href="#">Tin tức mới</a></li>
-                        <li><a href="#">Thông báo</a></li>
+                        <li><a href="#">Giao lưu nghệ thuật</a></li>
+                        <li><a href="#">Lễ tiếp lửa</a></li>
+                        <li><a href="#">K16 tri ân</a></li>
+                        <li><a href="#">Học bổng GEOL</a></li>
+                        <li><a href="#">Trần Hữu Hưng - Nam sinh ưu tú trường THPT Lê Quý Đôn</a></li>
                     </ul>
                 </li>
-                <li>
-                    <a href="#" class="dropdown-arrow">Sản phẩm <i class="fas fa-caret-down"></i></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="#">Chatbox AI thanh niên</a></li>
-                        <li><a href="#">Thử sức kiến thức Đoàn</a></li>
-                        <li><a href="#">Mô hình 3D trường</a></li>
-                    </ul>
-                </li>
-                <li><a href="#">Liên hệ</a></li>
             </ul>
         </nav>
     </header>
@@ -564,28 +575,29 @@
         <div class="full-width-image">
             <img src="https://xdcs.cdnchinhphu.vn/446259493575335936/2022/12/16/banthuongvu-doan-web-1519-16711736844011035451716.jpg" alt="Hội nghị Ban Chấp hành">
         </div>
-        <footer style="background-color: #003366; color: white; padding: 20px 0;">
-  <div style="display: flex; justify-content: space-around; flex-wrap: wrap; text-align: left;">
-    <div style="flex: 1; min-width: 250px; padding: 10px;">
-      <div style="margin-bottom: 10px;">
-        <img src="https://lh3.googleusercontent.com/nncDY_eP4-Py5kHcWjt8wFaXCUhKpwUgOMqQGT_ac7B3okxjXoWHgv_mj1D5O8emb1VAmuKGCdgQoR8XT1xNUkPJ9JCdwcvU=rw-w267" alt="logo đoàn" class="content-image" style="height: 150px;">
-      </div>
-      <strong>SỨC TRẺ THANH NIÊN</strong><br>
-      Đoàn trường THPT chuyên Lê Quý Đôn - Điện Biên<br><br>
-      <em style="font-size: 14px;">Trang web đang trong quá trình dự thảo và đang chờ thẩm định nên chưa được cấp quyền sử dụng dưới mọi hình thức</em>
-    </div>
-    <div style="flex: 1; min-width: 250px; padding: 10px;">
-      <strong>Liên hệ</strong><br><br>
-      📞 Cô Lê Thùy Hoa – Bí thư Đoàn trường: <strong>0372632222</strong><br>
-      📞 Bạn Nguyễn Quang Minh – Quản trị viên Website: <strong>0849102558</strong><br>
-      📧 <a href="mailto:doantruongthptchuyenlqd@gmail.com" style="color: #99ccff;">doantruongthptchuyenlqd@gmail.com</a>
-    </div>
-    <div style="flex: 1; min-width: 250px; padding: 10px;">
-      <strong>Địa điểm</strong><br><br>
-      📍 Văn phòng Đoàn E103 - E104, Trường THPT Chuyên Lê Quý Đôn
-    </div>
-  </div>
-</footer>
     </section>
+
+    <footer style="background-color: #003366; color: white; padding: 20px 0;">
+        <div style="display: flex; justify-content: space-around; flex-wrap: wrap; text-align: left;">
+            <div style="flex: 1; min-width: 250px; padding: 10px;">
+                <div style="margin-bottom: 10px;">
+                    <img src="https://lh3.googleusercontent.com/nncDY_eP4-Py5kHcWjt8wFaXCUhKpwUgOMqQGT_ac7B3okxjXoWHgv_mj1D5O8emb1VAmuKGCdgQoR8XT1xNUkPJ9JCdwcvU=rw-w267" alt="logo đoàn" class="content-image" style="height: 150px;">
+                </div>
+                <strong>SỨC TRẺ THANH NIÊN</strong><br>
+                Đoàn trường THPT chuyên Lê Quý Đôn - Điện Biên<br><br>
+                <em style="font-size: 14px;">Trang web đang trong quá trình dự thảo và đang chờ thẩm định nên chưa được cấp quyền sử dụng dưới mọi hình thức</em>
+            </div>
+            <div style="flex: 1; min-width: 250px; padding: 10px;">
+                <strong>Liên hệ</strong><br><br>
+                📞 Cô Lê Thùy Hoa – Bí thư Đoàn trường: <strong>0372632222</strong><br>
+                📞 Bạn Nguyễn Quang Minh – Quản trị viên Website: <strong>0849102558</strong><br>
+                📧 <a href="mailto:doantruongthptchuyenlqd@gmail.com" style="color: #99ccff;">doantruongthptchuyenlqd@gmail.com</a>
+            </div>
+            <div style="flex: 1; min-width: 250px; padding: 10px;">
+                <strong>Địa điểm</strong><br><br>
+                📍 Văn phòng Đoàn E103 - E104, Trường THPT Chuyên Lê Quý Đôn
+            </div>
+        </div>
+    </footer>
 </body>
 </html>
