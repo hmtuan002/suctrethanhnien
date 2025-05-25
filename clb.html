@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Danh sách Câu lạc bộ</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f7fa;
+            color: #333;
+        }
+        .container {
+            max-width: 1300px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .header h1 {
+            font-size: 36px;
+            color: #1e90ff;
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        .intro {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #555;
+            margin-top: 20px;
+            text-align: justify;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .club-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 25px;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+        .club {
+            width: calc(25% - 25px);
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            padding: 15px;
+            box-sizing: border-box;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .club:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+        .club img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+        .club-content {
+            margin: 0;
+            font-size: 14px;
+            line-height: 1.6;
+            color: #666;
+        }
+        .club-content h3 {
+            margin: 0 0 10px 0;
+            font-size: 18px;
+            color: #333;
+            font-weight: 600;
+        }
+        .club-link {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 10px 20px;
+            background-color: #1e90ff;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 500;
+            transition: background-color 0.3s ease;
+        }
+        .club-link:hover {
+            background-color: #0d6efd;
+        }
+        .club-grid:last-child .club {
+            width: calc(33.33% - 25px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>CÁC CÂU LẠC BỘ</h1>
+            <div class="intro">
+                <h2>TRỰC THUỘC ĐOÀN TRƯỜNG THPT CHUYÊN LÊ QUÝ ĐÔN - TỈNH ĐIỆN BIÊN</h2>
+                <p>Với mục tiêu tạo nên một môi trường học đường năng động, sáng tạo và phát triển toàn diện, Đoàn trường THPT Chuyên Lê Quý Đôn - Điện Biên luôn chú trọng phát triển các câu lạc bộ (CLB) học sinh như một phần không thể thiếu trong đời sống học đường. Mỗi CLB là một không gian riêng để học sinh được thỏa sức thể hiện đam mê, rèn luyện kỹ năng, kết nối bạn bè và lan tỏa những giá trị tích cực.</p>
+                <p>Từ học thuật, nghệ thuật đến thể thao và hoạt động xã hội, các CLB trực thuộc Đoàn trường không chỉ là nơi hội tụ những học sinh nhiệt huyết, tài năng mà còn là “sân chơi” giúp mỗi thành viên trưởng thành hơn từng ngày. Dưới đây là danh sách các câu lạc bộ đang hoạt động sôi nổi tại trường – những mảnh ghép quan trọng làm nên màu sắc riêng biệt cho ngôi nhà chung Lê Quý Đôn.</p>
+            </div>
+        </div>
+        <div class="club-grid">
+            <div class="club">
+                <img src="https://lh3.googleusercontent.com/w3F3AhKn52byH24nJrx3YpdKaf_wGEmZKEqhjBqoGo6iNBg_l3YxH_rsoTNPPi5A_a_0uBvs-lpMhq9bA9wEL_tzf23W72Q=rw-w576" alt="CLB 1">
+                <div class="club-content">
+                    <h3>Câu lạc bộ Truyền thông - MCC</h3>
+                    <p>Tự hào là CLB truyền thông có tầm ảnh hưởng lớn nhất trên địa bàn tỉnh Điện Biên, MCC đã đứng sau tổ chức các sự kiện đình đám như: 𝐓𝐇𝐄 𝐒𝐔𝐌𝐌𝐄𝐑 𝐒𝐓𝐀𝐆𝐄 𝟐𝟎𝟐𝟒, 𝐌𝐈𝐒𝐒 𝐀𝐍𝐃 𝐌𝐈𝐒𝐓𝐄𝐑, 𝐌𝐈𝐒𝐒 𝐁𝐎𝐘𝐒,… Đặc biệt chúng mình còn nhận được sự tin tưởng của Đoàn trường khi được góp mặt trong một số hoạt động: 𝐂𝐡𝐚̀𝐨 đ𝐨́𝐧 𝐭𝐚̂𝐧 𝐡𝐨̣𝐜 𝐬𝐢𝐧𝐡 𝐁𝐀𝐁, 𝐓𝐢𝐞̂́𝐩 𝐬𝐮̛́𝐜 𝐦𝐮̀𝐚 𝐭𝐡𝐢,...</p>
+                </div>
+                <a href="https://www.facebook.com/lqdsmcc" class="club-link">Tìm hiểu thêm</a>
+            </div>
+            <div class="club">
+                <img src="https://lh3.googleusercontent.com/2KKu1RItcpciGMN0Lz8nGyxuabMgdXbX1ToebiB0ISWj5TfkdgmiXRBQI46EMT5quhU4W96tKq1UF9E80ljnaX8J5TkhKxNfQw=rw-w576" alt="CLB 2">
+                <div class="club-content">
+                    <h3>Câu lạc bộ Nhảy - CNVR</h3>
+                    <p>Tự hào là một trong những câu lạc bộ nhảy lớn nhất Điện Biên với bề dày kinh nghiệm, sự chỉn chu trong sản phẩm và luôn nỗ lực với đam mê của mình. Với hơn 30k lượt theo dõi và 100k lượt thích, CNVR thường xuyên biểu diễn cho các chương trình và lễ lớn của trường và địa bàn tỉnh. Ngoài ra, CNVR cũng đã đứng ra tổ chức nhiều chương trình lớn như SHOWCASE ONLINE ORCHID 2022, SUMMERLAND 2018, SUMMERLAND 2022,...</p>
+                </div>
+                <a href="https://www.facebook.com/CNVRdancecrew" class="club-link">Tìm hiểu thêm</a>
+            </div>
+            <div class="club">
+                <img src="https://lh3.googleusercontent.com/P-nQLTJLu17UY97kzW7lR0BBMA9G8sqKqZWwtQpE61taEOVx1rrrjlrQ7w_9XdzIw_0cX3DInAwJjMDfqrd8aPNVXg_0EnF-=rw-w576" alt="CLB 3">
+                <div class="club-content">
+                    <h3>Câu lạc bộ Hát - MIS</h3>
+                    <p>Được thành lập từ năm 2016, CLB M.I.S hay Melody In Soul là CLB Hát trường THPT Chuyên Lê Quý Đôn, nơi những bạn trẻ đam mê âm nhạc cùng giao lưu và học hỏi. M.I.S chính là nơi những nốt nhạc cùng nhau toà sáng, đắm chìm vào những giai điệu để cùng nhau tạo nên một bản giao hưởng tuyệt vời.</p>
+                </div>
+                <a href="https://www.facebook.com/profile.php?id=100063536081704" class="club-link">Tìm hiểu thêm</a>
+            </div>
+            <div class="club">
+                <img src="https://lh3.googleusercontent.com/JP0YyQPUvPmW9LzRZDPG5SHv-YvsMguMKUlw9zmeb__96dUdJTwxoy9npXdJvy-TdY_t6RZOJ63UXYFhmBSVvO9cLyNMBZA=rw-w576" alt="CLB 4">
+                <div class="club-content">
+                    <h3>Câu lạc bộ Diễn xuất - LCC</h3>
+                    <p>CLB đã có 5 năm hoạt động trong trường, được Đoàn trường tin tưởng và luôn có mặt trong các chương trình lớn nhỏ của trường như chương trình chào xuân GALA, chương trình chào tân học sinh BAB, các hoạt động ngoại khoá trong vào ngoài trường như Đêm nhạc DUCA, Đêm nhạc Thương Thương TSS 2024,... Bên cạnh đó chúng mình còn cùng nhau mang tới những bộ phim hay ấn tượng với nhiều cảm xúc khác nhau.</p>
+                </div>
+                <a href="https://www.facebook.com/clbdienxuat" class="club-link">Tìm hiểu thêm</a>
+            </div>
+        </div>
+        <div class="club-grid">
+            <div class="club">
+                <img src="https://lh3.googleusercontent.com/C8SWgCSyzoLz2O2noii_N1BM1y7Du20cvA5O4yHT93I9QoGwTXNPE41rKGDKvjpy1FzRBNXhXXrIYjMlIfFFBvcY3PjPqCJg=rw-w576" alt="CLB 5">
+                <div class="club-content">
+                    <h3>Câu lạc bộ Ghita - LGC</h3>
+                    <p>Hướng đến những bạn học sinh có niềm đam mê với nhạc cụ, ca hát tại trường THPT chuyên Lê Quý Đôn, chúng mình- LGCers- mang theo sứ mệnh tạo ra môi trường phát triển năng khiếu lành mạnh, giúp các thành viên toả sáng hơn trong lĩnh vực mình yêu thích.</p>
+                </div>
+                <a href="https://www.facebook.com/lgcleuleu" class="club-link">Tìm hiểu thêm</a>
+            </div>
+            <div class="club">
+                <img src="https://lh3.googleusercontent.com/07KsBVDFV5X_uXR9Snhr9GHQ4LSc4i7xkHQuMPL_E3M5qrQjof0eRXN0QmCWOTqWBShw0e2aZXANuPv2eEImj342GseDf7soQw=rw-w576" alt="CLB 6">
+                <div class="club-content">
+                    <h3>Câu lạc bộ Bóng rổ - LBC</h3>
+                    <p>Vậy là sau 4 năm tích cực hoạt động cùng 4 thế hệ thành viên đầy nỗ lực và đam mê, LBC đã có được một số thành tựu nhất định, mang về vô số thành tích phong trào thể thao cho trường. Không dừng lại ở đó LBC hứa hẹn sẽ “cháy“ hơn nữa để mang về nhiều chiếc cup hơn trong các giải đấu sắp tới.</p>
+                </div>
+                <a href="https://www.facebook.com/LBCLQDBasketballClub" class="club-link">Tìm hiểu thêm</a>
+            </div>
+            <div class="club">
+                <img src="https://lh3.googleusercontent.com/wuQRy-IVWXCfbMHvMv2pQ_W2qGw40-xaPQvLxaY_Anguh86EnQvGd5EiscvkwHQL1-zFLgbXO9mxX0rcLRDfVQwHjP5nSPkX-g=rw-w576" alt="CLB 7">
+                <div class="club-content">
+                    <h3>Câu lạc bộ Sách - RBC</h3>
+                    <p> “Một cuốn cũng có thể là một vì sao sáng, một ngọn lửa sinh động làm sáng bừng không gian tối, dẫn lối ta vào vũ trụ đang rộng mở.” Hiểu được tầm quan trọng của những con chữ tinh hoa của những người đi trước, CLB Sách – RBC chúng mình rất hoan nghênh mọi người cùng đến và chia sẻ niềm yêu thích của mình với các bạn xung quanh.</p>
+                </div>
+                <a href="https://www.facebook.com/profile.php?id=100063949241078" class="club-link">Tìm hiểu thêm</a>
+            </div>
+            <div class="club">
+                <img src="https://lh3.googleusercontent.com/K9p92XwerbIXFkY-Tfi6aX7vWvF07chogHq8pG-RtXaU3yVdAp0rWAFjxKSf5AEXznK2ZDI62NS4kCHFYTpl1Ra1abgHaUpJmw=rw-w576" alt="CLB 8">
+                <div class="club-content">
+                    <h3>Câu lạc bộ Tiếng Anh - Engdom</h3>
+                    <p>Tự hào là một trong những câu lạc bộ lâu đời nhất của ngôi nhà chung Chuyên Lê Quý Đôn, ENGDOM chính là nơi hội tụ những bạn học sinh mang trong mình niềm đam mê với bộ môn tiếng Anh và mong muốn phát triển kỹ năng mềm của bản thân mình. Các bạn học sinh không chỉ có cơ hội nâng cao khả năng ngoại ngữ của mình mà còn được thỏa sức sáng tạo, rèn luyện kỹ năng làm việc nhóm qua những dự án và sự kiện như School’s Out Mind’s In, OPEN MIC,...; các chuyên mục truyền thông như Vitamin Vocab, Guest our guest,...</p>
+                </div>
+                <a href="https://www.facebook.com/profile.php?id=61563251195387" class="club-link">Tìm hiểu thêm</a>
+            </div>
+        </div>
+        <div class="club-grid">
+            <div class="club">
+                <img src="https://lh3.googleusercontent.com/A-HC65-D9Iyumu5lJjQex7ozvZ9T7Hzlb9rF0C0lRPDfzJpCM8k0qgNAh64mAR_EznWy72zmcOYvRVzBNR2baxTi2WJZdNGW=rw-w576" alt="CLB 9">
+                <div class="club-content">
+                    <h3>Câu lạc bộ Vẽ - Art 45°</h3>
+                    <p>Xin chào tất cả mọi người, chúng mình là ART 45° – nơi hội tụ những con người có đam mê hội họa. Chúng mình được thành lập vào năm 2016. Trong suốt những năm hoạt động ấy, CLB luôn không ngừng cải thiện và tiến bộ để đạt được kết quả tốt nhất. ART 45° là nơi để các bạn thỏa sức làm điều mình thích, là nơi để học hỏi, trau dồi kinh nghiệm vẽ để phát triển bản thân.</p>
+                </div>
+                <a href="https://www.facebook.com/art45doo" class="club-link">Tìm hiểu thêm</a>
+            </div>
+            <div class="club">
+                <img src="https://lh3.googleusercontent.com/w0KBXB4lzJ45pCBv0hdlUgX71H9b8paRHFF42rHRbkNs6OpFfzzqJTooa89pQkws3WK59S7ZUBF1wCsljdTyYQeaqaZ63WY=rw-w576" alt="CLB 10">
+                <div class="club-content">
+                    <h3>Câu lạc bộ Môi trường và Cộng đồng - EAS</h3>
+                    <p>Câu lạc bộ Môi trường và Cộng đồng - EᗩՏ được thành lập với mục đích lan tỏa những thông điệp ý nghĩa, nhằm thúc đẩy và kêu gọi mọi người cùng chung tay vì một môi trường xanh - sạch - đẹp. Qua từng sự kiện, bạn không chỉ biết thêm nhiều kiến thức thú vị, bổ ích về xã hội mà còn có cơ hội được cùng các thành viên thử thách bản thân với nhiều trải nghiệm mới lạ.</p>
+                </div>
+                <a href="https://www.facebook.com/EASLeQuyDonDBP" class="club-link">Tìm hiểu thêm</a>
+            </div>
+            <div class="club">
+                <img src="https://lh3.googleusercontent.com/QTnyKLsRRU-oH3-BPBwZhe5x0yJgZh9rZr_E3i_bnn9NEgSMhql7CW0vWdOqz0S3mYnfXeTYcP6HzpIEQ8YHx36bu4Mb0ow=rw-w576" alt="CLB 11">
+                <div class="club-content">
+                    <h3>Câu lạc bộ Thiện nguyện - BBL</h3>
+                    <p>Chuyến tàu yêu thương BBL khởi hành từ năm 2021, là một tổ chức thiện nguyện mang trong mình sứ mệnh lan tỏa tinh thần đoàn kết, tấm lòng chân thiện và mang lại ấm áp, lan tỏa yêu thương trong cộng đồng. CLB Tình nguyện chính là nơi để các bạn đóng góp sức trẻ, thể hiện tinh thần nhiệt huyết và cho đi để nhận lại thật nhiều niềm vui khi làm được những việc có ích cho xã hội.</p>
+                </div>
+                <a href="https://www.facebook.com/bblvolunteerclub" class="club-link">Tìm hiểu thêm</a>
+            </div>
+            <div class="club">
+                <img src="https://lh3.googleusercontent.com/5EJHXkNGigsyAwVNEn-aRYvXPcjhzrX97wNuYi-Saf7cOzSjRGpYQUHwY3pGdOwTrAeHdiPlbYino_Hchdos6_xd4k91toZc=rw-w576" alt="CLB 12">
+                <div class="club-content">
+                    <h3>Câu lạc bộ Bóng đá - LFC</h3>
+                    <p>Le Quy Don’s Football Club (LFC) – Câu lạc bộ bóng đá của Trường THPT Chuyên Lê Quý Đôn, là sân chơi lý tưởng để bạn giao lưu, học hỏi và cùng nhau phát triển. Sau 6 năm hoạt động đầy thử thách và chiến thắng, với sự trở lại này, LFC đã sẵn sàng cho một năm học mới với những quyết tâm cao nhất </p>
+                </div>
+                <a href="https://www.facebook.com/lqdsfc" class="club-link">Tìm hiểu thêm</a>
+            </div>
+        </div>
+        <div class="club-grid">
+            <div class="club">
+                <img src="https://lh3.googleusercontent.com/PkJ2uZw3erC7Kwp78HSu13JyDOFb_SWRtjeeJkX_XUuUxpRk7H_tdd1hrL1eFnk-QRHr6w3IaRVSuHCls_NwdIFPK8SNlfzBsg=rw-w576" alt="CLB 13">
+                <div class="club-content">
+                    <h3>Câu lạc bộ Văn hóa Nhật Bản - LJCC</h3>
+                    <p>CLB Văn hóa Nhật chúng mình được lập ra với mong muốn mang đến cho các bạn một môi trường được bao quanh bởi những nét đặc trưng ấy của Nhật Bản. Đến với CLB chúng mình, mọi người sẽ được học hỏi tìm hiểu một cách chi tiết hơn về văn hoá và đất nước Nhật Bản. Có thể nói đây cũng là cơ hội tìm hiểu nhau cho các học sinh có cùng đam mê về những khía cạnh độc đáo trong đời sống con người nơi đây.</p>
+                </div>
+                <a href="https://www.facebook.com/lqdjcc" class="club-link">Tìm hiểu thêm</a>
+            </div>
+            <div class="club">
+                <img src="https://lh3.googleusercontent.com/lADCPJiUNzSyGZWEFxrghUiOF9beMo3oUBbSZAki7dLqNgYBWE1N_bO0_7tLey1B3aXS7UDqf8YgP-alfxnfCB-QtAROe9Ybeg=rw-w576" alt="CLB 14">
+                <div class="club-content">
+                    <h3>Câu lạc bộ Bóng chuyền - LVC</h3>
+                    <p>Chúng mình là LVC. Chúng mình muốn mang đến cho mọi người một sân chơi lành mạnh, giao lưu, học hỏi giữa những bạn có cùng đam mê với bóng chuyền. Ở đây các bạn có thể thoả sức với niềm đam mê của mình, cùng nhau xây dựng một tập thể đoàn kết, trau dồi kĩ năng và tinh thần đồng đội. Hơn thế nữa chúng ta có thể cùng nhau trải qua những mùa giải thật bùng nổ.</p>
+                </div>
+                <a href="https://www.facebook.com/lqdvb" class="club-link">Tìm hiểu thêm</a>
+            </div>
+            <div class="club">
+                <img src="https://lh3.googleusercontent.com/Q42ojEhWLrnlHhd9YSqXDl9nXBsvmzOyB-umcTUseJ5gAiVOEUnkpu1MW4K9V-3noKIfmrzzjuFGImX5NNGVsztxE0xulaZQTQ=rw-w576" alt="CLB 15">
+                <div class="club-content">
+                    <h3>Câu lạc bộ Board Game - BGC</h3>
+                    <p>BGC xin được cảm ơn mọi người đã ủng hộ và tiếp động lực cho câu lạc bộ trong thời gian vừa qua thành công. Ngay lúc này, chúng mình đã sẵn sàng thổi bùng ngọn lửa đam mê Boardgames thêm một lần nữa, cùng các bạn tạo nên những kỉ niệm đáng nhớ tại nhà trường</p>
+                </div>
+                <a href="https://www.facebook.com/profile.php?id=100062964594728" class="club-link">Tìm hiểu thêm</a>
+            </div>
+            <div class="club">
+                <img src="https://lh3.googleusercontent.com/wISO5YyYWMrv3r2gL3hW4oeNmwineOjxTQDZ1OYsMuH12GtPslL3UP8IGbDpyodMQ4JKgefe_ZE0hT7BZ1rMN55R7tHwZvZt=rw-w576" alt="CLB 16">
+                <div class="club-content">
+                    <h3>Câu lạc bộ Sức khỏe học đường - YHC</h3>
+                    <p>YHC hướng tới việc mở rộng các hoạt động, khuyến khích ngày càng nhiều các bạn học sinh tham gia, duy trì thói quen sống khỏe mạnh cũng như góp phần tuyên truyền về những kiến thức bổ ích đó. CLB mong muốn tạo ra một không gian trường học tích cực, nơi các bạn có thể cùng nhau tập luyện, học hỏi, chia sẻ và hỗ trợ lẫn nhau để đạt được những mục tiêu sức khỏe cá nhân và môi trường học tập lành mạnh</p>
+                </div>
+                <a href="https://www.facebook.com/lqdYHC" class="club-link">Tìm hiểu thêm</a>
+            </div>
+        </div>
+        <div class="club-grid">
+            <div class="club">
+                <img src="https://lh3.googleusercontent.com/svd4BzC8907ID-zq4PY0PM7ZARWRR8LgFJ8yY6UXp77t1P-hEiYmU6Dc3tGtPkN-TQQ0X-APl8zZV3ObmuNQma2LS0H6jn80=rw-w576" alt="CLB 17">
+                <div class="club-content">
+                    <h3>Câu lạc bộ LQĐ Tôi và Bạn - TVB</h3>
+                    <p>Câu lạc bộ TVB là nơi để các bạn được giao lưu, được tham gia các hoạt động cũng như nung nấu ước mơ giúp bản thân trở nên dần hoàn thiện hơn khi cùng làm việc với những người đã và đang hoạt động trong CLB. Tôi và Bạn sẽ giúp các bạn lưu giữ những hoài niệm, ký ức đẹp đẽ trong 3 năm của thanh xuân. Với niềm tin của”bạn”gửi gắm vào CLB thì chúng mình rất hy vọng sẽ đem lại sự gắn kết, sẻ chia, ấm áp như những người bạn</p>
+                </div>
+                <a href="https://www.facebook.com/springmemories102" class="club-link">Tìm hiểu thêm</a>
+            </div>
+            <div class="club">
+                <img src="https://lh3.googleusercontent.com/-iiBy1jPTbK8WDJLfxNQq1_XLDauyskFLXM6zKPP1CwXoh2e81CKY0z9qqMM-vm7hJ4pbISBrkd3j25DeMw4o2J0y-5nekegUQ=rw-w576" alt="CLB 18">
+                <div class="club-content">
+                    <h3>Câu lạc bộ Bóng chày - StarChasers</h3>
+                    <p>Là một môn thể thao mới được du nhập. Nếu như mọi người đang muốn trải nghiệm, tham gia một môn thể thao mới, có những cảm giác mới lạ, thú vị thì hãy đến và đồng hành của chúng mình nhé</p>
+                </div>
+                <a href="https://www.facebook.com/profile.php?id=61559347640267" class="club-link">Tìm hiểu thêm</a>
+            </div>
+            <div class="club">
+                <img src="https://lh3.googleusercontent.com/FGPzLAnBT4-NwX-rh0vMg0NUTOH5AGlHMUKxlpeIGPV3SJrArB_WGRjcQSeg4bHBQzkEw3vOo5KP5y6g2YX_kmFcNlnozAnOSQ=rw-w576" alt="CLB 19">
+                <div class="club-content">
+                    <h3>Câu lạc bộ Múa - FOW</h3>
+                    <p>Chúng tớ là Fly On Wings với một niềm đam mê yêu thích biểu diễn vũ đạo múa. Qua một khoảng thời gian ngừng hoạt động, CLB MÚA chính thức quay trở lại cùng nhiều sự đổi mới lần này. FOW luôn mong rằng những bạn cùng sở thích, cùng đam mê bộ môn nghệ thuật vũ đạo múa sẽ luôn luôn tin yêu và sẽ đồng hành cùng clb trong thời gian tới!</p>
+                </div>
+                <a href="https://www.facebook.com/profile.php?id=61565769455174" class="club-link">Tìm hiểu thêm</a>
+            </div>
+        </div>
+    </div>
+    <footer style="background-color: #003366; color: white; padding: 20px 0;">
+  <div style="display: flex; justify-content: space-around; flex-wrap: wrap; text-align: left;">
+    <div style="flex: 1; min-width: 250px; padding: 10px;">
+      <div style="margin-bottom: 10px;">
+        <img src="https://lh3.googleusercontent.com/nncDY_eP4-Py5kHcWjt8wFaXCUhKpwUgOMqQGT_ac7B3okxjXoWHgv_mj1D5O8emb1VAmuKGCdgQoR8XT1xNUkPJ9JCdwcvU=rw-w267" alt="logo đoàn" class="content-image" style="height: 150px;">
+      </div>
+      <strong>SỨC TRẺ THANH NIÊN</strong><br>
+      Đoàn trường THPT chuyên Lê Quý Đôn - Điện Biên<br><br>
+      <em style="font-size: 14px;">Trang web đang trong quá trình dự thảo và đang chờ thẩm định nên chưa được cấp quyền sử dụng dưới mọi hình thức</em>
+    </div>
+    <div style="flex: 1; min-width: 250px; padding: 10px;">
+      <strong>Liên hệ</strong><br><br>
+      📞 Cô Lê Thùy Hoa – Bí thư Đoàn trường: <strong>0372632222</strong><br>
+      📞 Bạn Nguyễn Quang Minh – Quản trị viên Website: <strong>0849102558</strong><br>
+      📧 <a href="mailto:doantruongthptchuyenlqd@gmail.com" style="color: #99ccff;">doantruongthptchuyenlqd@gmail.com</a>
+    </div>
+    <div style="flex: 1; min-width: 250px; padding: 10px;">
+      <strong>Địa điểm</strong><br><br>
+      📍 Văn phòng Đoàn E103 - E104, Trường THPT Chuyên Lê Quý Đôn
+    </div>
+  </div>
+</footer>
+</body>
+</html>
