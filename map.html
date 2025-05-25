@@ -80,6 +80,14 @@
 
     <script src="https://cdn.jsdelivr.net/npm/three@0.137.0/build/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/eventemitter3@4.0.7/umd/eventemitter3.min.js"></script>
+    <script>
+        // Ensure EventEmitter is globally available for PhotoSphereViewer v4
+        // The UMD bundle of eventemitter3 typically attaches to window.EventEmitter3.
+        // PhotoSphereViewer v4 expects it to be available as window.EventEmitter.
+        if (typeof EventEmitter3 !== 'undefined' && typeof window.EventEmitter === 'undefined') {
+            window.EventEmitter = EventEmitter3;
+        }
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/photo-sphere-viewer@4/dist/photo-sphere-viewer.min.js"></script>
 
     <script>
