@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lễ Tiếp Lửa Đội Tuyển HSG Quốc Gia 2024-2025</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,700;1,400&display=swap');
+
+        :root {
+            --primary-blue: #0A6DFF;
+            --dark-blue: #0056b3;
+            --text-color: #2d2d2d;
+            --light-grey: #f4f6f9;
+            --white: #fff;
+            --shadow-light: 0 6px 12px rgba(0, 0, 0, 0.1);
+            --shadow-hover: 0 10px 20px rgba(0, 0, 0, 0.15);
+            --accent-orange: #ff6f61;
+            --border-radius-card: 15px;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--light-grey);
+            color: var(--text-color);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--white) 0%, #e8f0ff 100%);
+            padding: 15px 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: var(--shadow-light);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-left .logo {
+            height: 55px;
+            transition: transform 0.3s ease, filter 0.3s ease;
+        }
+
+        .header-left .logo:hover {
+            transform: scale(1.1);
+            filter: brightness(1.1);
+        }
+
+        .nav-menu {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-menu li {
+            margin-left: 45px;
+        }
+
+        .nav-menu li a {
+            text-decoration: none;
+            color: var(--text-color);
+            padding: 15px 0;
+            display: block;
+            font-weight: 500;
+            font-size: 1.1em;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+
+        .nav-menu li a:hover {
+            color: var(--primary-blue);
+            transform: translateY(-2px);
+        }
+
+        .main-section {
+            padding: 60px 60px;
+            background-color: var(--white);
+            text-align: center;
+        }
+
+        .main-section h1 {
+            font-size: 2.5em;
+            color: var(--primary-blue);
+            margin-bottom: 40px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+        }
+
+        .main-section h1::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            bottom: -10px;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 4px;
+            background-color: var(--accent-orange);
+            border-radius: 2px;
+        }
+
+        .content-section {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: left;
+        }
+
+        .content-section p {
+            font-size: 1em;
+            color: #555;
+            margin: 20px 0;
+        }
+
+        .content-section p strong {
+            color: var(--text-color);
+        }
+
+        .content-with-image {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .content-with-image img {
+            width: 100%;
+            max-width: 300px;
+            height: 200px;
+            object-fit: cover;
+            border-radius: var(--border-radius-card);
+            box-shadow: var(--shadow-light);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .content-with-image img:hover {
+            transform: scale(1.05);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .content-with-image p {
+            flex: 1;
+            margin: 0;
+        }
+
+        .content-with-image:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+
+        @media (max-width: 1024px) {
+            .header {
+                padding: 15px 30px;
+            }
+            .nav-menu li {
+                margin-left: 30px;
+            }
+            .main-section {
+                padding: 50px 30px;
+            }
+            .content-with-image img {
+                max-width: 250px;
+                height: 180px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                padding: 15px 20px;
+            }
+            .nav-menu {
+                margin-top: 20px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            .nav-menu li {
+                margin: 8px 20px;
+            }
+            .main-section h1 {
+                font-size: 2em;
+            }
+            .content-with-image {
+                flex-direction: column !important;
+                align-items: center;
+                text-align: center;
+            }
+            .content-with-image img {
+                max-width: 100%;
+                height: 200px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header-left .logo {
+                height: 45px;
+            }
+            .main-section {
+                padding: 40px 20px;
+            }
+            .main-section h1 {
+                font-size: 1.6em;
+            }
+            .content-with-image img {
+                height: 150px;
+            }
+            .content-section p {
+                font-size: 0.9em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-left">
+            <a href="#"><img src="logo.png" alt="Logo" class="logo"></a>
+        </div>
+        <nav>
+            <ul class="nav-menu">
+                <li><a href="#">Trang chủ</a></li>
+                <li><a href="#">Giới thiệu</a></li>
+                <li><a href="#">Hoạt động tiêu biểu</a></li>
+                <li><a href="#">Tin tức</a></li>
+                <li><a href="#">Liên hệ</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="main-section">
+        <h1>LỄ TIẾP LỬA ĐỘT TUYỂN HSG QUỐC GIA 2024-2025</h1>
+        <div class="content-section">
+            <p><b>Sáng ngày 14/12/2024, trường THPT Chuyên Lê Quý Đôn long trọng tổ chức lễ tiếp lửa cho các em học sinh và các thầy cô giáo ôn luyện đội tuyển Học sinh giỏi Quốc gia năm học 2024 – 2025.</b></p>
+
+            <div class="content-with-image">
+                <img src="https://lh3.googleusercontent.com/wKmZEgNrYvoU3U0j00skuwZwB_V8TAgJplSue3GNDXNl0uwQUfvrFrg8-seZM6IBTPN4QLE_OkgPoXWqOUYlz8x4bgogdold=rw-w1387" alt="Image 1">
+                <p>Năm học 2024 – 2025, nhà trường có 10 đội tuyển tham dự kỳ thi HSGQG bao gồm các môn: Toán học, Ngữ văn, Vật lý, Hoá học, Sinh học, Lịch sử, Địa lý, Tiếng Anh, Tin học, Trung Quốc với 100 học sinh trong đó có 94 em là học sinh trường THPT Chuyên Lê Quý Đôn; 06 em học sinh ở các trường PTDTNT THPT Mường Nhé; THPT Thành phố; PTDTNT tỉnh; THPT huyện Điện Biên; 36 học sinh vượt cấp lớp 11; 25 học sinh dự thi lần 2 và 03 em học sinh lớp 10. Đây là lần đầu tiên trong suốt hành trình 29 năm qua có học sinh lớp 10 vừa đỗ vào trường đã tham gia dự thi học sinh giỏi Quốc gia.</p>
+            </div>
+
+            <p>Để trở thành thành viên chính thức, các em đã trải qua rất nhiều kỳ thi, từ cấp trường đến cấp tỉnh, qua nhiều bài khảo sát, đánh giá của các thầy cô. Các em đã vượt qua mọi khó khăn để khẳng định trí tuệ, sự nỗ lực của bản thân.</p>
+
+            <div class="content-with-image">
+                <img src="https://lh3.googleusercontent.com/02LVTSTZmz08n6s3fhHXbxWAQsfaXfubBMylV7e8rF7hD6J33dIOzcQoGbFjoY1YaBlS0FMNdu-3bEWJ6cE6t1ptukRMf99azA=rw-w1385" alt="Image 2">
+                <p>Phát biểu tại lễ tiếp lửa, <strong>Nhà giáo Ưu tú Bùi Thị Anh - Bí thư Đảng Uỷ, Hiệu trưởng nhà trường</strong> đã chia sẻ, động viên, thể hiện sự quan tâm, cổ vũ tinh thần cho các em trong đội tuyển học sinh giỏi với lời nhắn gửi: “Chỉ còn 10 ngày nữa các em bước vào kỳ thi, cô mong muốn trong thời gian nước rút này các em hãy giữ gìn sức khoẻ, phân bố thời gian hợp lí giữa ôn tập và nghỉ ngơi thư giãn, tạo năng lượng tốt nhất cho mình để có thể phát huy tốt nhất thế mạnh, sự thông minh sáng tạo trong quá trình làm bài, cô tin các em sẽ thành công và mang vinh quang về cho bản thân, gia đình, thầy cô, nhà trường, tỉnh nhà.”</p>
+            </div>
+
+            <p>Bên cạnh đó, <strong>Nhà giáo Ưu tú Bùi Thị Anh</strong> cũng gửi lời cảm ơn đến Lãnh đạo Sở Giáo dục và Đào tạo tỉnh Điện Biên, các đơn vị trường đã quan tâm sâu sắc và tạo điều kiện trong suốt giai đoạn tổ chức ôn tập Học sinh giỏi; Ban đại diện cha mẹ học sinh và các thầy cô giáo luôn nỗ lực hết mình trong sự nghiệp nuôi dưỡng các thế hệ nhân tài.</p>
+
+            <div class="content-with-image">
+                <img src="https://lh3.googleusercontent.com/XDn5JnHtq17rRv4C8YZ7GHqJetSJQNZXPMF2tonu4dzRd2gi9ahwL7UJ9FjLirtg1VybthhjMETHxCopZI6JjlhCcCnSnm7XDg=rw-w1386" alt="Image 3">
+                <p><strong>Thầy giáo Trần Đại Lộ - giáo viên lãnh đội Toán</strong> đã thay mặt các thầy cô giáo ôn luyện có những lời nhắn nhủ, động viên đến các học sinh đội tuyển. Là người trực tiếp sát cánh từng ngày, từng giờ bên học sinh, thầy giáo thể hiện sự thấu hiểu trước những vất vả, khó khăn mà các em học sinh dự thi học sinh giỏi quốc gia phải trải qua đồng thời động viên các em cố gắng hơn nữa, có chiến thuật hợp lí trong thời gian còn lại để có thể về đích thành công.</p>
+            </div>
+
+            <div class="content-with-image">
+                <img src="https://lh3.googleusercontent.com/j3KzFTRk44gHtUwSKjvMynQfaHooN53M9z9u6oKwR405VUzH--HnIE3qcNCEYFVQBTbsrqX7ekJEt0jvT5698fwB3fXCzgw=rw-w1386" alt="Image 4">
+                <p>Với tinh thần quyết tâm cao độ, <strong>em Trịnh Anh Thảo - lớp 10A5, chuyên Văn khóa K29</strong> - đến từ đội tuyển HSG QG môn Ngữ Văn đại diện cho 100 học sinh thi học sinh giỏi Quốc gia năm nay hứa sẽ nỗ lực hết sức mình để mang lại thành tích cao nhất về cho tỉnh nhà.</p>
+            </div>
+
+            <p>Ban Giám hiệu và Đoàn trường đã tặng hoa và quà lưu niệm cho các thầy cô giáo lãnh đội và các học sinh 10 đội tuyển.</p>
+
+            <p>Bên cạnh đó, chương trình cũng gửi những lá thư đầy ý nghĩa mang theo lời chúc mà học sinh trong trường gửi đến các em học sinh dự thi. Những lời chúc dí dỏm nhưng chứa đựng tình cảm chân thành, niềm tin, niềm tự hào của học sinh toàn trường sẽ là nguồn khích lệ lớn đối với các học sinh đội tuyển, để các em thêm tự tin và quyết tâm bước vào kì thi quan trọng sắp tới.</p>
+
+            <div class="content-with-image">
+                <img src="https://lh3.googleusercontent.com/DMfTou4jOywsJ-QYEOZMQGaTXVA4uH8ymwVUBaN5LbKZLnnFbLWtuCvQJLc-G8cVDmtG3znIMUZqylYtr2ObT1rGh-FfuBGt=rw-w1385" alt="Image 5">
+                <p>Buổi lễ kết thúc bằng những giây phút hào hứng xen lẫn xúc động khi 100 học sinh đội tuyển cùng nhau viết những điều ước và thả những điều ước đó theo những quả bóng bay, những cánh chim bồ câu mang theo hi vọng được bay cao bay xa trên bầu trời đầy nắng. Mong sao tất cả những điều ước mà các em mong mỏi đều sẽ trở thành hiện thực. Hi vọng trường THPT Chuyên Lê Quý Đôn sẽ đạt được thành tích cao trong kì thi Học sinh giỏi cấp Quốc gia sắp tới!</p>
+            </div>
+        </div>
+        <footer style="background-color: #003366; color: white; padding: 20px 0;">
+  <div style="display: flex; justify-content: space-around; flex-wrap: wrap; text-align: left;">
+    <div style="flex: 1; min-width: 250px; padding: 10px;">
+      <div style="margin-bottom: 10px;">
+        <img src="https://lh3.googleusercontent.com/nncDY_eP4-Py5kHcWjt8wFaXCUhKpwUgOMqQGT_ac7B3okxjXoWHgv_mj1D5O8emb1VAmuKGCdgQoR8XT1xNUkPJ9JCdwcvU=rw-w267" alt="logo đoàn" class="content-image" style="height: 150px;">
+      </div>
+      <strong>SỨC TRẺ THANH NIÊN</strong><br>
+      Đoàn trường THPT chuyên Lê Quý Đôn - Điện Biên<br><br>
+      <em style="font-size: 14px;">Trang web đang trong quá trình dự thảo và đang chờ thẩm định nên chưa được cấp quyền sử dụng dưới mọi hình thức</em>
+    </div>
+    <div style="flex: 1; min-width: 250px; padding: 10px;">
+      <strong>Liên hệ</strong><br><br>
+      📞 Cô Lê Thùy Hoa – Bí thư Đoàn trường: <strong>0372632222</strong><br>
+      📞 Bạn Nguyễn Quang Minh – Quản trị viên Website: <strong>0849102558</strong><br>
+      📧 <a href="mailto:doantruongthptchuyenlqd@gmail.com" style="color: #99ccff;">doantruongthptchuyenlqd@gmail.com</a>
+    </div>
+    <div style="flex: 1; min-width: 250px; padding: 10px;">
+      <strong>Địa điểm</strong><br><br>
+      📍 Văn phòng Đoàn E103 - E104, Trường THPT Chuyên Lê Quý Đôn
+    </div>
+  </div>
+</footer>
+    </section>
+</body>
+</html>
