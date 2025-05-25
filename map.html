@@ -3,303 +3,326 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bản đồ Tòa nhà</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photo-sphere-viewer@4/dist/photo-sphere-viewer.min.css">
+    <title>Bản đồ Tòa Nhà</title>
     <style>
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f3f4f6; /* Light gray background */
+            margin: 0;
+            font-family: 'Roboto', 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #e0e7ff, #f3f4f6);
+            overflow: hidden;
         }
-        /* Custom styles for markers */
+        #map-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #ffffff;
+        }
+        #map {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        #map:hover {
+            transform: scale(1.02);
+        }
         .marker {
             position: absolute;
-            width: 30px; /* Kích thước điểm đánh dấu */
-            height: 30px;
-            background-color: #ef4444; /* Màu đỏ */
-            border-radius: 50%; /* Hình tròn */
+            width: 44px;
+            height: 56px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23FFD700" stroke="%23ffffff" stroke-width="1"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5S13.38 11.5 12 11.5z"/></svg>') no-repeat center;
+            background-size: contain;
             cursor: pointer;
+            transition: transform 0.3s ease, filter 0.3s ease;
+            filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.4));
+            animation: pulse 2s infinite ease-in-out;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.4)); }
+            50% { transform: scale(1.1); filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.7)); }
+            100% { transform: scale(1); filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.4)); }
+        }
+        .marker:hover {
+            transform: scale(1.5);
+            filter: drop-shadow(0 0 12px rgba(255, 215, 0, 0.9));
+            animation: none;
+        }
+        .info-panel {
+            position: absolute;
+            background: linear-gradient(135deg, #ffffff, #f0f0f5);
+            border-radius: 10px;
+            padding: 12px;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+            max-width: 220px;
+            max-height: 280px;
+            overflow-y: auto;
+            z-index: 10;
+            display: none;
+            font-size: 14px;
+            scrollbar-width: thin;
+            scrollbar-color: #888 #f0f0f5;
+        }
+        .info-panel::-webkit-scrollbar {
+            width: 6px;
+        }
+        .info-panel::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 3px;
+        }
+        .info-panel h3 {
+            margin: 0 0 12px;
+            font-size: 18px;
+            color: #1a1a1a;
+            font-weight: 600;
+        }
+        .info-panel ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .info-panel li {
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: background 0.2s ease, transform 0.2s ease;
+        }
+        .info-panel li:hover {
+            background: #d9e6ff;
+            transform: translateX(5px);
+        }
+        .close-popup {
+            position: absolute;
+            top: -12px;
+            right: -12px;
+            background: #ff4d4d;
+            color: white;
+            border: none;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
-            font-weight: bold;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            transition: transform 0.2s ease-in-out, background-color 0.2s ease-in-out;
-            transform: translate(-50%, -50%); /* Căn giữa điểm đánh dấu trên tọa độ */
-            z-index: 10;
+            transition: background 0.2s ease, transform 0.2s ease;
+            z-index: 11;
         }
-        .marker:hover {
-            transform: translate(-50%, -50%) scale(1.1);
-            background-color: #dc2626;
+        .close-popup:hover {
+            background: #cc0000;
+            transform: scale(1.1);
         }
-        /* Style for the 360 viewer container */
-        #photosphere {
+        #panorama-container {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%;
+            max-width: 1400px;
+            height: 85vh;
+            background: #000;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+            z-index: 1000;
+            animation: fadeIn 0.3s ease;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        #panorama {
             width: 100%;
             height: 100%;
-            border-radius: 0.5rem; /* Match modal's rounded corners */
-            overflow: hidden; /* Ensure content stays within rounded corners */
+            border-radius: 16px;
         }
-        /* Ensure the modal content scrolls if it's too long */
-        #modalContent {
-            max-height: 70vh; /* Giới hạn chiều cao để nội dung có thể cuộn */
-            overflow-y: auto; /* Cho phép cuộn dọc */
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #ff4d4d;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background 0.2s ease, transform 0.2s ease;
+        }
+        .close-btn:hover {
+            background: #cc0000;
+            transform: scale(1.05);
+        }
+        @media (max-width: 768px) {
+            .info-panel {
+                max-width: 180px;
+                max-height: 200px;
+                font-size: 12px;
+            }
+            .info-panel h3 {
+                font-size: 16px;
+            }
+            .close-popup {
+                width: 24px;
+                height: 24px;
+                font-size: 12px;
+            }
+            #panorama-container {
+                width: 95%;
+                height: 70vh;
+            }
+            .marker {
+                width: 36px;
+                height: 48px;
+            }
         }
     </style>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.css">
 </head>
-<body class="p-4">
-
-    <h1 class="text-4xl font-extrabold text-center text-gray-900 mb-8">Bản đồ Tòa nhà & Xem Phòng 360°</h1>
-
-    <div class="relative w-full max-w-5xl mx-auto bg-white rounded-xl shadow-2xl overflow-hidden">
-        <img id="mapImage" src="ht.png" alt="Bản đồ tòa nhà" class="w-full h-auto rounded-xl">
-        <div id="markersContainer" class="absolute top-0 left-0 w-full h-full">
-            </div>
+<body>
+    <div id="map-container">
+        <img id="map" src="https://hmtuan002.github.io/suctrethanhnien/ht.png" alt="Bản đồ">
     </div>
-
-    <div id="detailsModal" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center p-4 z-50 hidden">
-        <div class="bg-white p-6 rounded-xl shadow-2xl w-full max-w-md mx-auto transform transition-all duration-300 scale-95 opacity-0" id="detailsModalContent">
-            <h2 id="modalTitle" class="text-3xl font-bold text-gray-800 mb-6 text-center"></h2>
-            <div id="modalContent" class="space-y-4 text-lg">
-                </div>
-            <button id="closeModal" class="mt-8 w-full px-6 py-3 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 transition duration-200 ease-in-out shadow-md">
-                Đóng
-            </button>
-        </div>
+    <div id="panorama-container">
+        <button class="close-btn" onclick="closePanorama()">Đóng</button>
+        <div id="panorama"></div>
     </div>
-
-    <div id="viewerModal" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center p-4 z-50 hidden">
-        <div class="relative bg-gray-900 rounded-xl shadow-2xl w-full max-w-4xl h-3/4 transform transition-all duration-300 scale-95 opacity-0" id="viewerModalContent">
-            <div id="photosphere" class="w-full h-full"></div>
-            <button id="closeViewer" class="absolute top-4 right-4 px-6 py-3 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 transition duration-200 ease-in-out shadow-md z-10">
-                Đóng
-            </button>
-        </div>
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/three@0.137.0/build/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/eventemitter3@4.0.7/umd/eventemitter3.min.js"></script>
-    <script>
-        // Ensure EventEmitter is globally available for PhotoSphereViewer v4
-        // The UMD bundle of eventemitter3 typically attaches to window.EventEmitter3.
-        // PhotoSphereViewer v4 expects it to be available as window.EventEmitter.
-        if (typeof EventEmitter3 !== 'undefined' && typeof window.EventEmitter === 'undefined') {
-            window.EventEmitter = EventEmitter3;
-        }
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/photo-sphere-viewer@4/dist/photo-sphere-viewer.min.js"></script>
 
     <script>
-        // Dữ liệu giả định cho các tòa nhà, tầng và phòng
-        // Bạn sẽ cần cập nhật tọa độ (x, y) của marker để phù hợp với bản đồ 'ht.png' của bạn.
-        // Tọa độ (x, y) là phần trăm từ góc trên bên trái của ảnh bản đồ.
-        const buildingsData = [
+        // Dữ liệu tòa nhà với tọa độ marker và thông tin tầng/phòng
+        const buildings = [
             {
-                id: 'building1',
-                name: 'Tòa nhà A',
-                marker: { x: 30, y: 40 }, // Tọa độ ví dụ (30% từ trái, 40% từ trên)
+                name: "Tòa A",
+                x: 100,
+                y: 100,
                 floors: [
                     {
-                        id: 'floor1_A',
-                        name: 'Tầng 1',
+                        name: "Tầng 1",
                         rooms: [
-                            { id: 'room101_A', name: 'Phòng 101', image: 'https://placehold.co/1000x500/000/FFF?text=Phong+101' },
-                            { id: 'room102_A', name: 'Phòng 102', image: 'Hs.jpg' }, // Sử dụng 'Hs.jpg' như yêu cầu
-                            { id: 'room103_A', name: 'Phòng 103', image: 'https://placehold.co/1000x500/000/FFF?text=Phong+103' }
+                            { name: "Phòng 101", panorama: "https://hmtuan002.github.io/suctrethanhnien/Hs.jpg" },
+                            { name: "Phòng 102", panorama: "https://hmtuan002.github.io/suctrethanhnien/Hs.jpg" }
                         ]
                     },
                     {
-                        id: 'floor2_A',
-                        name: 'Tầng 2',
+                        name: "Tầng 2",
                         rooms: [
-                            { id: 'room201_A', name: 'Phòng 201', image: 'https://placehold.co/1000x500/000/FFF?text=Phong+201' },
-                            { id: 'room202_A', name: 'Phòng 202', image: 'https://placehold.co/1000x500/000/FFF?text=Phong+202' }
+                            { name: "Phòng 201", panorama: "https://hmtuan002.github.io/suctrethanhnien/Hs.jpg" },
+                            { name: "Phòng 202", panorama: "https://hmtuan002.github.io/suctrethanhnien/Hs.jpg" }
                         ]
                     }
                 ]
             },
             {
-                id: 'building2',
-                name: 'Tòa nhà B',
-                marker: { x: 70, y: 25 }, // Tọa độ ví dụ khác
+                name: "Tòa B",
+                x: 200,
+                y: 150,
                 floors: [
                     {
-                        id: 'floor1_B',
-                        name: 'Tầng Trệt',
+                        name: "Tầng 1",
                         rooms: [
-                            { id: 'roomB01', name: 'Phòng B01', image: 'https://placehold.co/1000x500/000/FFF?text=Phong+B01' }
-                        ]
-                    },
-                    {
-                        id: 'floor2_B',
-                        name: 'Tầng 1',
-                        rooms: [
-                            { id: 'roomB11', name: 'Phòng B11', image: 'https://placehold.co/1000x500/000/FFF?text=Phong+B11' },
-                            { id: 'roomB12', name: 'Phòng B12', image: 'https://placehold.co/1000x500/000/FFF?text=Phong+B12' }
+                            { name: "Phòng 101", panorama: "https://hmtuan002.github.io/suctrethanhnien/Hs.jpg" },
+                            { name: "Phòng 102", panorama: "https://hmtuan002.github.io/suctrethanhnien/Hs.jpg" }
                         ]
                     }
                 ]
             }
-            // Thêm các tòa nhà khác tại đây
         ];
 
-        // Lấy các phần tử DOM
-        const mapImage = document.getElementById('mapImage');
-        const markersContainer = document.getElementById('markersContainer');
-        const detailsModal = document.getElementById('detailsModal');
-        const detailsModalContent = document.getElementById('detailsModalContent');
-        const modalTitle = document.getElementById('modalTitle');
-        const modalContent = document.getElementById('modalContent');
-        const closeModalBtn = document.getElementById('closeModal');
-        const viewerModal = document.getElementById('viewerModal');
-        const viewerModalContent = document.getElementById('viewerModalContent');
-        const closeViewerBtn = document.getElementById('closeViewer');
-        const photosphereContainer = document.getElementById('photosphere');
+        const mapContainer = document.getElementById('map-container');
+        const panoramaContainer = document.getElementById('panorama-container');
+        let viewer = null;
+        let activePanel = null;
 
-        let currentViewer = null; // Biến để lưu trữ thể hiện PhotoSphereViewer
+        // Tạo marker và panel cho từng tòa nhà
+        buildings.forEach(building => {
+            const marker = document.createElement('div');
+            marker.className = 'marker';
+            marker.style.left = `${building.x}px`;
+            marker.style.top = `${building.y}px`;
 
-        // Hàm hiển thị modal
-        function showModal(modalElement, contentElement) {
-            modalElement.classList.remove('hidden');
-            // Kích hoạt hiệu ứng chuyển đổi
-            setTimeout(() => {
-                contentElement.classList.remove('scale-95', 'opacity-0');
-                contentElement.classList.add('scale-100', 'opacity-100');
-            }, 10);
-        }
+            const panel = document.createElement('div');
+            panel.className = 'info-panel';
+            panel.style.left = `${building.x + 50}px`;
+            panel.style.top = `${building.y}px`;
+            panel.innerHTML = `
+                <h3>${building.name}</h3>
+                <ul id="floor-list-${building.name.replace(/\s+/g, '-')}"</ul>
+                <button class="close-popup" onclick="closePopup(this)">X</button>
+            `;
+            mapContainer.appendChild(marker);
+            mapContainer.appendChild(panel);
 
-        // Hàm ẩn modal
-        function hideModal(modalElement, contentElement) {
-            // Kích hoạt hiệu ứng chuyển đổi ngược
-            contentElement.classList.remove('scale-100', 'opacity-100');
-            contentElement.classList.add('scale-95', 'opacity-0');
-            setTimeout(() => {
-                modalElement.classList.add('hidden');
-            }, 300); // Thời gian khớp với thời gian chuyển đổi CSS
-        }
-
-        // Hàm tạo và hiển thị các điểm đánh dấu trên bản đồ
-        function createMarkers() {
-            // Đảm bảo container trống trước khi thêm marker mới
-            markersContainer.innerHTML = '';
-            buildingsData.forEach(building => {
-                const marker = document.createElement('div');
-                marker.classList.add('marker');
-                marker.textContent = building.name.charAt(0); // Hiển thị chữ cái đầu tiên của tên tòa nhà
-                // Tính toán vị trí dựa trên phần trăm của ảnh
-                marker.style.left = `${building.marker.x}%`;
-                marker.style.top = `${building.marker.y}%`;
-
-                marker.addEventListener('click', () => {
-                    displayFloors(building);
-                });
-                markersContainer.appendChild(marker);
+            const floorList = panel.querySelector(`#floor-list-${building.name.replace(/\s+/g, '-')}`);
+            marker.addEventListener('click', () => {
+                if (activePanel) activePanel.style.display = 'none';
+                panel.style.display = 'block';
+                activePanel = panel;
+                showFloors(building, floorList);
             });
-        }
+        });
 
-        // Hàm hiển thị danh sách các tầng của một tòa nhà
-        function displayFloors(building) {
-            modalTitle.textContent = `Tòa nhà: ${building.name}`;
-            modalContent.innerHTML = ''; // Xóa nội dung cũ
-
+        // Hiển thị danh sách tầng
+        function showFloors(building, floorList) {
+            floorList.innerHTML = '';
             building.floors.forEach(floor => {
-                const floorItem = document.createElement('button');
-                floorItem.classList.add('w-full', 'p-4', 'bg-blue-500', 'text-white', 'rounded-lg', 'shadow-md', 'hover:bg-blue-600', 'transition', 'duration-200', 'ease-in-out', 'font-medium');
-                floorItem.textContent = floor.name;
-                floorItem.addEventListener('click', () => {
-                    displayRooms(floor);
-                });
-                modalContent.appendChild(floorItem);
+                const li = document.createElement('li');
+                li.textContent = floor.name;
+                li.addEventListener('click', () => showRooms(floor, floorList));
+                floorList.appendChild(li);
             });
-            showModal(detailsModal, detailsModalContent);
         }
 
-        // Hàm hiển thị danh sách các phòng của một tầng
-        function displayRooms(floor) {
-            modalTitle.textContent = `Tầng: ${floor.name}`;
-            modalContent.innerHTML = ''; // Xóa nội dung cũ
-
+        // Hiển thị danh sách phòng
+        function showRooms(floor, floorList) {
+            floorList.innerHTML = '';
             floor.rooms.forEach(room => {
-                const roomItem = document.createElement('button');
-                roomItem.classList.add('w-full', 'p-4', 'bg-green-500', 'text-white', 'rounded-lg', 'shadow-md', 'hover:bg-green-600', 'transition', 'duration-200', 'ease-in-out', 'font-medium');
-                roomItem.textContent = room.name;
-                roomItem.addEventListener('click', () => {
-                    open360Viewer(room.image);
-                });
-                modalContent.appendChild(roomItem);
+                const li = document.createElement('li');
+                li.textContent = room.name;
+                li.addEventListener('click', () => showPanorama(room.panorama));
+                floorList.appendChild(li);
             });
         }
 
-        // Hàm mở trình xem ảnh 360 độ
-        function open360Viewer(imagePath) {
-            hideModal(detailsModal, detailsModalContent); // Ẩn modal chi tiết trước
-
-            // Giải phóng trình xem cũ nếu có
-            if (currentViewer) {
-                currentViewer.destroy();
-                currentViewer = null;
+        // Hiển thị ảnh 360
+        function showPanorama(imageUrl) {
+            panoramaContainer.style.display = 'block';
+            if (activePanel) activePanel.style.display = 'none';
+            if (viewer) {
+                viewer.destroy();
             }
-
-            // Khởi tạo PhotoSphereViewer
-            currentViewer = new PhotoSphereViewer.Viewer({
-                container: photosphereContainer,
-                panorama: imagePath,
-                caption: 'Ảnh 360 độ',
-                loadingImg: 'https://cdn.jsdelivr.net/npm/photo-sphere-viewer@4/dist/loader.gif', // Hình ảnh tải
-                navbar: [
-                    'zoom',
-                    'move',
-                    'fullscreen',
-                    'caption',
-                    'autorotate',
-                ],
-                plugins: [
-                    PhotoSphereViewer.AutorotatePlugin,
-                ],
+            viewer = pannellum.viewer('panorama', {
+                type: 'equirectangular',
+                panorama: imageUrl,
+                autoLoad: true,
+                showControls: false
             });
-
-            showModal(viewerModal, viewerModalContent);
         }
 
-        // Đóng modal chi tiết
-        closeModalBtn.addEventListener('click', () => {
-            hideModal(detailsModal, detailsModalContent);
-        });
-
-        // Đóng modal xem 360 độ
-        closeViewerBtn.addEventListener('click', () => {
-            hideModal(viewerModal, viewerModalContent);
-            if (currentViewer) {
-                currentViewer.destroy(); // Hủy trình xem khi đóng modal
-                currentViewer = null;
+        // Đóng panorama
+        function closePanorama() {
+            panoramaContainer.style.display = 'none';
+            if (viewer) {
+                viewer.destroy();
+                viewer = null;
             }
-        });
-
-        // Khởi tạo các điểm đánh dấu khi ảnh bản đồ được tải
-        mapImage.onload = createMarkers;
-        // Nếu ảnh đã được tải (ví dụ: từ bộ nhớ cache), gọi ngay lập tức
-        if (mapImage.complete) {
-            createMarkers();
         }
 
-        // Đóng modal khi nhấp ra bên ngoài (cho cả hai modal)
-        detailsModal.addEventListener('click', (event) => {
-            if (event.target === detailsModal) {
-                hideModal(detailsModal, detailsModalContent);
-            }
-        });
-
-        viewerModal.addEventListener('click', (event) => {
-            if (event.target === viewerModal) {
-                hideModal(viewerModal, viewerModalContent);
-                if (currentViewer) {
-                    currentViewer.destroy();
-                    currentViewer = null;
-                }
-            }
-        });
-
+        // Đóng popup
+        function closePopup(button) {
+            const panel = button.parentElement;
+            panel.style.display = 'none';
+            activePanel = null;
+        }
     </script>
 </body>
 </html>
