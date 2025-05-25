@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -658,6 +659,53 @@
                 font-size: 0.875rem;
             }
         }
+        
+        .result-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            overflow-y: auto;
+            padding: 20px;
+        }
+        
+        .result-modal-content {
+            background-color: white;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 2rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+        
+        .close-result-modal {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--gray);
+        }
+        
+        .close-result-modal:hover {
+            color: var(--dark);
+        }
+        
+        @media (max-width: 768px) {
+            .result-modal-content {
+                width: 95%;
+                padding: 1.5rem;
+            }
+        }
     </style>
 </head>
 <body class="min-h-screen">
@@ -1120,7 +1168,346 @@
         }
     </script>
     
+    <div id="result-modal" class="result-modal">
+        <div class="result-modal-content">
+            <span class="close-result-modal">&times;</span>
+            <div id="scanned-result-content">
+                <!-- Nội dung kết quả quét sẽ được thêm vào đây -->
+            </div>
+        </div>
+    </div>
+
     <script type="module">
+        // Thêm biến toàn cục cho modal kết quả
+        const resultModal = document.getElementById('result-modal');
+        const closeResultModal = document.querySelector('.close-result-modal');
+        const scannedResultContent = document.getElementById('scanned-result-content');
+        
+        // Xử lý đóng modal kết quả
+        closeResultModal.addEventListener('click', () => {
+            resultModal.style.display = 'none';
+        });
+        
+        // Đóng modal khi click bên ngoài
+        window.addEventListener('click', (event) => {
+            if (event.target === resultModal) {
+                resultModal.style.display = 'none';
+            }
+        });
+
+        // Sửa lại hàm handleScannedResult để mở modal thay vì hiển thị trực tiếp
+        function handleScannedResult(resultUrl) {
+            try {
+                const url = new URL(resultUrl);
+                const resultId = url.searchParams.get('resultId');
+                const shareHistory = url.searchParams.get('shareHistory');
+                
+                if (resultId) {
+                    // Tải kết quả từ Firestore và hiển thị trong modal
+                    loadSharedResult(resultId, true);
+                } else if (shareHistory) {
+                    // Tải lịch sử kiểm tra từ Firestore và hiển thị trong modal
+                    loadSharedHistory(shareHistory, true);
+                } else {
+                    throw new Error("QR code không hợp lệ");
+                }
+            } catch (error) {
+                console.error("Lỗi khi xử lý QR code:", error);
+                alert("QR code không hợp lệ. Vui lòng quét lại.");
+            }
+        }
+        
+        // Sửa lại hàm loadSharedResult để hỗ trợ hiển thị trong modal
+        async function loadSharedResult(resultId, showInModal = false) {
+            const loadingHTML = `
+                <div class="text-center py-8">
+                    <i class="fas fa-spinner fa-spin text-2xl text-blue-500 mb-2"></i>
+                    <p>Đang tải kết quả kiểm tra...</p>
+                </div>
+            `;
+            
+            if (showInModal) {
+                scannedResultContent.innerHTML = loadingHTML;
+                resultModal.style.display = 'flex';
+            } else {
+                sharedResultContainer.innerHTML = loadingHTML;
+                sharedResultSection.classList.remove('hidden');
+                sharedResultSection.scrollIntoView({ behavior: 'smooth' });
+            }
+
+            try {
+                const doc = await db.collection('exam_results').doc(resultId).get();
+                
+                if (!doc.exists) {
+                    throw new Error("Không tìm thấy kết quả");
+                }
+                
+                const data = doc.data();
+                const userEmail = data.userId; // Trong thực tế nên lưu thêm thông tin người dùng
+                
+                // Hiển thị kết quả
+                if (showInModal) {
+                    displaySharedResultInModal(data, userEmail);
+                } else {
+                    displaySharedResult(data, userEmail);
+                }
+            } catch (error) {
+                console.error("Lỗi khi tải kết quả chia sẻ:", error);
+                
+                const errorHTML = `
+                    <div class="text-center py-8 text-red-500">
+                        <i class="fas fa-exclamation-triangle text-2xl mb-2"></i>
+                        <p class="font-medium">Không thể tải kết quả</p>
+                        <p class="text-sm mt-2">${error.message || "Liên kết có thể không hợp lệ hoặc đã hết hạn"}</p>
+                    </div>
+                `;
+                
+                if (showInModal) {
+                    scannedResultContent.innerHTML = errorHTML;
+                } else {
+                    sharedResultContainer.innerHTML = errorHTML;
+                }
+            }
+        }
+        
+        // Sửa lại hàm loadSharedHistory để hỗ trợ hiển thị trong modal
+        async function loadSharedHistory(userId, showInModal = false) {
+            const loadingHTML = `
+                <div class="text-center py-8">
+                    <i class="fas fa-spinner fa-spin text-2xl text-blue-500 mb-2"></i>
+                    <p>Đang tải lịch sử kiểm tra...</p>
+                </div>
+            `;
+            
+            if (showInModal) {
+                scannedResultContent.innerHTML = loadingHTML;
+                resultModal.style.display = 'flex';
+            } else {
+                sharedResultContainer.innerHTML = loadingHTML;
+                sharedResultSection.classList.remove('hidden');
+                sharedResultSection.scrollIntoView({ behavior: 'smooth' });
+            }
+
+            try {
+                // Lấy thông tin người dùng trước
+                const userDoc = await db.collection('users').doc(userId).get();
+                
+                if (!userDoc.exists) {
+                    throw new Error("Không tìm thấy thông tin người dùng");
+                }
+                
+                const userName = userDoc.data().name || userDoc.data().email || 'Người dùng';
+                const userAvatar = userDoc.data().avatarText || userName.charAt(0).toUpperCase();
+                
+                // Sau đó lấy lịch sử kiểm tra
+                const querySnapshot = await db.collection('exam_results')
+                    .where('userId', '==', userId)
+                    .orderBy('timestamp', 'desc')
+                    .limit(5)
+                    .get();
+                
+                if (querySnapshot.empty) {
+                    throw new Error("Người dùng này chưa có bài kiểm tra nào");
+                }
+                
+                const historyData = [];
+                const chartLabels = [];
+                const chartData = [];
+                
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    const date = data.timestamp.toDate();
+                    const dateStr = date.toLocaleDateString('vi-VN');
+                    const timeStr = date.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
+                    const fullDateStr = `${dateStr} ${timeStr}`;
+                    
+                    historyData.push({
+                        date: fullDateStr,
+                        score: data.totalScore,
+                        feedback: getScoreFeedback(data.totalScore)
+                    });
+                });
+                
+                // Đảo ngược thứ tự để hiển thị từ cũ đến mới
+                historyData.reverse();
+                
+                // Tạo dữ liệu cho biểu đồ
+                historyData.forEach((item, index) => {
+                    chartLabels.push(`Lần ${index + 1}`);
+                    chartData.push(item.score);
+                });
+                
+                // Hiển thị lịch sử được chia sẻ
+                if (showInModal) {
+                    displaySharedHistoryInModal(historyData, chartLabels, chartData, userName, userAvatar);
+                } else {
+                    displaySharedHistory(historyData, chartLabels, chartData, userName, userAvatar);
+                }
+            } catch (error) {
+                console.error("Lỗi khi tải lịch sử chia sẻ:", error);
+                
+                const errorHTML = `
+                    <div class="text-center py-8 text-red-500">
+                        <i class="fas fa-exclamation-triangle text-2xl mb-2"></i>
+                        <p class="font-medium">Không thể tải lịch sử kiểm tra</p>
+                        <p class="text-sm mt-2">${error.message || "Liên kết có thể không hợp lệ hoặc đã hết hạn"}</p>
+                    </div>
+                `;
+                
+                if (showInModal) {
+                    scannedResultContent.innerHTML = errorHTML;
+                } else {
+                    sharedResultContainer.innerHTML = errorHTML;
+                }
+            }
+        }
+        
+        // Hàm hiển thị kết quả trong modal
+        function displaySharedResultInModal(resultData, userEmail) {
+            const date = resultData.timestamp.toDate();
+            const dateStr = date.toLocaleDateString('vi-VN');
+            const timeStr = date.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
+            const fullDateStr = `${dateStr} ${timeStr}`;
+            
+            // Tạo avatar từ chữ cái đầu email
+            const avatarText = userEmail ? userEmail.charAt(0).toUpperCase() : 'U';
+            
+            scannedResultContent.innerHTML = `
+                <div class="shared-result-header">
+                    <div class="shared-result-user">
+                        <div class="shared-result-avatar">${avatarText}</div>
+                        <div>
+                            <div class="shared-result-name">${userEmail || 'Người dùng'}</div>
+                            <div class="shared-result-date">${fullDateStr}</div>
+                        </div>
+                    </div>
+                    <div class="text-xl font-bold">${resultData.totalScore.toFixed(1)}/10</div>
+                </div>
+                
+                <div class="mt-4">
+                    <h4 class="font-bold text-lg mb-4 text-gray-800">I. Phần trắc nghiệm (6.0 điểm)</h4>
+                    <div class="text-gray-700">
+                        Điểm số: ${resultData.result.mcq.totalScore.toFixed(2)}/6.00
+                    </div>
+                </div>
+                
+                <div class="mt-6">
+                    <h4 class="font-bold text-lg mb-4 text-gray-800">II. Phần tự luận (4.0 điểm)</h4>
+                    <div class="space-y-4">
+                        <div>
+                            <h5 class="font-semibold text-gray-700">Câu 1:</h5>
+                            <div class="text-gray-700">Điểm số: ${resultData.result.essay[1].score.toFixed(1)}/1.0</div>
+                        </div>
+                        <div>
+                            <h5 class="font-semibold text-gray-700">Câu 2:</h5>
+                            <div class="text-gray-700">Điểm số: ${resultData.result.essay[2].score.toFixed(1)}/1.0</div>
+                        </div>
+                        <div>
+                            <h5 class="font-semibold text-gray-700">Câu 3:</h5>
+                            <div class="text-gray-700">Điểm số: ${resultData.result.essay[3].score.toFixed(1)}/1.0</div>
+                        </div>
+                        <div>
+                            <h5 class="font-semibold text-gray-700">Câu 4:</h5>
+                            <div class="text-gray-700">Điểm số: ${resultData.result.essay[4].score.toFixed(1)}/1.0</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-6 p-4 bg-blue-50 rounded-lg">
+                    <h5 class="font-semibold text-gray-700 mb-2">Nhận xét tổng quan:</h5>
+                    <p class="text-gray-700">${resultData.result.overallFeedback}</p>
+                </div>
+            `;
+        }
+        
+        // Hàm hiển thị lịch sử trong modal
+        function displaySharedHistoryInModal(historyData, chartLabels, chartData, userName, userAvatar) {
+            scannedResultContent.innerHTML = `
+                <div class="shared-result-header">
+                    <div class="shared-result-user">
+                        <div class="shared-result-avatar">${userAvatar}</div>
+                        <div>
+                            <div class="shared-result-name">${userName}</div>
+                            <div class="shared-result-date">${historyData.length} bài kiểm tra gần nhất</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-6">
+                    <h4 class="font-bold text-lg mb-4 text-gray-800">LỊCH SỬ KIỂM TRA</h4>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full bg-white rounded-lg overflow-hidden">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ngày kiểm tra</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Điểm số</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Đánh giá</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-200">
+                                ${historyData.map(item => `
+                                    <tr class="${item.score >= 8 ? 'bg-green-50' : item.score >= 6 ? 'bg-blue-50' : item.score >= 4 ? 'bg-amber-50' : 'bg-red-50'}">
+                                        <td class="px-6 py-4 whitespace-nowrap">${item.date}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap font-bold">${item.score.toFixed(1)}/10</td>
+                                        <td class="px-6 py-4">${item.feedback}</td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <div class="mt-6">
+                    <h4 class="font-bold text-lg mb-4 text-gray-800">BIỂU ĐỒ TIẾN BỘ</h4>
+                    <div class="chart-container" style="height: 250px;">
+                        <canvas id="shared-progress-chart"></canvas>
+                    </div>
+                </div>
+            `;
+            
+            // Vẽ biểu đồ tiến bộ
+            const ctx = document.getElementById('shared-progress-chart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: chartLabels,
+                    datasets: [{
+                        label: 'Điểm số',
+                        data: chartData,
+                        backgroundColor: 'rgba(30, 58, 138, 0.2)',
+                        borderColor: 'rgba(30, 58, 138, 1)',
+                        borderWidth: 2,
+                        tension: 0.3,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `Điểm: ${context.raw.toFixed(1)}/10`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 10,
+                            ticks: {
+                                stepSize: 1
+                            }
+                        }
+                    }
+                }
+            });
+        }
         import { GoogleGenerativeAI } from "@google/generative-ai";
         
         // Khởi tạo Firebase
