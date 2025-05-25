@@ -178,12 +178,8 @@
         </div>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/eventemitter3/5.0.1/index.min.js"></script>
-    <script>console.log("EventEmitter loaded:", typeof EventEmitter !== 'undefined');</script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script>console.log("Three.js loaded:", typeof THREE !== 'undefined');</script>
-    <script src="https://raw.githack.com/mistic100/Photo-Sphere-Viewer/v4.4.0/dist/photo-sphere-viewer.js"></script>
-    <script>console.log("PhotoSphereViewer loaded:", typeof PhotoSphereViewer !== 'undefined', "Viewer constructor:", typeof PhotoSphereViewer !== 'undefined' ? typeof PhotoSphereViewer.Viewer : 'undefined');</script>
+    <script src="https://unpkg.com/photo-sphere-viewer@4/dist/photo-sphere-viewer.min.js"></script>
 
     <script>
         // Ensure the DOM is fully loaded before running the script
@@ -365,79 +361,41 @@
                 }
             });
 
+            // Dynamically create markers on DOMContentLoaded
             const mapContainer = document.querySelector('.map-container');
 
-            // Function to check and initialize Photo Sphere Viewer related logic
-            function initializePhotoSphereViewerDependencies() {
-                if (typeof THREE === 'undefined') {
-                    console.error("Lỗi: Thư viện Three.js không được định nghĩa. Vui lòng kiểm tra kết nối mạng hoặc đường dẫn CDN.");
-                    return false; // Indicate failure
-                } else {
-                    // console.log("Three.js đã được định nghĩa."); // Logged by script tag directly
-                }
-
-                // Check for EventEmitter before PhotoSphereViewer
-                if (typeof EventEmitter === 'undefined') {
-                    console.error("Lỗi: Thư viện EventEmitter không được định nghĩa. Photo Sphere Viewer có thể cần nó.");
-                    return false; // Indicate failure
-                } else {
-                    // console.log("EventEmitter đã được định nghĩa."); // Logged by script tag directly
-                }
-
-                if (typeof PhotoSphereViewer === 'undefined') {
-                    console.error("Lỗi: Thư viện PhotoSphereViewer không được định nghĩa. Vui lòng kiểm tra kết nối mạng hoặc đường dẫn CDN.");
-                    return false; // Indicate failure
-                } else if (typeof PhotoSphereViewer.Viewer === 'undefined') {
-                    console.error("Lỗi: PhotoSphereViewer đã được định nghĩa, nhưng PhotoSphereViewer.Viewer không phải là một hàm tạo. Có thể do xung đột môi trường hoặc thư viện không tương thích.");
-                    return false; // Indicate failure
-                } else {
-                    // console.log("PhotoSphereViewer và PhotoSphereViewer.Viewer đã được định nghĩa."); // Logged by script tag directly
-                    return true; // Indicate success
-                }
+            // Create markers dynamically based on allBuildingsData
+            for (const buildingName in allBuildingsData) {
+                const building = allBuildingsData[buildingName];
+                const marker = document.createElement('div');
+                marker.id = `marker-${buildingName.replace(/\s/g, '-')}`;
+                marker.classList.add('marker');
+                marker.style.left = building.markerCoords.left;
+                marker.style.top = building.markerCoords.top;
+                marker.setAttribute('data-building-name', buildingName); // Store building name
+                marker.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
+                        <path fill-rule="evenodd" d="m11.54 22.351.07.04.028.016a.76.76 0 0 0 .723 0l.028-.015.071-.041a16.975 16.975 0 0 0 1.144-.742 19.58 19.58 0 0 0 2.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 0 0-16.5 0c0 3.846 2.02 6.837 3.963 8.827a19.58 19.58 0 0 0 2.682 2.282 16.975 16.975 0 0 0 1.145.742ZM12 13.5a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" clip-rule="evenodd" />
+                    </svg>
+                `;
+                marker.addEventListener('click', () => displayFloors(buildingName));
+                mapContainer.appendChild(marker);
             }
 
-            let checkAttempts = 0;
-            const maxAttempts = 30; // Try for up to 3 seconds (30 * 100ms)
-            const intervalTime = 100; // Check every 100ms
-
-            function pollForPhotoSphereViewerReady() {
-                if (initializePhotoSphereViewerDependencies()) {
-                    console.log("Photo Sphere Viewer sẵn sàng. Bắt đầu tạo điểm đánh dấu.");
-                    // Create markers dynamically based on allBuildingsData
-                    for (const buildingName in allBuildingsData) {
-                        const building = allBuildingsData[buildingName];
-                        const marker = document.createElement('div');
-                        marker.id = `marker-${buildingName.replace(/\s/g, '-')}`;
-                        marker.classList.add('marker');
-                        marker.style.left = building.markerCoords.left;
-                        marker.style.top = building.markerCoords.top;
-                        marker.setAttribute('data-building-name', buildingName); // Store building name
-                        marker.innerHTML = `
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
-                                <path fill-rule="evenodd" d="m11.54 22.351.07.04.028.016a.76.76 0 0 0 .723 0l.028-.015.071-.041a16.975 16.975 0 0 0 1.144-.742 19.58 19.58 0 0 0 2.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 0 0-16.5 0c0 3.846 2.02 6.837 3.963 8.827a19.58 19.58 0 0 0 2.682 2.282 16.975 16.975 0 0 0 1.145.742ZM12 13.5a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" clip-rule="evenodd" />
-                            </svg>
-                        `;
-                        marker.addEventListener('click', () => displayFloors(buildingName));
-                        mapContainer.appendChild(marker);
-                    }
-                } else {
-                    checkAttempts++;
-                    if (checkAttempts < maxAttempts) {
-                        console.log(`Đang chờ Photo Sphere Viewer... Thử lại lần ${checkAttempts}/${maxAttempts}`);
-                        setTimeout(pollForPhotoSphereViewerReady, intervalTime);
-                    } else {
-                        console.error("Đã hết số lần thử. Không thể tải Photo Sphere Viewer. Vui lòng kiểm tra kết nối mạng hoặc đường dẫn CDN.");
-                        // Optionally, display a message to the user that the 360 viewer is unavailable
-                        const viewerContainer = document.getElementById('viewer');
-                        if (viewerContainer) {
-                            viewerContainer.innerHTML = '<p class="text-center text-red-500">Không thể tải trình xem ảnh 360 độ. Vui lòng kiểm tra kết nối mạng hoặc đường dẫn CDN.</p>';
-                        }
-                    }
-                }
+            // Debugging PhotoSphereViewer and Three.js availability on load
+            if (typeof THREE === 'undefined') {
+                console.error("Lỗi: Thư viện Three.js không được định nghĩa. Vui lòng kiểm tra kết nối mạng hoặc đường dẫn CDN.");
+            } else {
+                console.log("Three.js đã được định nghĩa.");
             }
 
-            // Start polling for Photo Sphere Viewer readiness
-            pollForPhotoSphereViewerReady();
+            if (typeof PhotoSphereViewer === 'undefined') {
+                console.error("Lỗi: Thư viện PhotoSphereViewer không được định nghĩa. Vui lòng kiểm tra kết nối mạng hoặc đường dẫn CDN.");
+            } else if (typeof PhotoSphereViewer.Viewer === 'undefined') {
+                console.error("Lỗi: PhotoSphereViewer đã được định nghĩa, nhưng PhotoSphereViewer.Viewer không phải là một hàm tạo. Có thể do xung đột môi trường hoặc thư viện không tương thích.");
+            } else {
+                console.log("PhotoSphereViewer và PhotoSphereViewer.Viewer đã được định nghĩa.");
+            }
         });
     </script>
 </body>
