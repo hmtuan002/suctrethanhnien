@@ -35,11 +35,19 @@
             padding: 15px 60px;
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            justify-content: center;
             box-shadow: var(--shadow-light);
             position: sticky;
             top: 0;
             z-index: 1000;
+            position: relative;
+        }
+
+        .header-left {
+            position: absolute;
+            left: 60px;
+            top: 50%;
+            transform: translateY(-50%);
         }
 
         .header-left .logo {
@@ -58,13 +66,15 @@
             padding: 0;
             display: flex;
             align-items: center;
+            justify-content: center;
         }
 
         .nav-menu li {
+            position: relative;
             margin-left: 45px;
         }
 
-        .nav-menu li a {
+        .nav-menu > li > a {
             text-decoration: none;
             color: var(--text-color);
             padding: 15px 0;
@@ -72,11 +82,84 @@
             font-weight: 500;
             font-size: 1.1em;
             transition: color 0.3s ease, transform 0.3s ease;
+            position: relative;
         }
 
-        .nav-menu li a:hover {
+        .nav-menu > li > a:hover {
             color: var(--primary-blue);
             transform: translateY(-2px);
+        }
+
+        .nav-menu > li > a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: var(--primary-blue);
+            transition: width 0.3s ease;
+        }
+
+        .nav-menu > li > a:hover::after {
+            width: 100%;
+        }
+
+        /* Dropdown Styles */
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            background-color: var(--white);
+            min-width: 240px;
+            box-shadow: var(--shadow-light);
+            z-index: 1;
+            border-radius: 10px;
+            overflow: hidden;
+            top: 100%;
+            left: 0;
+            transform: translateY(10px);
+            opacity: 0;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+
+        .nav-menu li:hover > .dropdown-menu {
+            display: block;
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .dropdown-menu li {
+            margin: 0;
+        }
+
+        .dropdown-menu li a {
+            color: var(--text-color);
+            padding: 14px 20px;
+            text-decoration: none;
+            display: block;
+            white-space: nowrap;
+            transition: background-color 0.2s ease, color 0.2s ease, padding-left 0.3s ease;
+        }
+
+        .dropdown-menu li a:hover {
+            background-color: var(--primary-blue);
+            color: var(--white);
+            padding-left: 25px;
+        }
+
+        .dropdown-arrow {
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .dropdown-arrow i {
+            margin-left: 8px;
+            font-size: 0.8em;
+            transition: transform 0.3s ease;
+        }
+
+        .nav-menu li:hover .dropdown-arrow i {
+            transform: rotate(180deg);
         }
 
         .main-section {
@@ -221,6 +304,9 @@
             .header {
                 padding: 15px 30px;
             }
+            .header-left {
+                left: 30px;
+            }
             .nav-menu li {
                 margin-left: 30px;
             }
@@ -239,15 +325,31 @@
         @media (max-width: 768px) {
             .header {
                 flex-direction: column;
+                align-items: center;
                 padding: 15px 20px;
+            }
+            .header-left {
+                position: static;
+                transform: none;
+                margin-bottom: 10px;
             }
             .nav-menu {
                 margin-top: 20px;
                 flex-wrap: wrap;
                 justify-content: center;
+                width: 100%;
             }
             .nav-menu li {
                 margin: 8px 20px;
+            }
+            .nav-menu > li > a {
+                font-size: 1em;
+                padding: 10px 0;
+            }
+            .dropdown-menu {
+                left: 50%;
+                transform: translateX(-50%) translateY(10px);
+                min-width: 200px;
             }
             .main-section h1 {
                 font-size: 2em;
@@ -292,15 +394,33 @@
 <body>
     <header class="header">
         <div class="header-left">
-            <a href="#"><img src="logo.png" alt="Logo" class="logo"></a>
+            <a href="#"><img src="https://lh3.googleusercontent.com/nncDY_eP4-Py5kHcWjt8wFaXCUhKpwUgOMqQGT_ac7B3okxjXoWHgv_mj1D5O8emb1VAmuKGCdgQoR8XT1xNUkPJ9JCdwcvU=rw-w267" alt="Logo" class="logo"></a>
         </div>
         <nav>
             <ul class="nav-menu">
                 <li><a href="#">Trang chủ</a></li>
-                <li><a href="#">Giới thiệu</a></li>
-                <li><a href="#">Hoạt động tiêu biểu</a></li>
-                <li><a href="#">Tin tức</a></li>
-                <li><a href="#">Liên hệ</a></li>
+                <li>
+                    <a href="#" class="dropdown-arrow">Giới thiệu chung <i class="fas fa-caret-down"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Về Đoàn trường chuyên THPT Lê Quý Đôn</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#" class="dropdown-arrow">Hoạt động tiêu biểu <i class="fas fa-caret-down"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Câu lạc bộ</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#" class="dropdown-arrow">Tin tức <i class="fas fa-caret-down"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Giao lưu nghệ thuật</a></li>
+                        <li><a href="#">Lễ tiếp lửa</a></li>
+                        <li><a href="#">K16 tri ân</a></li>
+                        <li><a href="#">Học bổng GEOL</a></li>
+                        <li><a href="#">Trần Hữu Hưng - Nam sinh ưu tú trường THPT Lê Quý Đôn</a></li>
+                    </ul>
+                </li>
             </ul>
         </nav>
     </header>
@@ -311,24 +431,24 @@
             <p>Hội khóa được đón chào <strong>thầy giáo Phạm Hồng Phong - nguyên Hiệu trưởng nhà trường</strong>; <strong>cô giáo Lê Thị Biên – Phó hiệu trưởng nhà trường</strong> và hơn 40 quý thầy giáo, cô giáo đã trực tiếp giảng dạy các em. Đây cũng là dịp cựu học sinh K16 được ôn lại những kỉ niệm khó quên của năm tháng học tập dưới mái trường THPT Chuyên Lê Quý Đôn, với hành trang mà nhà trường, thầy cô đã kiến tạo, học sinh niên khóa 2011 - 2014 đang ngày càng vững vàng, trưởng thành hơn. Bước đầu khẳng định được vị trí và có những thành công nhất định trong cuộc sống.</p>
 
             <div class="content-with-image">
-             
+
                 <p>Trong chương trình gặp gỡ tri ân, đại diện cho các bạn cựu học sinh K16, <strong>em Trần Đức Anh</strong> xúc động chia sẻ: “Trong không gian đầy ắp kỷ niệm này, chúng em được trở về với mái trường, nơi đã ghi dấu những năm tháng tuổi trẻ rực rỡ nhất. Mười năm qua đi, nhưng tình yêu thương, sự tận tâm của thầy cô vẫn luôn là hành trang quý giá đồng hành cùng chúng em trên mỗi bước đường đời. Thầy cô không chỉ là người mở ra cho chúng em những cánh cửa tri thức, mà còn là những người định hướng nhân cách, giúp chúng em biết sống đúng, sống đẹp và sống ý nghĩa.”</p>
             </div>
 
             <p>“Qua từng bài giảng, từng lời khuyên nhủ, thầy cô đã dạy chúng em biết kính trên nhường dưới, biết trân trọng công sức của người khác, và biết đặt lòng biết ơn vào trái tim mình. Chúng em hiểu rằng, tri ân không chỉ là một lời nói, mà là cách sống. Và hôm nay, hơn bao giờ hết, chúng em muốn nói lời tri ân ấy từ tận sâu thẳm trái tim mình. Cảm ơn thầy cô vì đã không chỉ dạy dỗ mà còn thắp sáng ngọn lửa đạo đức, để mỗi chúng em luôn hướng về điều tốt đẹp, giữ vững nhân cách dù đi đến bất cứ nơi đâu.”</p>
 
             <div class="content-with-image">
-           
+
                 <p>Nhân dịp ngày trở về, bên cạnh những bó hoa tươi thắm, những món quà ấm áp tình nghĩa gửi tặng toàn thể các thầy cô tham dự, Hội cựu học sinh khóa 2011-2014 đã trao tặng Quỹ khuyến học nhà trường món quà trị giá <strong>12.000.000 đồng</strong>. Đây là sự tri ân vô cùng ý nghĩa hòa chung không khí cả nước đang phấn khởi hướng về kỷ niệm 42 năm ngày Nhà giáo Việt Nam (20/11/1982 – 20/11/2024) và hướng tới kỉ niệm 30 năm thành lập trường THPT Chuyên Lê Quý Đôn (1995 – 2025).</p>
             </div>
 
             <div class="content-with-image">
-  
+
                 <p>Tại chương trình Hội khoá đã có nhiều hoạt động rất ý nghĩa và sôi nổi. Một trong những hoạt động nổi bật của chương trình là gặp mặt, giao lưu với các em học sinh lớp 12 đang học tại nhà trường với chủ đề: “Chia sẻ trải nghiệm – thắp sáng ước mơ”. Các anh chị đã mang đến những câu chuyện chân thực về hành trình học tập, công việc, cũng như kinh nghiệm vượt qua thử thách sau khi tốt nghiệp. Không chỉ là lời khuyên, những chia sẻ này còn truyền cảm hứng, tiếp thêm động lực để các em mạnh dạn định hướng tương lai.</p>
             </div>
 
             <div class="content-with-image">
-              
+
                 <p>Phát biểu tại buổi gặp mặt, <strong>Cô giáo Lê Thị Biên – Phó hiệu trưởng nhà trường</strong> thay mặt cho toàn thể các thầy cô giáo tham dự bày tỏ sự cảm kích, phấn khởi trước tình cảm nồng nhiệt, sự tri ân quý giá mà các cựu học sinh dành tặng; niềm tự hào, kiêu hãnh và không quên biểu dương những tình cảm trân quý của các bạn cựu học sinh khóa 2011-2014 đã dành cho nhà trường và các thầy cô giáo: “Hôm nay, được gặp lại các em sau mười năm, thầy cô vô cùng xúc động và tự hào. Nhìn các em trưởng thành, tự tin và thành đạt, thầy cô cảm thấy những nỗ lực của mình đã được đền đáp xứng đáng.”</p>
             </div>
 
@@ -337,7 +457,7 @@
             <p>Một ngày Hội khoá ngắn ngủi đã trôi qua, chưa đủ để thầy trò, bạn bè hàn huyên tâm sự. Chỉ kịp chụp những bức hình lưu niệm bù cho 10 năm trước, cùng ăn với nhau một bữa liên hoan, các trò tặng các thầy cô những bó hoa, những món quà tri ân vô cùng ý nghĩa... Còn nhiều lắm những điều chưa nói hết. Tất cả lại cùng mong một ngày hội ngộ trong tương lai gần nhất. Sau Hội khóa, đã có những sự kết nối, liên hệ, hỗ trợ và tương tác trong các mảng công việc và trong đời sống để gắn kết những nhóm cựu học sinh.</p>
 
             <div class="content-with-image">
-              
+
                 <p>Sự kiện hội khóa kết thúc đã để lại nhiều cảm xúc đan xen và cả sự tiếc nuối đến nao lòng đối với tất cả thầy cô và các bạn cựu học sinh khóa 2011-2014. Buổi gặp mặt sau 10 năm ra trường cũng là điểm bắt đầu hứa hẹn cho những lần gặp đầy ắp tiếng cười mai sau trong các sự kiện Hội khóa 20-25-30 năm… của tất cả cựu học sinh THPT Chuyên Lê Quý Đôn. Mong rằng tất cả chúng ta sẽ hội ngộ trên chuyến tàu “Trở về thanh xuân” tại lễ kỉ niệm 30 năm thành lập trường sắp tới!</p>
             </div>
 
@@ -350,28 +470,27 @@
             </div>
         </div>
     </section>
-<footer style="background-color: #003366; color: white; padding: 20px 0;">
-  <div style="display: flex; justify-content: space-around; flex-wrap: wrap; text-align: left;">
-    <div style="flex: 1; min-width: 250px; padding: 10px;">
-      <div style="margin-bottom: 10px;">
-        <img src="https://lh3.googleusercontent.com/nncDY_eP4-Py5kHcWjt8wFaXCUhKpwUgOMqQGT_ac7B3okxjXoWHgv_mj1D5O8emb1VAmuKGCdgQoR8XT1xNUkPJ9JCdwcvU=rw-w267" alt="logo đoàn" class="content-image" style="height: 150px;">
-      </div>
-      <strong>SỨC TRẺ THANH NIÊN</strong><br>
-      Đoàn trường THPT chuyên Lê Quý Đôn - Điện Biên<br><br>
-      <em style="font-size: 14px;">Trang web đang trong quá trình dự thảo và đang chờ thẩm định nên chưa được cấp quyền sử dụng dưới mọi hình thức</em>
-    </div>
-    <div style="flex: 1; min-width: 250px; padding: 10px;">
-      <strong>Liên hệ</strong><br><br>
-      📞 Cô Lê Thùy Hoa – Bí thư Đoàn trường: <strong>0372632222</strong><br>
-      📞 Bạn Nguyễn Quang Minh – Quản trị viên Website: <strong>0849102558</strong><br>
-      📧 <a href="mailto:doantruongthptchuyenlqd@gmail.com" style="color: #99ccff;">doantruongthptchuyenlqd@gmail.com</a>
-    </div>
-    <div style="flex: 1; min-width: 250px; padding: 10px;">
-      <strong>Địa điểm</strong><br><br>
-      📍 Văn phòng Đoàn E103 - E104, Trường THPT Chuyên Lê Quý Đôn
-    </div>
-  </div>
-</footer>
-   
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <div style="margin-bottom: 10px;">
+                    <img src="https://lh3.googleusercontent.com/nncDY_eP4-Py5kHcWjt8wFaXCUhKpwUgOMqQGT_ac7B3okxjXoWHgv_mj1D5O8emb1VAmuKGCdgQoR8XT1xNUkPJ9JCdwcvU=rw-w267" alt="logo đoàn" class="content-image" style="height: 150px;">
+                </div>
+                <h3>SỨC TRẺ THANH NIÊN</h3>
+                <p>Đoàn trường THPT chuyên Lê Quý Đôn - Điện Biên</p>
+                <p><em>Trang web đang trong quá trình dự thảo và đang chờ thẩm định nên chưa được cấp quyền sử dụng dưới mọi hình thức</em></p>
+            </div>
+            <div class="footer-section">
+                <h3>Liên hệ</h3>
+                <p>📞 Cô Lê Thùy Hoa – Bí thư Đoàn trường: <strong>0372632222</strong></p>
+                <p>📞 Bạn Nguyễn Quang Minh – Quản trị viên Website: <strong>0849102558</strong></p>
+                <p>📧 <a href="mailto:doantruongthptchuyenlqd@gmail.com">doantruongthptchuyenlqd@gmail.com</a></p>
+            </div>
+            <div class="footer-section">
+                <h3>Địa điểm</h3>
+                <p>📍 Văn phòng Đoàn E103 - E104, Trường THPT Chuyên Lê Quý Đôn</p>
+            </div>
+        </div>
+    </footer>
 </body>
 </html>
