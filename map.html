@@ -178,213 +178,267 @@
         </div>
     </div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/eventemitter3/5.0.1/index.min.js"></script>
+    <script>console.log("EventEmitter loaded:", typeof EventEmitter !== 'undefined');</script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/photo-sphere-viewer@4/dist/photo-sphere-viewer.min.js"></script>
+    <script>console.log("Three.js loaded:", typeof THREE !== 'undefined');</script>
+    <script src="https://raw.githack.com/mistic100/Photo-Sphere-Viewer/v4.4.0/dist/photo-sphere-viewer.js"></script>
+    <script>console.log("PhotoSphereViewer loaded:", typeof PhotoSphereViewer !== 'undefined', "Viewer constructor:", typeof PhotoSphereViewer !== 'undefined' ? typeof PhotoSphereViewer.Viewer : 'undefined');</script>
 
     <script>
-        // Data structure for multiple buildings, their markers, floors, and rooms
-        const allBuildingsData = {
-            "Tòa nhà A": {
-                markerCoords: { left: '50%', top: '50%' }, // Example coordinates for Tòa nhà A
-                floors: {
-                    "Tầng 1": {
-                        "Phòng A101": "https://placehold.co/1920x960/000000/FFFFFF?text=Tòa+nhà+A+Phòng+A101+360",
-                        "Phòng A102": "https://placehold.co/1920x960/000000/FFFFFF?text=Tòa+nhà+A+Phòng+A102+360",
-                        "Phòng A103": "https://placehold.co/1920x960/000000/FFFFFF?text=Tòa+nhà+A+Phòng+A103+360"
-                    },
-                    "Tầng 2": {
-                        "Phòng A201": "Hs.jpg", // The specific 360 image
-                        "Phòng A202": "https://placehold.co/1920x960/000000/FFFFFF?text=Tòa+nhà+A+Phòng+A202+360",
-                        "Phòng A203": "https://placehold.co/1920x960/000000/FFFFFF?text=Tòa+nhà+A+Phòng+A203+360"
+        // Ensure the DOM is fully loaded before running the script
+        document.addEventListener('DOMContentLoaded', () => {
+            // Data structure for multiple buildings, their markers, floors, and rooms
+            const allBuildingsData = {
+                "Tòa nhà A": {
+                    markerCoords: { left: '50%', top: '50%' }, // Example coordinates for Tòa nhà A
+                    floors: {
+                        "Tầng 1": {
+                            "Phòng A101": "https://placehold.co/1920x960/000000/FFFFFF?text=Tòa+nhà+A+Phòng+A101+360",
+                            "Phòng A102": "https://placehold.co/1920x960/000000/FFFFFF?text=Tòa+nhà+A+Phòng+A102+360",
+                            "Phòng A103": "https://placehold.co/1920x960/000000/FFFFFF?text=Tòa+nhà+A+Phòng+A103+360"
+                        },
+                        "Tầng 2": {
+                            "Phòng A201": "Hs.jpg", // The specific 360 image
+                            "Phòng A202": "https://placehold.co/1920x960/000000/FFFFFF?text=Tòa+nhà+A+Phòng+A202+360",
+                            "Phòng A203": "https://placehold.co/1920x960/000000/FFFFFF?text=Tòa+nhà+A+Phòng+A203+360"
+                        }
+                    }
+                },
+                "Tòa nhà B": {
+                    markerCoords: { left: '25%', top: '70%' }, // Example coordinates for Tòa nhà B
+                    floors: {
+                        "Tầng Trệt": {
+                            "Phòng B001": "https://placehold.co/1920x960/000000/FFFFFF?text=Tòa+nhà+B+Phòng+B001+360",
+                            "Phòng B002": "https://placehold.co/1920x960/000000/FFFFFF?text=Tòa+nhà+B+Phòng+B002+360"
+                        },
+                        "Tầng 1": {
+                            "Phòng B101": "https://placehold.co/1920x960/000000/FFFFFF?text=Tòa+nhà+B+Phòng+B101+360",
+                            "Phòng B102": "https://placehold.co/1920x960/000000/FFFFFF?text=Tòa+nhà+B+Phòng+B102+360"
+                        }
+                    }
+                },
+                "Tòa nhà C": {
+                    markerCoords: { left: '75%', top: '30%' }, // Example coordinates for Tòa nhà C
+                    floors: {
+                        "Tầng 1": {
+                            "Phòng C101": "https://placehold.co/1920x960/000000/FFFFFF?text=Tòa+nhà+C+Phòng+C101+360",
+                            "Phòng C102": "https://placehold.co/1920x960/000000/FFFFFF?text=Tòa+nhà+C+Phòng+C102+360"
+                        }
                     }
                 }
-            },
-            "Tòa nhà B": {
-                markerCoords: { left: '25%', top: '70%' }, // Example coordinates for Tòa nhà B
-                floors: {
-                    "Tầng Trệt": {
-                        "Phòng B001": "https://placehold.co/1920x960/000000/FFFFFF?text=Tòa+nhà+B+Phòng+B001+360",
-                        "Phòng B002": "https://placehold.co/1920x960/000000/FFFFFF?text=Tòa+nhà+B+Phòng+B002+360"
-                    },
-                    "Tầng 1": {
-                        "Phòng B101": "https://placehold.co/1920x960/000000/FFFFFF?text=Tòa+nhà+B+Phòng+B101+360",
-                        "Phòng B102": "https://placehold.co/1920x960/000000/FFFFFF?text=Tòa+nhà+B+Phòng+B102+360"
-                    }
+            };
+
+            let currentBuildingName = '';
+            let currentFloorData = {}; // Store the floor data for the currently selected building
+            let viewer = null; // Photo Sphere Viewer instance
+
+            // Function to open a modal
+            function openModal(modalId) {
+                document.getElementById(modalId).classList.add('active');
+            }
+
+            // Function to close a modal
+            function closeModal(modalId) {
+                document.getElementById(modalId).classList.remove('active');
+                // Stop the viewer if it's active
+                if (modalId === 'viewerModal' && viewer) {
+                    viewer.destroy();
+                    viewer = null;
+                    document.getElementById('viewer').innerHTML = ''; // Clear viewer content
+                    document.getElementById('viewerMessage').classList.add('hidden');
                 }
-            },
-            "Tòa nhà C": {
-                markerCoords: { left: '75%', top: '30%' }, // Example coordinates for Tòa nhà C
-                floors: {
-                    "Tầng 1": {
-                        "Phòng C101": "https://placehold.co/1920x960/000000/FFFFFF?text=Tòa+nhà+C+Phòng+C101+360",
-                        "Phòng C102": "https://placehold.co/1920x960/000000/FFFFFF?text=Tòa+nhà+C+Phòng+C102+360"
-                    }
+            }
+
+            // Display floors list for a given building
+            function displayFloors(buildingName) {
+                currentBuildingName = buildingName;
+                const building = allBuildingsData[buildingName];
+                if (!building) {
+                    console.error(`Building data not found for: ${buildingName}`);
+                    return;
+                }
+                currentFloorData = building.floors; // Set the current floor data
+
+                const floorsList = document.getElementById('floorsList');
+                floorsList.innerHTML = ''; // Clear previous list
+                Object.keys(currentFloorData).forEach(floor => {
+                    const floorItem = document.createElement('div');
+                    floorItem.classList.add('list-item');
+                    floorItem.textContent = floor;
+                    floorItem.onclick = () => {
+                        closeModal('floorsModal');
+                        displayRooms(floor);
+                        openModal('roomsModal');
+                    };
+                    floorsList.appendChild(floorItem);
+                });
+                // Update modal title
+                document.querySelector('#floorsModal .modal-content h2').textContent = `Chọn Tầng cho ${buildingName}`;
+                openModal('floorsModal');
+            }
+
+            // Display rooms list for a given floor in the current building
+            function displayRooms(floor) {
+                const roomsList = document.getElementById('roomsList');
+                roomsList.innerHTML = ''; // Clear previous list
+                const rooms = currentFloorData[floor]; // Use currentFloorData
+                if (!rooms) {
+                    console.error(`Rooms not found for floor: ${floor} in building: ${currentBuildingName}`);
+                    return;
+                }
+                Object.keys(rooms).forEach(room => {
+                    const roomItem = document.createElement('div');
+                    roomItem.classList.add('list-item');
+                    roomItem.textContent = room;
+                    roomItem.onclick = () => {
+                        closeModal('roomsModal');
+                        load360Viewer(rooms[room]);
+                    };
+                    roomsList.appendChild(roomItem);
+                });
+                // Update modal title
+                document.querySelector('#roomsModal .modal-content h2').textContent = `Chọn Phòng cho ${currentBuildingName} - ${floor}`;
+            }
+
+            // Load 360-degree viewer
+            function load360Viewer(imagePath) {
+                openModal('viewerModal');
+                document.getElementById('viewerMessage').classList.remove('hidden'); // Show loading message
+
+                // Explicitly check if PhotoSphereViewer is defined and its Viewer constructor is available
+                if (typeof PhotoSphereViewer === 'undefined' || typeof PhotoSphereViewer.Viewer === 'undefined') {
+                    console.error("Lỗi: PhotoSphereViewer.Viewer không phải là một hàm tạo. Thư viện có thể không tải đúng cách hoặc có xung đột môi trường.");
+                    document.getElementById('viewer').innerHTML = '<p class="text-center text-red-500">Không thể tải trình xem ảnh 360 độ. Vui lòng kiểm tra console để biết chi tiết lỗi (có thể do lỗi tải thư viện).</p>';
+                    document.getElementById('viewerMessage').classList.add('hidden');
+                    return; // Exit if viewer is not available
+                }
+
+                try {
+                    // Initialize Photo Sphere Viewer
+                    viewer = new PhotoSphereViewer.Viewer({
+                        container: 'viewer',
+                        panorama: imagePath,
+                        loadingImg: 'https://cdn.jsdelivr.net/npm/photo-sphere-viewer@4/assets/loader.gif', // Default loader
+                        navbar: [
+                            'zoom',
+                            'move',
+                            'caption',
+                            'fullscreen',
+                        ],
+                        caption: 'Ảnh 360 độ',
+                        touchmoveTwoFingers: true, // Enable two-finger touch for pan
+                        mousewheel: true, // Enable mouse wheel for zoom
+                        defaultZoomLvl: 50,
+                    });
+
+                    viewer.once('ready', () => {
+                        document.getElementById('viewerMessage').classList.add('hidden'); // Hide loading message
+                    });
+
+                    viewer.once('error', (e) => {
+                        document.getElementById('viewer').innerHTML = '<p class="text-center text-red-500">Không thể tải ảnh 360 độ. Vui lòng kiểm tra đường dẫn hoặc định dạng ảnh.</p>';
+                        document.getElementById('viewerMessage').classList.add('hidden');
+                        console.error("Photo Sphere Viewer error:", e);
+                    });
+                } catch (e) {
+                    console.error("Lỗi khi khởi tạo PhotoSphereViewer:", e);
+                    document.getElementById('viewer').innerHTML = '<p class="text-center text-red-500">Không thể khởi tạo trình xem ảnh 360 độ. Vui lòng kiểm tra console để biết chi tiết lỗi.</p>';
+                    document.getElementById('viewerMessage').classList.add('hidden');
                 }
             }
-        };
 
-        let currentBuildingName = '';
-        let currentFloorData = {}; // Store the floor data for the currently selected building
-        let viewer = null; // Photo Sphere Viewer instance
-
-        // Function to open a modal
-        function openModal(modalId) {
-            document.getElementById(modalId).classList.add('active');
-        }
-
-        // Function to close a modal
-        function closeModal(modalId) {
-            document.getElementById(modalId).classList.remove('active');
-            // Stop the viewer if it's active
-            if (modalId === 'viewerModal' && viewer) {
-                viewer.destroy();
-                viewer = null;
-                document.getElementById('viewer').innerHTML = ''; // Clear viewer content
-                document.getElementById('viewerMessage').classList.add('hidden');
-            }
-        }
-
-        // Display floors list for a given building
-        function displayFloors(buildingName) {
-            currentBuildingName = buildingName;
-            const building = allBuildingsData[buildingName];
-            if (!building) {
-                console.error(`Building data not found for: ${buildingName}`);
-                return;
-            }
-            currentFloorData = building.floors; // Set the current floor data
-
-            const floorsList = document.getElementById('floorsList');
-            floorsList.innerHTML = ''; // Clear previous list
-            Object.keys(currentFloorData).forEach(floor => {
-                const floorItem = document.createElement('div');
-                floorItem.classList.add('list-item');
-                floorItem.textContent = floor;
-                floorItem.onclick = () => {
+            // Close modals if clicking outside
+            document.getElementById('floorsModal').addEventListener('click', (e) => {
+                if (e.target === document.getElementById('floorsModal')) {
                     closeModal('floorsModal');
-                    displayRooms(floor);
-                    openModal('roomsModal');
-                };
-                floorsList.appendChild(floorItem);
+                }
             });
-            // Update modal title
-            document.querySelector('#floorsModal .modal-content h2').textContent = `Chọn Tầng cho ${buildingName}`;
-            openModal('floorsModal');
-        }
-
-        // Display rooms list for a given floor in the current building
-        function displayRooms(floor) {
-            const roomsList = document.getElementById('roomsList');
-            roomsList.innerHTML = ''; // Clear previous list
-            const rooms = currentFloorData[floor]; // Use currentFloorData
-            if (!rooms) {
-                console.error(`Rooms not found for floor: ${floor} in building: ${currentBuildingName}`);
-                return;
-            }
-            Object.keys(rooms).forEach(room => {
-                const roomItem = document.createElement('div');
-                roomItem.classList.add('list-item');
-                roomItem.textContent = room;
-                roomItem.onclick = () => {
+            document.getElementById('roomsModal').addEventListener('click', (e) => {
+                if (e.target === document.getElementById('roomsModal')) {
                     closeModal('roomsModal');
-                    load360Viewer(rooms[room]);
-                };
-                roomsList.appendChild(roomItem);
+                }
             });
-            // Update modal title
-            document.querySelector('#roomsModal .modal-content h2').textContent = `Chọn Phòng cho ${currentBuildingName} - ${floor}`;
-        }
-
-        // Load 360-degree viewer
-        function load360Viewer(imagePath) {
-            openModal('viewerModal');
-            document.getElementById('viewerMessage').classList.remove('hidden'); // Show loading message
-
-            // Explicitly check if PhotoSphereViewer is defined
-            if (typeof PhotoSphereViewer === 'undefined' || typeof PhotoSphereViewer.Viewer === 'undefined') {
-                console.error("Lỗi: PhotoSphereViewer.Viewer không phải là một hàm tạo. Thư viện có thể không tải đúng cách.");
-                document.getElementById('viewer').innerHTML = '<p class="text-center text-red-500">Không thể tải trình xem ảnh 360 độ. Vui lòng kiểm tra kết nối mạng hoặc đường dẫn CDN.</p>';
-                document.getElementById('viewerMessage').classList.add('hidden');
-                return; // Exit if viewer is not available
-            }
-
-            // Initialize Photo Sphere Viewer
-            viewer = new PhotoSphereViewer.Viewer({
-                container: 'viewer',
-                panorama: imagePath,
-                loadingImg: 'https://cdn.jsdelivr.net/npm/photo-sphere-viewer@4/assets/loader.gif', // Default loader
-                navbar: [
-                    'zoom',
-                    'move',
-                    'caption',
-                    'fullscreen',
-                ],
-                caption: 'Ảnh 360 độ',
-                touchmoveTwoFingers: true, // Enable two-finger touch for pan
-                mousewheel: true, // Enable mouse wheel for zoom
-                defaultZoomLvl: 50,
+            document.getElementById('viewerModal').addEventListener('click', (e) => {
+                if (e.target === document.getElementById('viewerModal')) {
+                    closeModal('viewerModal');
+                }
             });
 
-            viewer.once('ready', () => {
-                document.getElementById('viewerMessage').classList.add('hidden'); // Hide loading message
-            });
-
-            viewer.once('error', (e) => {
-                document.getElementById('viewer').innerHTML = '<p class="text-center text-red-500">Không thể tải ảnh 360 độ. Vui lòng kiểm tra đường dẫn hoặc định dạng ảnh.</p>';
-                document.getElementById('viewerMessage').classList.add('hidden');
-                console.error("Photo Sphere Viewer error:", e);
-            });
-        }
-
-        // Close modals if clicking outside
-        document.getElementById('floorsModal').addEventListener('click', (e) => {
-            if (e.target === document.getElementById('floorsModal')) {
-                closeModal('floorsModal');
-            }
-        });
-        document.getElementById('roomsModal').addEventListener('click', (e) => {
-            if (e.target === document.getElementById('roomsModal')) {
-                closeModal('roomsModal');
-            }
-        });
-        document.getElementById('viewerModal').addEventListener('click', (e) => {
-            if (e.target === document.getElementById('viewerModal')) {
-                closeModal('viewerModal');
-            }
-        });
-
-        // Initial setup: Dynamically create markers on window load
-        window.onload = () => {
             const mapContainer = document.querySelector('.map-container');
 
-            // Create markers dynamically based on allBuildingsData
-            for (const buildingName in allBuildingsData) {
-                const building = allBuildingsData[buildingName];
-                const marker = document.createElement('div');
-                marker.id = `marker-${buildingName.replace(/\s/g, '-')}`;
-                marker.classList.add('marker');
-                marker.style.left = building.markerCoords.left;
-                marker.style.top = building.markerCoords.top;
-                marker.setAttribute('data-building-name', buildingName); // Store building name
-                marker.innerHTML = `
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
-                        <path fill-rule="evenodd" d="m11.54 22.351.07.04.028.016a.76.76 0 0 0 .723 0l.028-.015.071-.041a16.975 16.975 0 0 0 1.144-.742 19.58 19.58 0 0 0 2.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 0 0-16.5 0c0 3.846 2.02 6.837 3.963 8.827a19.58 19.58 0 0 0 2.682 2.282 16.975 16.975 0 0 0 1.145.742ZM12 13.5a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" clip-rule="evenodd" />
-                    </svg>
-                `;
-                marker.addEventListener('click', () => displayFloors(buildingName));
-                mapContainer.appendChild(marker);
+            // Function to check and initialize Photo Sphere Viewer related logic
+            function initializePhotoSphereViewerDependencies() {
+                if (typeof THREE === 'undefined') {
+                    console.error("Lỗi: Thư viện Three.js không được định nghĩa. Vui lòng kiểm tra kết nối mạng hoặc đường dẫn CDN.");
+                    return false; // Indicate failure
+                } else {
+                    // console.log("Three.js đã được định nghĩa."); // Logged by script tag directly
+                }
+
+                // Check for EventEmitter before PhotoSphereViewer
+                if (typeof EventEmitter === 'undefined') {
+                    console.error("Lỗi: Thư viện EventEmitter không được định nghĩa. Photo Sphere Viewer có thể cần nó.");
+                    return false; // Indicate failure
+                } else {
+                    // console.log("EventEmitter đã được định nghĩa."); // Logged by script tag directly
+                }
+
+                if (typeof PhotoSphereViewer === 'undefined') {
+                    console.error("Lỗi: Thư viện PhotoSphereViewer không được định nghĩa. Vui lòng kiểm tra kết nối mạng hoặc đường dẫn CDN.");
+                    return false; // Indicate failure
+                } else if (typeof PhotoSphereViewer.Viewer === 'undefined') {
+                    console.error("Lỗi: PhotoSphereViewer đã được định nghĩa, nhưng PhotoSphereViewer.Viewer không phải là một hàm tạo. Có thể do xung đột môi trường hoặc thư viện không tương thích.");
+                    return false; // Indicate failure
+                } else {
+                    // console.log("PhotoSphereViewer và PhotoSphereViewer.Viewer đã được định nghĩa."); // Logged by script tag directly
+                    return true; // Indicate success
+                }
             }
 
-            // Debugging PhotoSphereViewer availability on load
-            if (typeof PhotoSphereViewer === 'undefined' || typeof PhotoSphereViewer.Viewer === 'undefined') {
-                console.error("Lỗi: Thư viện PhotoSphereViewer hoặc PhotoSphereViewer.Viewer không được định nghĩa. Thư viện có thể không tải đúng cách.");
-                document.getElementById('viewer').innerHTML = '<p class="text-center text-red-500">Lỗi: Thư viện xem ảnh 360 độ không tải được. Vui lòng kiểm tra kết nối mạng hoặc đường dẫn CDN.</p>';
-            } else {
-                console.log("PhotoSphereViewer và PhotoSphereViewer.Viewer đã được định nghĩa.");
-            }
-        };
+            let checkAttempts = 0;
+            const maxAttempts = 30; // Try for up to 3 seconds (30 * 100ms)
+            const intervalTime = 100; // Check every 100ms
 
+            function pollForPhotoSphereViewerReady() {
+                if (initializePhotoSphereViewerDependencies()) {
+                    console.log("Photo Sphere Viewer sẵn sàng. Bắt đầu tạo điểm đánh dấu.");
+                    // Create markers dynamically based on allBuildingsData
+                    for (const buildingName in allBuildingsData) {
+                        const building = allBuildingsData[buildingName];
+                        const marker = document.createElement('div');
+                        marker.id = `marker-${buildingName.replace(/\s/g, '-')}`;
+                        marker.classList.add('marker');
+                        marker.style.left = building.markerCoords.left;
+                        marker.style.top = building.markerCoords.top;
+                        marker.setAttribute('data-building-name', buildingName); // Store building name
+                        marker.innerHTML = `
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
+                                <path fill-rule="evenodd" d="m11.54 22.351.07.04.028.016a.76.76 0 0 0 .723 0l.028-.015.071-.041a16.975 16.975 0 0 0 1.144-.742 19.58 19.58 0 0 0 2.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 0 0-16.5 0c0 3.846 2.02 6.837 3.963 8.827a19.58 19.58 0 0 0 2.682 2.282 16.975 16.975 0 0 0 1.145.742ZM12 13.5a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" clip-rule="evenodd" />
+                            </svg>
+                        `;
+                        marker.addEventListener('click', () => displayFloors(buildingName));
+                        mapContainer.appendChild(marker);
+                    }
+                } else {
+                    checkAttempts++;
+                    if (checkAttempts < maxAttempts) {
+                        console.log(`Đang chờ Photo Sphere Viewer... Thử lại lần ${checkAttempts}/${maxAttempts}`);
+                        setTimeout(pollForPhotoSphereViewerReady, intervalTime);
+                    } else {
+                        console.error("Đã hết số lần thử. Không thể tải Photo Sphere Viewer. Vui lòng kiểm tra kết nối mạng hoặc đường dẫn CDN.");
+                        // Optionally, display a message to the user that the 360 viewer is unavailable
+                        const viewerContainer = document.getElementById('viewer');
+                        if (viewerContainer) {
+                            viewerContainer.innerHTML = '<p class="text-center text-red-500">Không thể tải trình xem ảnh 360 độ. Vui lòng kiểm tra kết nối mạng hoặc đường dẫn CDN.</p>';
+                        }
+                    }
+                }
+            }
+
+            // Start polling for Photo Sphere Viewer readiness
+            pollForPhotoSphereViewerReady();
+        });
     </script>
 </body>
 </html>
-
