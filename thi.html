@@ -583,6 +583,23 @@
             font-size: 0.875rem;
         }
         
+        .share-history-btn {
+            background-color: var(--primary);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            margin-left: 0.5rem;
+        }
+        
+        .share-history-btn:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+        
         @media (max-width: 768px) {
             .floating-action-btn {
                 bottom: 1rem;
@@ -608,6 +625,11 @@
             #qr-code {
                 width: 150px;
                 height: 150px;
+            }
+            
+            .share-history-btn {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.875rem;
             }
         }
     </style>
@@ -725,9 +747,14 @@
                 </button>
             </div>
             
-            <!-- Lịch sử kiểm tra (hiển thị ngay từ đầu) -->
+            <!-- Lịch sử kiểm tra -->
             <div class="exam-card p-6 md:p-8 mt-8" id="history-section">
-                <h3 class="section-title">LỊCH SỬ KIỂM TRA</h3>
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="section-title">LỊCH SỬ KIỂM TRA</h3>
+                    <button id="share-history-btn" class="share-history-btn">
+                        <i class="fas fa-share-alt mr-2"></i> Chia sẻ
+                    </button>
+                </div>
                 <div class="overflow-x-auto">
                     <table class="min-w-full bg-white rounded-lg overflow-hidden">
                         <thead class="bg-gray-50">
@@ -992,8 +1019,8 @@
     <div id="share-modal" class="modal">
         <div class="modal-content">
             <span class="close-modal">&times;</span>
-            <h3 class="text-xl font-bold text-center mb-4">Chia sẻ kết quả</h3>
-            <p class="text-center text-gray-600 mb-4">Quét QR code này để xem kết quả bài kiểm tra của bạn</p>
+            <h3 class="text-xl font-bold text-center mb-4">Chia sẻ lịch sử kiểm tra</h3>
+            <p class="text-center text-gray-600 mb-4">Quét QR code này để xem lịch sử kiểm tra và biểu đồ tiến bộ của bạn</p>
             
             <div class="qr-code-container">
                 <canvas id="qr-code"></canvas>
@@ -1014,7 +1041,7 @@
         <div class="modal-content">
             <span class="close-modal">&times;</span>
             <h3 class="text-xl font-bold text-center mb-4">Quét QR code</h3>
-            <p class="text-center text-gray-600 mb-4">Quét QR code để xem kết quả bài kiểm tra của người khác</p>
+            <p class="text-center text-gray-600 mb-4">Quét QR code để xem lịch sử kiểm tra của người khác</p>
             
             <div class="scanner-container">
                 <video id="scanner-video" muted playsinline></video>
@@ -1098,6 +1125,7 @@
         const streakCount = document.getElementById('streak-count');
         const shareResultBtn = document.getElementById('share-result-btn');
         const scanResultBtn = document.getElementById('scan-result-btn');
+        const shareHistoryBtn = document.getElementById('share-history-btn');
         const shareModal = document.getElementById('share-modal');
         const scanModal = document.getElementById('scan-modal');
         const closeModals = document.querySelectorAll('.close-modal');
@@ -1121,6 +1149,7 @@
         let currentResultId = null;
         let scannerStream = null;
         let scanInterval = null;
+        let historyData = [];
         
         // Xử lý đăng nhập/đăng xuất
         loginBtn.addEventListener('click', () => {
@@ -1282,7 +1311,7 @@
                     }
                     
                     // Chuẩn bị dữ liệu cho bảng và biểu đồ
-                    const historyData = [];
+                    historyData = [];
                     const chartLabels = [];
                     const chartData = [];
                     
@@ -1624,6 +1653,38 @@
             }
         });
         
+        // Xử lý chia sẻ lịch sử kiểm tra qua QR code
+        shareHistoryBtn.addEventListener('click', () => {
+            const user = auth.currentUser;
+            if (!user) {
+                alert("Vui lòng đăng nhập để sử dụng tính năng chia sẻ");
+                return;
+            }
+            
+            if (historyData.length === 0) {
+                alert("Chưa có lịch sử kiểm tra để chia sẻ");
+                return;
+            }
+            
+            // Tạo liên kết chia sẻ
+            const shareUrl = `${window.location.origin}${window.location.pathname}?shareHistory=${user.uid}`;
+            
+            // Hiển thị QR code
+            QRCode.toCanvas(qrCodeCanvas, shareUrl, { width: 200 }, (error) => {
+                if (error) {
+                    console.error("Lỗi khi tạo QR code:", error);
+                    alert("Có lỗi khi tạo QR code");
+                    return;
+                }
+                
+                // Hiển thị liên kết chia sẻ
+                shareLinkInput.value = shareUrl;
+                
+                // Hiển thị modal
+                shareModal.style.display = 'flex';
+            });
+        });
+        
         // Xử lý chia sẻ kết quả qua QR code
         shareResultBtn.addEventListener('click', () => {
             if (!currentResultId) {
@@ -1760,17 +1821,24 @@
         
         // Xử lý kết quả quét được
         function handleScannedResult(resultUrl) {
-            // Kiểm tra xem URL có chứa resultId không
-            const url = new URL(resultUrl);
-            const resultId = url.searchParams.get('resultId');
-            
-            if (!resultId) {
+            try {
+                const url = new URL(resultUrl);
+                const resultId = url.searchParams.get('resultId');
+                const shareHistory = url.searchParams.get('shareHistory');
+                
+                if (resultId) {
+                    // Tải kết quả từ Firestore
+                    loadSharedResult(resultId);
+                } else if (shareHistory) {
+                    // Tải lịch sử kiểm tra từ Firestore
+                    loadSharedHistory(shareHistory);
+                } else {
+                    throw new Error("QR code không hợp lệ");
+                }
+            } catch (error) {
+                console.error("Lỗi khi xử lý QR code:", error);
                 alert("QR code không hợp lệ. Vui lòng quét lại.");
-                return;
             }
-            
-            // Tải kết quả từ Firestore
-            loadSharedResult(resultId);
         }
         
         // Tải kết quả được chia sẻ
@@ -1796,6 +1864,70 @@
                 .catch((error) => {
                     console.error("Lỗi khi tải kết quả chia sẻ:", error);
                     alert("Không thể tải kết quả. Có thể liên kết đã hết hạn hoặc không tồn tại.");
+                });
+        }
+        
+        // Tải lịch sử kiểm tra được chia sẻ
+        function loadSharedHistory(userId) {
+            db.collection('users').doc(userId).get()
+                .then((userDoc) => {
+                    if (!userDoc.exists) {
+                        throw new Error("Không tìm thấy người dùng");
+                    }
+                    
+                    const userName = userDoc.data().name || userDoc.data().email || 'Người dùng';
+                    
+                    // Lấy lịch sử kiểm tra
+                    return db.collection('exam_results')
+                        .where('userId', '==', userId)
+                        .orderBy('timestamp', 'desc')
+                        .limit(5)
+                        .get()
+                        .then((querySnapshot) => {
+                            if (querySnapshot.empty) {
+                                throw new Error("Không có dữ liệu lịch sử");
+                            }
+                            
+                            const historyData = [];
+                            const chartLabels = [];
+                            const chartData = [];
+                            
+                            querySnapshot.forEach((doc) => {
+                                const data = doc.data();
+                                const date = data.timestamp.toDate();
+                                const dateStr = date.toLocaleDateString('vi-VN');
+                                const timeStr = date.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
+                                const fullDateStr = `${dateStr} ${timeStr}`;
+                                
+                                historyData.push({
+                                    date: fullDateStr,
+                                    score: data.totalScore,
+                                    feedback: getScoreFeedback(data.totalScore)
+                                });
+                            });
+                            
+                            // Đảo ngược thứ tự để hiển thị từ cũ đến mới
+                            historyData.reverse();
+                            
+                            // Tạo dữ liệu cho biểu đồ
+                            historyData.forEach((item, index) => {
+                                chartLabels.push(`Lần ${index + 1}`);
+                                chartData.push(item.score);
+                            });
+                            
+                            // Hiển thị lịch sử được chia sẻ
+                            displaySharedHistory(historyData, chartLabels, chartData, userName);
+                            
+                            // Hiển thị phần kết quả chia sẻ
+                            sharedResultSection.classList.remove('hidden');
+                            
+                            // Cuộn đến phần kết quả chia sẻ
+                            sharedResultSection.scrollIntoView({ behavior: 'smooth' });
+                        });
+                })
+                .catch((error) => {
+                    console.error("Lỗi khi tải lịch sử chia sẻ:", error);
+                    alert("Không thể tải lịch sử kiểm tra. Có thể liên kết đã hết hạn hoặc không tồn tại.");
                 });
         }
         
@@ -1855,6 +1987,98 @@
                     <p class="text-gray-700">${resultData.result.overallFeedback}</p>
                 </div>
             `;
+        }
+        
+        // Hiển thị lịch sử kiểm tra được chia sẻ
+        function displaySharedHistory(historyData, chartLabels, chartData, userName) {
+            // Tạo avatar từ chữ cái đầu tên
+            const avatarText = userName.charAt(0).toUpperCase();
+            
+            sharedResultContainer.innerHTML = `
+                <div class="shared-result-header">
+                    <div class="shared-result-user">
+                        <div class="shared-result-avatar">${avatarText}</div>
+                        <div>
+                            <div class="shared-result-name">${userName}</div>
+                            <div class="shared-result-date">${historyData.length} bài kiểm tra gần nhất</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-6">
+                    <h4 class="font-bold text-lg mb-4 text-gray-800">LỊCH SỬ KIỂM TRA</h4>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full bg-white rounded-lg overflow-hidden">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ngày kiểm tra</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Điểm số</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Đánh giá</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-200">
+                                ${historyData.map(item => `
+                                    <tr class="${item.score >= 8 ? 'bg-green-50' : item.score >= 6 ? 'bg-blue-50' : item.score >= 4 ? 'bg-amber-50' : 'bg-red-50'}">
+                                        <td class="px-6 py-4 whitespace-nowrap">${item.date}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap font-bold">${item.score.toFixed(1)}/10</td>
+                                        <td class="px-6 py-4">${item.feedback}</td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <div class="mt-6">
+                    <h4 class="font-bold text-lg mb-4 text-gray-800">BIỂU ĐỒ TIẾN BỘ</h4>
+                    <div class="chart-container" style="height: 250px;">
+                        <canvas id="shared-progress-chart"></canvas>
+                    </div>
+                </div>
+            `;
+            
+            // Vẽ biểu đồ tiến bộ
+            const ctx = document.getElementById('shared-progress-chart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: chartLabels,
+                    datasets: [{
+                        label: 'Điểm số',
+                        data: chartData,
+                        backgroundColor: 'rgba(30, 58, 138, 0.2)',
+                        borderColor: 'rgba(30, 58, 138, 1)',
+                        borderWidth: 2,
+                        tension: 0.3,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `Điểm: ${context.raw.toFixed(1)}/10`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 10,
+                            ticks: {
+                                stepSize: 1
+                            }
+                        }
+                    }
+                }
+            });
         }
         
         // Tạo đề thi bằng AI
@@ -2259,10 +2483,18 @@
         function checkSharedResultFromUrl() {
             const urlParams = new URLSearchParams(window.location.search);
             const resultId = urlParams.get('resultId');
+            const shareHistory = urlParams.get('shareHistory');
             
             if (resultId) {
                 // Tải kết quả chia sẻ
                 loadSharedResult(resultId);
+                
+                // Xóa tham số từ URL
+                const newUrl = window.location.pathname;
+                window.history.replaceState(null, '', newUrl);
+            } else if (shareHistory) {
+                // Tải lịch sử chia sẻ
+                loadSharedHistory(shareHistory);
                 
                 // Xóa tham số từ URL
                 const newUrl = window.location.pathname;
