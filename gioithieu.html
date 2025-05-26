@@ -421,10 +421,109 @@
                 font-size: 0.95em;
             }
         }
+                .read-aloud-btn {
+    padding: 10px 20px;
+    background-color: var(--primary-blue);
+    color: var(--white);
+    border: none;
+    border-radius: 6px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-left: 20px; /* Khoảng cách từ logo */
+}
+
+.read-aloud-btn:hover {
+    background-color: var(--dark-blue);
+}
+
+.reading {
+    background-color: var(--accent-orange) !important;
+}    
+
+
+
     </style>
 </head>
 <body>
-   <header class="header">
+  <script>
+    // Nội dung thủ công để đọc (bạn có thể chỉnh sửa tùy ý)
+    const customContent = `
+GIỚI THIỆU CHUNG VỀ ĐOÀN THANH NIÊN CỘNG SẢN HỒ CHÍ MINH,
+ĐẠI HỘI ĐOÀN TNCS HỒ CHÍ MINH TRƯỜNG THPT CHUYÊN LÊ QUÝ ĐÔN NHIỆM KỲ 2024 – 2025 HÀNH TRÌNH KẾT NỐI VÀ PHÁT TRIỂN.
+Chiều ngày 12/10/2024, Đoàn trường THPT Chuyên Lê Quý Đôn long trọng tổ chức Đại hội Đại biểu Đoàn TNCS Hồ Chí Minh nhiệm kỳ 2024-2025 với mục tiêu đề ra phương hướng hoạt động của công tác đoàn và phong trào thanh niên, bầu BCH Đoàn trường nhiệm kỳ 2024 – 2025.
+TẠI ĐẠI HỘI ĐÃ BẦU RA BCH ĐOÀN TRƯỜNG NHƯ SAU, Bí thư Đoàn trường: Đồng chí Lê Thúy Hòa,
+Phó Bí thư Đoàn trường: Đồng chí Lê Thị Huyền Trang,
+Phó Bí thư Đoàn trường: Đồng chí Nguyễn Sông Thao.
+TRONG SUỐT 30 NĂM HÌNH THÀNH VÀ PHÁT TRIỂN
+Đoàn trường THPT Chuyên Lê Quý Đôn, Điện Biên đã đạt được những thành tích như sau: I. DANH HIỆU THI ĐUA ĐÃ ĐẠT ĐƯỢC (TRONG 4 NĂM GẦN NHẤT). II. HÌNH THỨC KHEN THƯỞNG ĐÃ ĐẠT ĐƯỢC (TRONG 03 NĂM GẦN NHẤT)
+    `;
+
+    // Hàm đọc nội dung thủ công
+    function readCustomContent() {
+        speak(customContent, event.target);
+    }
+
+    // Hàm sử dụng SpeechSynthesis để đọc văn bản
+    function speak(text, button) {
+        if ('speechSynthesis' in window) {
+            // Chia văn bản thành các câu để đọc mượt hơn
+            const sentences = text.split('.').filter(sentence => sentence.trim() !== '');
+            let index = 0;
+
+            function readNextSentence() {
+                if (index < sentences.length) {
+                    const utterance = new SpeechSynthesisUtterance(sentences[index].trim());
+                    utterance.lang = 'vi-VN'; // Ngôn ngữ tiếng Việt
+                    utterance.rate = 1; // Tốc độ đọc
+                    utterance.pitch = 1; // Độ cao giọng
+                    utterance.volume = 1; // Âm lượng
+
+                    // Chọn giọng tiếng Việt
+                    const voices = speechSynthesis.getVoices();
+                    const vietnameseVoice = voices.find(voice => voice.lang === 'vi-VN');
+                    if (vietnameseVoice) {
+                        utterance.voice = vietnameseVoice;
+                    }
+
+                    // Thêm hiệu ứng visual khi đang đọc
+                    button.classList.add('reading');
+
+                    utterance.onend = () => {
+                        index++;
+                        readNextSentence();
+                    };
+
+                    speechSynthesis.speak(utterance);
+                } else {
+                    // Kết thúc đọc, bỏ hiệu ứng
+                    button.classList.remove('reading');
+                }
+            }
+
+            // Hủy các utterance đang đọc (nếu có)
+            speechSynthesis.cancel();
+            readNextSentence();
+        } else {
+            alert('Trình duyệt của bạn không hỗ trợ đọc văn bản. Vui lòng thử trình duyệt khác.');
+        }
+    }
+
+    // Hàm dừng đọc
+    function stopReading() {
+        if ('speechSynthesis' in window) {
+            speechSynthesis.cancel();
+            const button = document.querySelector('.read-aloud-btn');
+            if (button) button.classList.remove('reading');
+        }
+    }
+
+    // Load voices khi sẵn sàng
+    window.speechSynthesis.onvoiceschanged = function() {
+        const voices = speechSynthesis.getVoices();
+    };
+</script>
+    <header class="header">
         <div class="header-left">
             <a href="#"><img src="https://i.ibb.co/k2x779T4/unnamed-1.webp" alt="Logo" class="logo"></a>
         </div>
@@ -455,7 +554,10 @@
         </li>
     </ul>
 </nav>
+<button onclick="readCustomContent()" class="read-aloud-btn" aria-label="Đọc nội dung giới thiệu">Đọc nội dung</button>
+    <button onclick="stopReading()" class="read-aloud-btn" aria-label="Dừng đọc nội dung">Dừng đọc</button>
     </header>
+
 
     <section class="hero-section">
         <div class="hero-content">
