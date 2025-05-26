@@ -327,10 +327,111 @@
                 font-size: 0.9em;
             }
         }
+                .read-aloud-btn {
+    padding: 10px 20px;
+    background-color: var(--primary-blue);
+    color: var(--white);
+    border: none;
+    border-radius: 6px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-left: 20px; /* Khoảng cách từ logo */
+}
+
+.read-aloud-btn:hover {
+    background-color: var(--dark-blue);
+}
+
+.reading {
+    background-color: var(--accent-orange) !important;
+}    
+
+
+
     </style>
 </head>
 <body>
-<header class="header">
+  <script>
+    // Nội dung thủ công để đọc (bạn có thể chỉnh sửa tùy ý)
+    const customContent = `
+GIAO LƯU VĂN HÓA NGHỆ THUẬT
+VỚI CHỦ ĐỀ "THẮP SÁNG ƯỚC MƠ"
+
+Tham dự buổi giao lưu có Nhà giáo Bùi Thị Anh – Bí thư Đảng bộ, Hiệu trưởng nhà trường cùng toàn thể các thầy cô giáo, các em học sinh trường THPT Chuyên Lê Quý Đôn và các thành viên trung tâm nghệ thuật tình thương do NSND Trương Tường Vy sáng lập.
+
+Chương trình giao lưu văn nghệ với những bài hát thật thiết tha, sâu lắng và đầy cảm xúc của các diễn viên Trung tâm nghệ thuật tình thương đã chạm đến trái tim, tâm hồn của cả thầy và trò nhà trường bởi ý chí, nghị lực và khát vọng vươn lên của các em.
+
+Với truyền thống tương thân tương ái, lá lành đùm lá rách, nhân dịp buổi giao lưu, nhà trường đã kêu gọi thầy cô và các em học sinh cùng chung tay chia sẻ, ủng hộ, giúp đỡ đoàn Trung tâm nghệ thuật tình thương với tổng số tiền quyên góp: 14.188.000 (Mười bốn triệu một trăm tám mươi tám nghìn đồng).
+
+Số tiền tuy không lớn nhưng là trái tim, tấm lòng của thầy và trò nhà trường thể hiện sự thấu cảm và chia sẻ với những hoàn cảnh, số phận thiếu may mắn trong cuộc sống.
+    `;
+
+    // Hàm đọc nội dung thủ công
+    function readCustomContent() {
+        speak(customContent, event.target);
+    }
+
+    // Hàm sử dụng SpeechSynthesis để đọc văn bản
+    function speak(text, button) {
+        if ('speechSynthesis' in window) {
+            // Chia văn bản thành các câu để đọc mượt hơn
+            const sentences = text.split('.').filter(sentence => sentence.trim() !== '');
+            let index = 0;
+
+            function readNextSentence() {
+                if (index < sentences.length) {
+                    const utterance = new SpeechSynthesisUtterance(sentences[index].trim());
+                    utterance.lang = 'vi-VN'; // Ngôn ngữ tiếng Việt
+                    utterance.rate = 1; // Tốc độ đọc
+                    utterance.pitch = 1; // Độ cao giọng
+                    utterance.volume = 1; // Âm lượng
+
+                    // Chọn giọng tiếng Việt
+                    const voices = speechSynthesis.getVoices();
+                    const vietnameseVoice = voices.find(voice => voice.lang === 'vi-VN');
+                    if (vietnameseVoice) {
+                        utterance.voice = vietnameseVoice;
+                    }
+
+                    // Thêm hiệu ứng visual khi đang đọc
+                    button.classList.add('reading');
+
+                    utterance.onend = () => {
+                        index++;
+                        readNextSentence();
+                    };
+
+                    speechSynthesis.speak(utterance);
+                } else {
+                    // Kết thúc đọc, bỏ hiệu ứng
+                    button.classList.remove('reading');
+                }
+            }
+
+            // Hủy các utterance đang đọc (nếu có)
+            speechSynthesis.cancel();
+            readNextSentence();
+        } else {
+            alert('Trình duyệt của bạn không hỗ trợ đọc văn bản. Vui lòng thử trình duyệt khác.');
+        }
+    }
+
+    // Hàm dừng đọc
+    function stopReading() {
+        if ('speechSynthesis' in window) {
+            speechSynthesis.cancel();
+            const button = document.querySelector('.read-aloud-btn');
+            if (button) button.classList.remove('reading');
+        }
+    }
+
+    // Load voices khi sẵn sàng
+    window.speechSynthesis.onvoiceschanged = function() {
+        const voices = speechSynthesis.getVoices();
+    };
+</script>
+    <header class="header">
         <div class="header-left">
             <a href="#"><img src="https://i.ibb.co/k2x779T4/unnamed-1.webp" alt="Logo" class="logo"></a>
         </div>
@@ -361,7 +462,11 @@
         </li>
     </ul>
 </nav>
+<button onclick="readCustomContent()" class="read-aloud-btn" aria-label="Đọc nội dung giới thiệu">Đọc nội dung</button>
+    <button onclick="stopReading()" class="read-aloud-btn" aria-label="Dừng đọc nội dung">Dừng đọc</button>
     </header>
+
+
 
     <section class="main-section">
         <h1>GIAO LƯU VĂN HÓA NGHỆ THUẬT<br>VỚI CHỦ ĐỀ "THẮP SÁNG ƯỚC MƠ"</h1>
