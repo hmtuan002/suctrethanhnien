@@ -300,9 +300,12 @@
         
         <div class="flex-1 flex flex-col h-full overflow-hidden">
 
-            <header class="p-4 border-b border-gray-200 bg-light-bg">
-                <h1 class="text-xl font-semibold text-left">Chatbot Đoàn trường THPT Chuyên Lê Quý Đôn</h1>
-            </header>
+            <header class="p-4 border-b border-gray-200 bg-light-bg flex items-center justify-between">
+    <h1 class="text-xl font-semibold text-left">Chatbot Đoàn trường THPT Chuyên Lê Quý Đôn</h1>
+    <a href="/suctrethanhnien/home" class="bg-primary hover:bg-primary/90 text-white rounded-md transition px-4 py-2 text-sm font-medium flex items-center">
+        <i class="fa-solid fa-home mr-2"></i> Quay về trang chủ
+    </a>
+</header>
             
             <div id="chat-container" class="flex-1 overflow-y-auto hide-scrollbar p-4 bg-gray-100 flex flex-col gap-3">
                 <div id="chat-messages" class="flex flex-col gap-3 mx-auto max-w-3xl w-full">
