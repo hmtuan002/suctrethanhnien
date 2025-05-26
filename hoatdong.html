@@ -358,10 +358,148 @@
                 font-size: 0.95em;
             }
         }
+                .read-aloud-btn {
+    padding: 10px 20px;
+    background-color: var(--primary-blue);
+    color: var(--white);
+    border: none;
+    border-radius: 6px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-left: 20px; /* Khoảng cách từ logo */
+}
+
+.read-aloud-btn:hover {
+    background-color: var(--dark-blue);
+}
+
+.reading {
+    background-color: var(--accent-orange) !important;
+}    
+
+
+
     </style>
 </head>
 <body>
-<header class="header">
+  <script>
+    // Nội dung thủ công để đọc (bạn có thể chỉnh sửa tùy ý)
+    const customContent = `
+MỘT SỐ HÌNH ẢNH HOẠT ĐỘNG TIÊU BIỂU
+CỦA ĐOÀN TRƯỜNG THPT CHUYÊN LÊ QUÝ ĐÔN
+Với mong muốn xây dựng một môi trường giáo dục toàn diện, nơi mỗi học sinh đều có cơ hội phát triển cả về tri thức, kỹ năng và phẩm chất sống, Đoàn Trường THPT chuyên Lê Quý Đôn luôn chủ động tổ chức đa dạng các hoạt động trải rộng trên hầu hết các lĩnh vực: học thuật, văn hóa – nghệ thuật, thể thao, kỹ năng sống, thiện nguyện cộng đồng và bảo vệ môi trường.
+
+Mỗi chương trình, mỗi sự kiện không chỉ là một sân chơi bổ ích mà còn là cơ hội để học sinh khám phá bản thân, rèn luyện tư duy, nuôi dưỡng cảm xúc và lan tỏa các giá trị tích cực trong tập thể. Từ những hội thi trí tuệ, chuỗi hoạt động nghệ thuật, các dự án xã hội ý nghĩa đến những phong trào xanh vì môi trường… tất cả đều mang dấu ấn của tuổi trẻ chuyên Lê: năng động, trách nhiệm và luôn không ngừng vươn lên.
+
+Những hình ảnh tiêu biểu sau đây chính là minh chứng sống động cho hành trình ấy – hành trình của một Đoàn trường luôn lấy học sinh làm trung tâm, luôn đồng hành và truyền cảm hứng để các em trưởng thành trong từng khoảnh khắc.
+
+
+Cuộc thi Đường lên Đỉnh Olympia Lê Quý Đôn năm 2025
+Lĩnh vực học tập
+Cuộc thi Đường lên Đỉnh Olympia – Trường THPT chuyên Lê Quý Đôn năm 2025, do Đoàn trường tổ chức, không chỉ là một sân chơi trí tuệ mà còn là hành trình chinh phục đỉnh cao tri thức, nơi hội tụ những gương mặt xuất sắc, bản lĩnh và khát khao vươn lên. Với tinh thần học tập tích cực, sáng tạo và không ngừng bứt phá, cuộc thi mang sứ mệnh khơi dậy niềm đam mê tri thức, hun đúc ý chí vươn tới những tầm cao mới trong mỗi học sinh. Đây sẽ là nơi để các em thể hiện tài năng, rèn luyện bản lĩnh và lan tỏa cảm hứng học tập trong toàn trường – đúng với tinh thần của ngôi trường chuyên Lê Quý Đôn giàu truyền thống và khát vọng.
+
+
+Hội Trại - Trường THPT chuyên Lê Quý Đôn
+Lĩnh vực Tinh thần thanh niên
+Hội trại truyền thống Trường THPT chuyên Lê Quý Đôn là hoạt động trọng điểm chào mừng kỷ niệm ngày thành lập Đoàn TNCS Hồ Chí Minh, là nơi thắp sáng ngọn lửa lý tưởng trong trái tim tuổi trẻ – nhiệt huyết, bản lĩnh và khát vọng cống hiến. Giữa không gian rực lửa trại, các thế hệ học sinh sẽ cùng nhau hòa mình vào những hoạt động tập thể sôi nổi, sáng tạo và đầy ý nghĩa. Tại đây, các em không chỉ thể hiện tinh thần đoàn kết, lòng tự hào với màu áo xanh thanh niên, mà còn cảm nhận sâu sắc giá trị của sự sẻ chia, của lý tưởng sống đẹp và hành trình trưởng thành dưới mái trường mang tên nhà bác học Lê Quý Đôn. Hội trại không chỉ là một ngày hội, mà còn là biểu tượng sống động cho sức trẻ – nơi từng ngọn lửa cháy lên đều mang theo niềm tin, khát vọng và tình yêu lớn dành cho Tổ quốc, cho cộng đồng và cho chính tương lai của các em.
+
+
+Hội Chợ - Trường THPT chuyên Lê Quý Đôn
+Lĩnh vực Kỹ năng sống (kinh doanh, hợp tác, làm việc nhóm)
+Hội Chợ – Trường THPT chuyên Lê Quý Đôn là một hoạt động ngoại khóa đặc biệt, nơi mỗi tập thể lớp hóa thân thành những mô hình kinh doanh sáng tạo, mang đậm dấu ấn cá nhân và tinh thần khởi nghiệp của tuổi trẻ. Không đơn thuần là sân chơi trải nghiệm, hội chợ là dịp để học sinh rèn luyện các kỹ năng thiết yếu như: tư duy tài chính, giao tiếp, quản lý, làm việc nhóm và giải quyết vấn đề trong môi trường thực tế. Từ việc lên ý tưởng, chuẩn bị gian hàng đến tiếp thị và vận hành, mỗi bước đi đều là hành trình học hỏi, trưởng thành và khám phá chính mình. Trong không khí sôi động, đầy màu sắc và năng lượng tuổi trẻ, Hội chợ kỹ năng sống không chỉ khơi dậy tinh thần sáng tạo, sự tự tin và bản lĩnh, mà còn lan tỏa thông điệp sống tích cực, chủ động và biết tạo giá trị từ những điều nhỏ bé nhất.
+
+
+Chuỗi sự kiện âm nhạc gây quỹ mùa Hè - The Summer Stage
+Lĩnh vực Nghệ thuật (âm nhạc, lễ hội)
+The Summer Stage – chuỗi sự kiện âm nhạc gây quỹ mùa hè lớn nhất năm tại Trường THPT chuyên Lê Quý Đôn, là một hành trình nghệ thuật đầy cảm xúc do CLB MCC tổ chức, dưới sự chỉ đạo của Đoàn trường. Với sự góp mặt của những nghệ sĩ Gen Z truyền cảm hứng, cùng sự bùng nổ của âm thanh, ánh sáng và nhiệt huyết tuổi trẻ, sự kiện không chỉ là bữa tiệc âm nhạc đỉnh cao, mà còn là nhịp cầu kết nối yêu thương, lan tỏa tinh thần sẻ chia qua các hoạt động gây quỹ vì cộng đồng. The Summer Stage không đơn thuần là một sân khấu trình diễn – đó là nơi tuổi trẻ được cất lên bằng âm nhạc, sáng tạo và trái tim nhiệt thành. Mỗi giai điệu, mỗi khoảnh khắc sẽ là một tia nắng của mùa hè ý nghĩa, nơi tài năng được thắp sáng, đam mê được chắp cánh và lòng nhân ái được lan tỏa.
+
+
+Chương trình Chào tân học sinh - Break All The Barriers
+Lĩnh vực Hòa nhập (tinh thần đoàn kết)
+Break All The Barriers – sự kiện chào tân học sinh đặc biệt của Trường THPT chuyên Lê Quý Đôn, là hành trình kết nối mạnh mẽ giữa các thế hệ học sinh chuyên, nơi mọi khoảng cách được xóa mờ để nhường chỗ cho sự thấu hiểu, sẻ chia và đồng hành. Dưới sự dẫn dắt của các anh chị Scout – những người đồng hành truyền cảm hứng, các tân học sinh sẽ cùng nhau bước qua những thử thách, khám phá truyền thống, văn hóa và tinh thần đặc trưng của ngôi trường mang tên nhà bác học Lê Quý Đôn. Không chỉ là người mới, các em sẽ trở thành một phần không thể thiếu trong đại gia đình "chuyên Lê", được truyền lửa và tiếp sức để bắt đầu hành trình ba năm đầy ý nghĩa. Break All The Barriers không đơn thuần là một sự kiện chào đón – đó là lời khẳng định: mọi rào cản sẽ được phá vỡ khi trái tim mở ra, và khi tuổi trẻ cùng nhau tiến bước.
+
+
+Hội thi Học sinh thanh lịch - Miss and Mister
+Lĩnh vực Phát triển năng lực cá nhân
+Miss & Mister – Hội thi Học sinh Thanh lịch Trường THPT chuyên Lê Quý Đôn, là sân chơi sắc – tâm – tài do CLB MCC phối hợp cùng Đoàn trường tổ chức, nhằm tôn vinh vẻ đẹp toàn diện của những học sinh thế hệ mới: thông minh, bản lĩnh, tự tin và giàu lòng nhân ái. Không chỉ là nơi để tỏa sáng nhan sắc và khí chất riêng biệt, Miss & Mister còn là hành trình khám phá trí tuệ, phong cách và bản lĩnh cá nhân thông qua các vòng thi đầy màu sắc. Mỗi cặp thí sinh là một câu chuyện thanh xuân sống động, là biểu tượng cho tinh thần học sinh chuyên Lê: vừa lịch lãm, duyên dáng, vừa thông minh, sáng tạo. Hội thi không đơn thuần là một đêm trình diễn – mà là sân khấu để tuổi trẻ dám bước lên, thể hiện chính mình và truyền cảm hứng tích cực đến cộng đồng học sinh.
+
+
+Áo ấm mùa đông
+Lĩnh vực Thiện nguyện
+“Áo ấm mùa đông” là dự án thiện nguyện đầy ấm áp do CLB BBL phối hợp cùng Đoàn trường THPT chuyên Lê Quý Đôn tổ chức, với sứ mệnh mang hơi ấm yêu thương đến với những em nhỏ nơi vùng cao lạnh giá. Thông qua hoạt động quyên góp quần áo, đồ dùng học tập và các nhu yếu phẩm thiết yếu, dự án kêu gọi sự chung tay của toàn thể học sinh, giáo viên và cộng đồng để sẻ chia khó khăn, tiếp thêm nghị lực và niềm tin cho các em nhỏ còn thiếu thốn. Mỗi món quà trao đi là một bàn tay nắm lấy hy vọng, một ngọn lửa thắp sáng giữa mùa đông giá lạnh. “Áo ấm mùa đông” không chỉ là hành trình thiện nguyện, mà còn là hành trình trưởng thành của tuổi trẻ – khi ta biết sống vì người khác, biết trao đi để nhận lại những giá trị sâu sắc nhất của tình người và trách nhiệm công dân.
+
+
+Đổi giấy lấy cây
+Lĩnh vực Môi trường và Cộng đồng
+"Đổi giấy lấy cây" là dự án môi trường đầy ý nghĩa do CLB EAS phối hợp cùng Đoàn trường THPT chuyên Lê Quý Đôn tổ chức, hướng tới xây dựng lối sống xanh, văn minh và có trách nhiệm trong cộng đồng học sinh. Thông qua hoạt động thu gom và quy đổi các loại rác thải vô cơ có khả năng tái sử dụng – như giấy, chai nhựa, lon, vỏ hộp… – lấy những chậu cây xanh, dự án lan tỏa thông điệp: mỗi hành động nhỏ hôm nay có thể tạo nên sự thay đổi lớn cho ngày mai. Mỗi cây xanh được trao đi không chỉ là phần thưởng, mà còn là lời nhắn nhủ về ý thức bảo vệ môi trường, về một thế hệ trẻ biết yêu thiên nhiên và hành động vì tương lai bền vững. "Đổi giấy lấy cây" không chỉ là một chương trình đổi vật phẩm – mà là nơi tuổi trẻ cùng nhau gieo những mầm xanh của hy vọng, hành động và ý nghĩa.
+    `;
+
+    // Hàm đọc nội dung thủ công
+    function readCustomContent() {
+        speak(customContent, event.target);
+    }
+
+    // Hàm sử dụng SpeechSynthesis để đọc văn bản
+    function speak(text, button) {
+        if ('speechSynthesis' in window) {
+            // Chia văn bản thành các câu để đọc mượt hơn
+            const sentences = text.split('.').filter(sentence => sentence.trim() !== '');
+            let index = 0;
+
+            function readNextSentence() {
+                if (index < sentences.length) {
+                    const utterance = new SpeechSynthesisUtterance(sentences[index].trim());
+                    utterance.lang = 'vi-VN'; // Ngôn ngữ tiếng Việt
+                    utterance.rate = 1; // Tốc độ đọc
+                    utterance.pitch = 1; // Độ cao giọng
+                    utterance.volume = 1; // Âm lượng
+
+                    // Chọn giọng tiếng Việt
+                    const voices = speechSynthesis.getVoices();
+                    const vietnameseVoice = voices.find(voice => voice.lang === 'vi-VN');
+                    if (vietnameseVoice) {
+                        utterance.voice = vietnameseVoice;
+                    }
+
+                    // Thêm hiệu ứng visual khi đang đọc
+                    button.classList.add('reading');
+
+                    utterance.onend = () => {
+                        index++;
+                        readNextSentence();
+                    };
+
+                    speechSynthesis.speak(utterance);
+                } else {
+                    // Kết thúc đọc, bỏ hiệu ứng
+                    button.classList.remove('reading');
+                }
+            }
+
+            // Hủy các utterance đang đọc (nếu có)
+            speechSynthesis.cancel();
+            readNextSentence();
+        } else {
+            alert('Trình duyệt của bạn không hỗ trợ đọc văn bản. Vui lòng thử trình duyệt khác.');
+        }
+    }
+
+    // Hàm dừng đọc
+    function stopReading() {
+        if ('speechSynthesis' in window) {
+            speechSynthesis.cancel();
+            const button = document.querySelector('.read-aloud-btn');
+            if (button) button.classList.remove('reading');
+        }
+    }
+
+    // Load voices khi sẵn sàng
+    window.speechSynthesis.onvoiceschanged = function() {
+        const voices = speechSynthesis.getVoices();
+    };
+</script>
+    <header class="header">
         <div class="header-left">
             <a href="#"><img src="https://i.ibb.co/k2x779T4/unnamed-1.webp" alt="Logo" class="logo"></a>
         </div>
@@ -392,7 +530,11 @@
         </li>
     </ul>
 </nav>
+<button onclick="readCustomContent()" class="read-aloud-btn" aria-label="Đọc nội dung giới thiệu">Đọc nội dung</button>
+    <button onclick="stopReading()" class="read-aloud-btn" aria-label="Dừng đọc nội dung">Dừng đọc</button>
     </header>
+
+
 
     <div class="container">
         <h1>MỘT SỐ HÌNH ẢNH HOẠT ĐỘNG TIÊU BIỂU</h1>
