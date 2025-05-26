@@ -1,69 +1,84 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang=”vi”>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset=”UTF-8”>
+    <meta name=”viewport” content=”width=device-width, initial-scale=1.0”>
     <title>Bản đồ Tòa Nhà</title>
     <style>
-        body {
-            margin: 0;
-            font-family: 'Roboto', 'Segoe UI', Arial, sans-serif;
-            background: linear-gradient(135deg, #e0e7ff, #f3f4f6);
-            overflow: hidden; /* Ngăn cuộn trang chính */
+        Body {
+            Margin: 0;
+            Font-family: ‘Roboto’, ‘Segoe UI’, Arial, sans-serif;
+            Background: linear-gradient(135deg, #e0e7ff, #f3f4f6);
+            Overflow: hidden; /* Ngăn cuộn trang chính */
         }
         #map-container {
-            position: relative;
-            width: 100vw;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: #ffffff;
-            overflow: auto; /* Cho phép cuộn để xem toàn bộ bản đồ */
-            cursor: grab; /* Thay đổi con trỏ để chỉ ra có thể kéo */
+            Position: relative;
+            Width: 100vw;
+            Height: 100vh;
+            Display: flex;
+            Justify-content: center;
+            Align-items: center;
+            Background: #ffffff;
+            Overflow: auto; /* Cho phép cuộn để xem toàn bộ bản đồ */
+            Cursor: grab; /* Thay đổi con trỏ để chỉ ra có thể kéo */
+            Margin: 0; /* Đảm bảo không có margin */
+            Padding: 0; /* Đảm bảo không có padding */
         }
         #map-container.dragging {
-            cursor: grabbing;
+            Cursor: grabbing;
         }
         #map {
             /* map sẽ có kích thước thực tế dựa trên originalMapWidth/Height để chứa toàn bộ ảnh gốc */
-            position: absolute; /* Quan trọng: Đặt tuyệt đối để marker có thể đặt trên nó */
-            border-radius: 8px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            Position: absolute; /* Quan trọng: Đặt tuyệt đối để marker có thể đặt trên nó */
+            Border-radius: 8px;
+            Box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
             /* Sẽ được JavaScript thiết lập kích thước và vị trí */
         }
+        /* Style cho marker thông thường */
         .marker {
-            position: absolute;
-            width: 44px;
-            height: 56px;
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23FFD700" stroke="%23ffffff" stroke-width="1"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5S13.38 11.5 12 11.5z"/></svg>') no-repeat center;
-            background-size: contain;
-            cursor: pointer;
-            transition: transform 0.3s ease, filter 0.3s ease;
-            filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.4));
-            animation: pulse 2s infinite ease-in-out;
-            transform: translate(-50%, -100%); /* Điều chỉnh để chân marker ở đúng tọa độ */
+            Position: absolute;
+            Width: 44px;
+            Height: 56px;
+            Background: url(‘data:image/svg+xml;utf8,<svg xmlns=http://www.w3.org/2000/svg viewBox=”0 0 24 24” fill=”%23FFD700” stroke=”%23ffffff” stroke-width=”1”><path d=”M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5S13.38 11.5 12 11.5z”/></svg>’) no-repeat center;
+            Background-size: contain;
+            Cursor: pointer;
+            Transition: transform 0.3s ease, filter 0.3s ease;
+            Filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.4));
+            Animation: pulse 2s infinite ease-in-out;
+            Transform: translate(-50%, -100%); /* Điều chỉnh để chân marker ở đúng tọa độ */
             z-index: 5; /* Đảm bảo marker nằm trên bản đồ */
         }
+        /* Style cho marker đặc biệt (màu khác) */
+        .marker.special {
+            Background: url(‘data:image/svg+xml;utf8,<svg xmlns=http://www.w3.org/2000/svg viewBox=”0 0 24 24” fill=”%233366ff” stroke=”%23ffffff” stroke-width=”1”><path d=”M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5S13.38 11.5 12 11.5z”/></svg>’) no-repeat center; /* Màu xanh */
+            Filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.4));
+        }
+
         @keyframes pulse {
             0% { transform: translate(-50%, -100%) scale(1); filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.4)); }
             50% { transform: translate(-50%, -100%) scale(1.1); filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.7)); }
             100% { transform: translate(-50%, -100%) scale(1); filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.4)); }
         }
+        /* Hiệu ứng hover cho marker thông thường */
         .marker:hover {
-            transform: translate(-50%, -100%) scale(1.5);
-            filter: drop-shadow(0 0 12px rgba(255, 215, 0, 0.9));
-            animation: none;
+            Transform: translate(-50%, -100%) scale(1.5);
+            Filter: drop-shadow(0 0 12px rgba(255, 215, 0, 0.9));
+            Animation: none;
         }
+        /* Hiệu ứng hover cho marker đặc biệt (màu xanh sáng hơn) */
+        .marker.special:hover {
+            Filter: drop-shadow(0 0 12px rgba(51, 102, 255, 0.9)); /* Màu xanh đậm hơn */
+        }
+
         .info-panel {
-            position: absolute;
-            background: linear-gradient(135deg, #ffffff, #f0f0f5);
-            border-radius: 10px;
-            padding: 12px;
-            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
-            max-width: 220px;
-            max-height: 280px;
-            overflow-y: auto;
+            Position: absolute;
+            Background: linear-gradient(135deg, #ffffff, #f0f0f5);
+            Border-radius: 10px;
+            Padding: 12px;
+            Box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+            Max-width: 220px;
+            Max-height: 280px;
+            Overflow-y: auto;
             z-index: 10;
             display: none;
             font-size: 14px;
@@ -72,285 +87,288 @@
             transform: translate(0, -50%); /* Căn chỉnh panel theo chiều dọc so với marker */
         }
         .info-panel::-webkit-scrollbar {
-            width: 6px;
+            Width: 6px;
         }
         .info-panel::-webkit-scrollbar-thumb {
-            background: #888;
-            border-radius: 3px;
+            Background: #888;
+            Border-radius: 3px;
         }
         .info-panel h3 {
-            margin: 0 0 12px;
-            font-size: 18px;
-            color: #1a1a1a;
-            font-weight: 600;
+            Margin: 0 0 12px;
+            Font-size: 18px;
+            Color: #1a1a1a;
+            Font-weight: 600;
         }
         .info-panel ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
+            List-style: none;
+            Padding: 0;
+            Margin: 0;
         }
         .info-panel li {
-            padding: 10px;
-            cursor: pointer;
-            border-radius: 6px;
-            transition: background 0.2s ease, transform 0.2s ease;
+            Padding: 10px;
+            Cursor: pointer;
+            Border-radius: 6px;
+            Transition: background 0.2s ease, transform 0.2s ease;
         }
         .info-panel li:hover {
-            background: #d9e6ff;
-            transform: translateX(5px);
+            Background: #d9e6ff;
+            Transform: translateX(5px);
         }
         .close-popup {
-            position: absolute;
-            top: -12px;
-            right: -12px;
-            background: #ff4d4d;
-            color: white;
-            border: none;
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: background 0.2s ease, transform 0.2s ease;
+            Position: absolute;
+            Top: -12px;
+            Right: -12px;
+            Background: #ff4d4d;
+            Color: white;
+            Border: none;
+            Width: 28px;
+            Height: 28px;
+            Border-radius: 50%;
+            Cursor: pointer;
+            Font-size: 14px;
+            Font-weight: bold;
+            Display: flex;
+            Align-items: center;
+            Justify-content: center;
+            Transition: background 0.2s ease, transform 0.2s ease;
             z-index: 11;
         }
         .close-popup:hover {
-            background: #cc0000;
-            transform: scale(1.1);
+            Background: #cc0000;
+            Transform: scale(1.1);
         }
         #panorama-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: rgba(0, 0, 0, 0.7); /* Mờ và tối */
+            Display: none;
+            Position: fixed;
+            Top: 0;
+            Left: 0;
+            Width: 100vw;
+            Height: 100vh;
+            Background: rgba(0, 0, 0, 0.7); /* Mờ và tối */
             z-index: 999; /* Nằm dưới panorama-container nhưng trên bản đồ */
             cursor: pointer; /* Cho biết có thể click để đóng */
         }
         #panorama-container {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 90%;
-            max-width: 1400px;
-            height: 85vh;
-            background: #000;
-            border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+            Display: none;
+            Position: fixed;
+            Top: 50%;
+            Left: 50%;
+            Transform: translate(-50%, -50%);
+            Width: 90%;
+            Max-width: 1400px;
+            Height: 85vh;
+            Background: #000;
+            Border-radius: 16px;
+            Box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
             z-index: 1000;
             animation: fadeIn 0.3s ease;
         }
         @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            From { opacity: 0; }
+            To { opacity: 1; }
         }
         #panorama {
-            width: 100%;
-            height: 100%;
-            border-radius: 16px;
+            Width: 100%;
+            Height: 100%;
+            Border-radius: 16px;
         }
         .close-btn {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background: #ff4d4d;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: bold;
-            transition: background 0.2s ease, transform 0.2s ease;
+            Position: absolute;
+            Top: 15px;
+            Right: 15px;
+            Background: #ff4d4d;
+            Color: white;
+            Border: none;
+            Padding: 10px 20px;
+            Border-radius: 6px;
+            Cursor: pointer;
+            Font-size: 16px;
+            Font-weight: bold;
+            Transition: background 0.2s ease, transform 0.2s ease;
         }
         .close-btn:hover {
-            background: #cc0000;
-            transform: scale(1.05);
+            Background: #cc0000;
+            Transform: scale(1.05);
         }
         @media (max-width: 768px) {
             .info-panel {
-                max-width: 180px;
-                max-height: 200px;
-                font-size: 12px;
+                Max-width: 180px;
+                Max-height: 200px;
+                Font-size: 12px;
             }
             .info-panel h3 {
-                font-size: 16px;
+                Font-size: 16px;
             }
             .close-popup {
-                width: 24px;
-                height: 24px;
-                font-size: 12px;
+                Width: 24px;
+                Height: 24px;
+                Font-size: 12px;
             }
             #panorama-container {
-                width: 95%;
-                height: 70vh;
+                Width: 95%;
+                Height: 70vh;
             }
             .marker {
-                width: 36px;
-                height: 48px;
+                Width: 36px;
+                Height: 48px;
             }
         }
     </style>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;600&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.css">
+    <link href=https://fonts.googleapis.com/css2?family=Roboto:wght@400;600&display=swap rel=”stylesheet”>
+    <script src=https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.js></script>
+    <link rel=”stylesheet” href=https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.css>
 </head>
 <body>
-    <div id="map-container">
-        <img id="map" src="https://hmtuan002.github.io/suctrethanhnien/ht.png" alt="Bản đồ">
+    <div id=”map-container”>
+        <img id=”map” src=https://hmtuan002.github.io/suctrethanhnien/ht.png alt=”Bản đồ”>
     </div>
 
-    <div id="panorama-overlay"></div>
+    <div id=”panorama-overlay”></div>
 
-    <div id="panorama-container">
-        <button class="close-btn" onclick="closePanorama()">Đóng</button>
-        <div id="panorama"></div>
+    <div id=”panorama-container”>
+        <button class=”close-btn” onclick=”closePanorama()”>Đóng</button>
+        <div id=”panorama”></div>
     </div>
 
     <script>
-        // Dữ liệu tòa nhà với tọa độ marker và thông tin tầng/phòng
-        // Tọa độ X và Y là tỷ lệ phần trăm (0.0 đến 1.0) của chiều rộng và chiều cao ảnh GỐC.
-        // BẠN CẦN ĐIỀN CHÍNH XÁC KÍCH THƯỚC GỐC (PIXEL) CỦA ẢNH "ht.png" TẠI ĐÂY
-        let originalMapWidth = 0; // Sẽ được cập nhật sau khi ảnh tải
-        let originalMapHeight = 0; // Sẽ được cập nhật sau khi ảnh tải
+        // BẠN CẦN ĐIỀN CHÍNH XÁC KÍCH THƯỚC GỐC (PIXEL) CỦA ẢNH “ht.png” TẠI ĐÂY
+        Let originalMapWidth = 0; // Sẽ được cập nhật sau khi ảnh tải
+        Let originalMapHeight = 0; // Sẽ được cập nhật sau khi ảnh tải
 
-        const buildings = [
+        Const buildings = [
             {
-                name: "Tòa A",
-                x_ratio: 0.415, // Tỷ lệ từ trái của ảnh gốc (ví dụ: 25%)
-                y_ratio: 0.755, // Tỷ lệ từ trên của ảnh gốc (ví dụ: 35%)
-                floors: [
-                    {
-                        name: "Tầng 1",
-                        rooms: [
-                            { name: "Phòng 101", panorama: "https://hmtuan002.github.io/suctrethanhnien/Hs.jpg" },
-                            { name: "Phòng 102", panorama: "https://hmtuan002.github.io/suctrethanhnien/Hs.jpg" }
-                        ]
-                    },
-                    {
-                        name: "Tầng 2",
-                        rooms: [
-                            { name: "Phòng 201", panorama: "https://hmtuan002.github.io/suctrethanhnien/Hs.jpg" },
-                            { name: "Phòng 202", panorama: "https://hmtuan002.github.io/suctrethanhnien/Hs.jpg" }
-                        ]
-                    }
-                ]
+                Name: “1”,
+                X_ratio: 0.48, // Tỷ lệ từ trái của ảnh gốc
+                Y_ratio: 0.77, // Tỷ lệ từ trên của ảnh gốc
+                isSpecial: true, // Cờ báo hiệu đây là marker đặc biệt
+                panoramaUrl: https://hmtuan002.github.io/suctrethanhnien/1.jpg 
             },
             {
-                name: "Tòa B",
-                x_ratio: 0.66, // Tỷ lệ từ trái của ảnh gốc (ví dụ: 65%)
-                y_ratio: 0.50, // Tỷ lệ từ trên của ảnh gốc (ví dụ: 50%)
-                floors: [
-                    {
-                        name: "Tầng 1",
-                        rooms: [
-                            { name: "Phòng 101", panorama: "https://hmtuan002.github.io/suctrethanhnien/Hs.jpg" },
-                            { name: "Phòng 102", panorama: "https://hmtuan002.github.io/suctrethanhnien/Hs.jpg" }
-                        ]
-                    }
-                ]
+                Name: “2”,
+                X_ratio: 0.55, // Tỷ lệ từ trái của ảnh gốc
+                Y_ratio: 0.73, // Tỷ lệ từ trên của ảnh gốc
+                isSpecial: true, // Cờ báo hiệu đây là marker đặc biệt
+                panoramaUrl: https://hmtuan002.github.io/suctrethanhnien/2.jpg 
             },
             {
-                name: "Tòa C",
-                x_ratio: 0.595, // Tỷ lệ từ trái của ảnh gốc (ví dụ: 65%)
-                y_ratio: 0.485, // Tỷ lệ từ trên của ảnh gốc (ví dụ: 50%)
-                floors: [
-                    {
-                        name: "Tầng 1",
-                        rooms: [
-                            { name: "Phòng 101", panorama: "https://hmtuan002.github.io/suctrethanhnien/Hs.jpg" },
-                            { name: "Phòng 102", panorama: "https://hmtuan002.github.io/suctrethanhnien/Hs.jpg" }
-                        ]
-                    }
-                ]
+                Name: “3”,
+                X_ratio: 0.61, // Tỷ lệ từ trái của ảnh gốc
+                Y_ratio: 0.73, // Tỷ lệ từ trên của ảnh gốc
+                isSpecial: true, // Cờ báo hiệu đây là marker đặc biệt
+                panoramaUrl: https://hmtuan002.github.io/suctrethanhnien/3.jpg 
             },
-                name: "Tòa D",
-                x_ratio: 0.595, // Tỷ lệ từ trái của ảnh gốc (ví dụ: 65%)
-                y_ratio: 0.485, // Tỷ lệ từ trên của ảnh gốc (ví dụ: 50%)
-                floors: [
-                    {
-                        name: "Tầng 1",
-                        rooms: [
-                            { name: "Phòng 101", panorama: "https://hmtuan002.github.io/suctrethanhnien/Hs.jpg" },
-                            { name: "Phòng 102", panorama: "https://hmtuan002.github.io/suctrethanhnien/Hs.jpg" }
-                        ]
-                    }
-                ]
+            {
+                Name: “4”,
+                X_ratio: 0.5, // Tỷ lệ từ trái của ảnh gốc
+                Y_ratio: 0.67, // Tỷ lệ từ trên của ảnh gốc
+                isSpecial: true, // Cờ báo hiệu đây là marker đặc biệt
+                panoramaUrl: https://hmtuan002.github.io/suctrethanhnien/4.jpg 
+            },
+            {
+                Name: “5”,
+                X_ratio: 0.57, // Tỷ lệ từ trái của ảnh gốc
+                Y_ratio: 0.67, // Tỷ lệ từ trên của ảnh gốc
+                isSpecial: true, // Cờ báo hiệu đây là marker đặc biệt
+                panoramaUrl: https://hmtuan002.github.io/suctrethanhnien/5.jpg 
+            },
+            {
+                Name: “6”,
+                X_ratio: 0.57, // Tỷ lệ từ trái của ảnh gốc
+                Y_ratio: 0.58, // Tỷ lệ từ trên của ảnh gốc
+                isSpecial: true, // Cờ báo hiệu đây là marker đặc biệt
+                panoramaUrl: https://hmtuan002.github.io/suctrethanhnien/6.jpg 
+            },
+            {
+                Name: “7”,
+                X_ratio: 0.55, // Tỷ lệ từ trái của ảnh gốc
+                Y_ratio: 0.53, // Tỷ lệ từ trên của ảnh gốc
+                isSpecial: true, // Cờ báo hiệu đây là marker đặc biệt
+                panoramaUrl: https://hmtuan002.github.io/suctrethanhnien/7.jpg 
+            },
+            {
+                Name: “8”,
+                X_ratio: 0.59, // Tỷ lệ từ trái của ảnh gốc
+                Y_ratio: 0.37, // Tỷ lệ từ trên của ảnh gốc
+                isSpecial: true, // Cờ báo hiệu đây là marker đặc biệt
+                panoramaUrl: https://hmtuan002.github.io/suctrethanhnien/8.jpg 
+            },
+            {
+                Name: “9”,
+                X_ratio: 0.52, // Tỷ lệ từ trái của ảnh gốc
+                Y_ratio: 0.29, // Tỷ lệ từ trên của ảnh gốc
+                isSpecial: true, // Cờ báo hiệu đây là marker đặc biệt
+                panoramaUrl: https://hmtuan002.github.io/suctrethanhnien/9.jpg 
             },
         ];
 
-        const mapContainer = document.getElementById('map-container');
-        const mapImage = document.getElementById('map');
-        const panoramaContainer = document.getElementById('panorama-container');
-        const panoramaOverlay = document.getElementById('panorama-overlay');
-        let viewer = null;
-        let activePanel = null;
+        Const mapContainer = document.getElementById(‘map-container’);
+        Const mapImage = document.getElementById(‘map’);
+        Const panoramaContainer = document.getElementById(‘panorama-container’);
+        Const panoramaOverlay = document.getElementById(‘panorama-overlay’);
+        Let viewer = null;
+        Let activePanel = null;
 
         // Biến để xử lý kéo bản đồ
-        let isDragging = false;
-        let startX, startY, scrollLeft, scrollTop;
+        Let isDragging = false;
+        Let startX, startY, scrollLeft, scrollTop;
 
         // --- Chức năng kéo bản đồ ---
-        mapContainer.addEventListener('mousedown', (e) => {
+        mapContainer.addEventListener(‘mousedown’, (e) => {
+            // Chỉ bắt đầu kéo nếu không phải click vào marker hoặc panel
+            If (e.target.closest(‘.marker’) || e.target.closest(‘.info-panel’)) {
+                Return;
+            }
             isDragging = true;
-            mapContainer.classList.add('dragging');
-            startX = e.pageX - mapContainer.offsetLeft;
-            startY = e.pageY - mapContainer.offsetTop;
+            mapContainer.classList.add(‘dragging’);
+            startX = e.pageX – mapContainer.offsetLeft;
+            startY = e.pageY – mapContainer.offsetTop;
             scrollLeft = mapContainer.scrollLeft;
             scrollTop = mapContainer.scrollTop;
             e.preventDefault(); // Ngăn kéo ảnh mặc định
         });
 
-        mapContainer.addEventListener('mouseleave', () => {
+        mapContainer.addEventListener(‘mouseleave’, () => {
             isDragging = false;
-            mapContainer.classList.remove('dragging');
+            mapContainer.classList.remove(‘dragging’);
         });
 
-        mapContainer.addEventListener('mouseup', () => {
+        mapContainer.addEventListener(‘mouseup’, () => {
             isDragging = false;
-            mapContainer.classList.remove('dragging');
+            mapContainer.classList.remove(‘dragging’);
         });
 
-        mapContainer.addEventListener('mousemove', (e) => {
+        mapContainer.addEventListener(‘mousemove’, (e) => {
             if (!isDragging) return;
             e.preventDefault();
-            const x = e.pageX - mapContainer.offsetLeft;
-            const y = e.pageY - mapContainer.offsetTop;
-            const walkX = (x - startX); // Tốc độ cuộn X
-            const walkY = (y - startY); // Tốc độ cuộn Y
-            mapContainer.scrollLeft = scrollLeft - walkX;
-            mapContainer.scrollTop = scrollTop - walkY;
+            const x = e.pageX – mapContainer.offsetLeft;
+            const y = e.pageY – mapContainer.offsetTop;
+            const walkX = (x – startX); // Tốc độ cuộn X
+            const walkY = (y – startY); // Tốc độ cuộn Y
+            mapContainer.scrollLeft = scrollLeft – walkX;
+            mapContainer.scrollTop = scrollTop – walkY;
         });
 
         // --- Chức năng đặt Marker ---
-        function placeMarkers() {
+        Function placeMarkers() {
             // Xóa các marker và panel cũ
-            document.querySelectorAll('.marker, .info-panel').forEach(el => el.remove());
+            Document.querySelectorAll(‘.marker, .info-panel’).forEach(el => el.remove());
 
             // Đảm bảo mapImage đã có kích thước tự nhiên
-            if (originalMapWidth === 0 || originalMapHeight === 0) {
-                console.warn("Kích thước ảnh gốc chưa được tải. Vui lòng kiểm tra lại originalMapWidth/Height.");
-                return;
+            If (originalMapWidth === 0 || originalMapHeight === 0) {
+                Console.warn(“Kích thước ảnh gốc chưa được tải. Vui lòng kiểm tra lại originalMapWidth/Height.”);
+                Return;
             }
 
             // Tính toán tỷ lệ co giãn của ảnh trên màn hình so với ảnh gốc
-            const containerWidth = mapContainer.offsetWidth;
-            const containerHeight = mapContainer.offsetHeight;
+            Const containerWidth = mapContainer.offsetWidth;
+            Const containerHeight = mapContainer.offsetHeight;
 
             // Tính toán kích thước mà ảnh sẽ có sau khi `object-fit: cover` được áp dụng
-            let effectiveScale;
-            const containerAspectRatio = containerWidth / containerHeight;
-            const imageAspectRatio = originalMapWidth / originalMapHeight;
+            Let effectiveScale;
+            Const containerAspectRatio = containerWidth / containerHeight;
+            Const imageAspectRatio = originalMapWidth / originalMapHeight;
 
-            if (imageAspectRatio > containerAspectRatio) {
+            If (imageAspectRatio > containerAspectRatio) {
                 // Ảnh rộng hơn container, chiều cao ảnh sẽ khớp container
                 effectiveScale = containerHeight / originalMapHeight;
             } else {
@@ -358,131 +376,144 @@
                 effectiveScale = containerWidth / originalMapWidth;
             }
 
-            const displayedImageWidth = originalMapWidth * effectiveScale;
-            const displayedImageHeight = originalMapHeight * effectiveScale;
+            Const displayedImageWidth = originalMapWidth * effectiveScale;
+            Const displayedImageHeight = originalMapHeight * effectiveScale;
 
             // Đặt kích thước cho ảnh mapImage để nó có thể được cuộn
             mapImage.style.width = `${displayedImageWidth}px`;
             mapImage.style.height = `${displayedImageHeight}px`;
 
             // Tính toán offset của ảnh so với góc trên cùng bên trái của mapContainer
-            // Khi object-fit: cover và căn giữa, ảnh sẽ có thể bị lệch nếu kích thước không khớp hoàn toàn
-            const offsetX = (containerWidth - displayedImageWidth) / 2;
-            const offsetY = (containerHeight - displayedImageHeight) / 2;
+            Const offsetX = (containerWidth – displayedImageWidth) / 2;
+            Const offsetY = (containerHeight – displayedImageHeight) / 2;
             
             mapImage.style.left = `${offsetX}px`;
             mapImage.style.top = `${offsetY}px`;
 
-
             buildings.forEach(building => {
-                const marker = document.createElement('div');
-                marker.className = 'marker';
+                const marker = document.createElement(‘div’);
+                marker.className = ‘marker’;
                 
                 // Tính toán vị trí của marker trên ảnh ĐƯỢC HIỂN THỊ
-                // Sử dụng tỷ lệ từ dữ liệu và kích thước ảnh đã hiển thị
-                const markerX = offsetX + (building.x_ratio * originalMapWidth * effectiveScale);
-                const markerY = offsetY + (building.y_ratio * originalMapHeight * effectiveScale);
+                Const markerX = offsetX + (building.x_ratio * originalMapWidth * effectiveScale);
+                Const markerY = offsetY + (building.y_ratio * originalMapHeight * effectiveScale);
 
-                marker.style.left = `${markerX}px`;
-                marker.style.top = `${markerY}px`;
+                Marker.style.left = `${markerX}px`;
+                Marker.style.top = `${markerY}px`;
 
-                const panel = document.createElement('div');
-                panel.className = 'info-panel';
-                panel.style.left = `${markerX + 20}px`; // Offset sang phải một chút so với marker
-                panel.style.top = `${markerY - 50}px`; // Offset lên trên một chút so với marker
+                // Xử lý marker đặc biệt
+                If (building.isSpecial) {
+                    Marker.classList.add(‘special’); // Thêm class ‘special’ để tạo style riêng
+                    Marker.addEventListener(‘click’, (event) => {
+                        Event.stopPropagation(); // Ngăn click lan ra ngoài
+                        showPanorama(building.panoramaUrl); // Mở 360 ngay lập tức
+                    });
+                } else {
+                    // Xử lý marker thông thường
+                    Const panel = document.createElement(‘div’);
+                    Panel.className = ‘info-panel’;
+                    Panel.style.left = `${markerX + 20}px`; // Offset sang phải một chút so với marker
+                    Panel.style.top = `${markerY – 50}px`; // Offset lên trên một chút so với marker
 
-                panel.innerHTML = `
-                    <h3>${building.name}</h3>
-                    <ul id="floor-list-${building.name.replace(/\s+/g, '-')}"</ul>
-                    <button class="close-popup" onclick="closePopup(this)">X</button>
-                `;
-                mapContainer.appendChild(marker);
-                mapContainer.appendChild(panel);
+                    Panel.innerHTML = `
+                        <h3>${building.name}</h3>
+                        <ul id=”floor-list-${building.name.replace(/\s+/g, ‘-‘)}”</ul>
+                        <button class=”close-popup” onclick=”closePopup(this)”>X</button>
+                    `;
+                    mapContainer.appendChild(panel); // Chỉ thêm panel cho marker thông thường
 
-                const floorList = panel.querySelector(`#floor-list-${building.name.replace(/\s+/g, '-')}`);
-                marker.addEventListener('click', (event) => {
-                    event.stopPropagation(); // Ngăn click lan ra mapContainer gây đóng panel khác hoặc kéo bản đồ
-                    if (activePanel && activePanel !== panel) {
-                        activePanel.style.display = 'none';
-                    }
-                    panel.style.display = 'block';
-                    activePanel = panel;
-                    showFloors(building, floorList);
-                });
+                    const floorList = panel.querySelector(`#floor-list-${building.name.replace(/\s+/g, ‘-‘)}`);
+                    marker.addEventListener(‘click’, (event) => {
+                        event.stopPropagation(); // Ngăn click lan ra mapContainer gây đóng panel khác hoặc kéo bản đồ
+                        if (activePanel && activePanel !== panel) {
+                            activePanel.style.display = ‘none’;
+                        }
+                        Panel.style.display = ‘block’;
+                        activePanel = panel;
+                        showFloors(building, floorList);
+                    });
+                }
+                mapContainer.appendChild(marker); // Thêm marker vào container
             });
+
+            // Cập nhật vị trí cuộn để căn giữa
+            mapContainer.scrollLeft = offsetX + (displayedImageWidth – containerWidth) / 2;
+            mapContainer.scrollTop = offsetY + (displayedImageHeight – containerHeight) / 2;
         }
 
         // --- Xử lý tải ảnh để lấy kích thước gốc và đặt marker ---
-        // Sử dụng một đối tượng Image tạm thời để lấy kích thước tự nhiên của ảnh gốc
-        const tempImage = new Image();
+        Const tempImage = new Image();
         tempImage.src = mapImage.src;
         tempImage.onload = () => {
             originalMapWidth = tempImage.naturalWidth;
             originalMapHeight = tempImage.naturalHeight;
-            placeMarkers(); // Đặt marker sau khi đã biết kích thước gốc của ảnh
+            placeMarkers(); // Đặt marker và căn giữa sau khi đã biết kích thước gốc của ảnh
         };
 
-        // Cập nhật vị trí marker khi cửa sổ thay đổi kích thước
-        window.addEventListener('resize', placeMarkers);
+        // Cập nhật vị trí marker và vị trí cuộn khi cửa sổ thay đổi kích thước
+        Window.addEventListener(‘resize’, () => {
+            placeMarkers();
+        });
 
         // --- Chức năng hiển thị thông tin và Panorama ---
-        function showFloors(building, floorList) {
-            floorList.innerHTML = '';
+        Function showFloors(building, floorList) {
+            floorList.innerHTML = ‘’;
             building.floors.forEach(floor => {
-                const li = document.createElement('li');
+                const li = document.createElement(‘li’);
                 li.textContent = floor.name;
-                li.addEventListener('click', () => showRooms(floor, floorList));
+                li.addEventListener(‘click’, () => showRooms(floor, floorList));
                 floorList.appendChild(li);
             });
         }
 
-        function showRooms(floor, floorList) {
-            floorList.innerHTML = '';
+        Function showRooms(floor, floorList) {
+            floorList.innerHTML = ‘’;
             floor.rooms.forEach(room => {
-                const li = document.createElement('li');
+                const li = document.createElement(‘li’);
                 li.textContent = room.name;
-                li.addEventListener('click', () => showPanorama(room.panorama));
+                li.addEventListener(‘click’, () => showPanorama(room.panorama));
                 floorList.appendChild(li);
             });
         }
 
-        function showPanorama(imageUrl) {
-            panoramaOverlay.style.display = 'block';
-            panoramaContainer.style.display = 'block';
-            if (activePanel) activePanel.style.display = 'none';
+        Function showPanorama(imageUrl) {
+            panoramaOverlay.style.display = ‘block’;
+            panoramaContainer.style.display = ‘block’;
+            if (activePanel) activePanel.style.display = ‘none’; // Đóng panel thông tin nếu đang mở
             if (viewer) {
                 viewer.destroy();
             }
-            viewer = pannellum.viewer('panorama', {
-                type: 'equirectangular',
-                panorama: imageUrl,
+            Viewer = pannellum.viewer(‘panorama’, {
+                Type: ‘equirectangular’,
+                Panorama: imageUrl,
                 autoLoad: true,
                 showControls: false
             });
         }
 
-        function closePanorama() {
-            panoramaOverlay.style.display = 'none';
-            panoramaContainer.style.display = 'none';
+        Function closePanorama() {
+            panoramaOverlay.style.display = ‘none’;
+            panoramaContainer.style.display = ‘none’;
             if (viewer) {
                 viewer.destroy();
                 viewer = null;
             }
         }
 
-        function closePopup(button) {
-            const panel = button.parentElement;
-            panel.style.display = 'none';
+        Function closePopup(button) {
+            Const panel = button.parentElement;
+            Panel.style.display = ‘none’;
             activePanel = null;
         }
 
         // --- Xử lý click ra ngoài để tắt panorama ---
-        panoramaOverlay.addEventListener('click', closePanorama);
+        panoramaOverlay.addEventListener(‘click’, closePanorama);
 
         // Ngăn chặn sự kiện click bên trong panorama-container lan ra ngoài lớp phủ
-        panoramaContainer.addEventListener('click', (event) => {
+        panoramaContainer.addEventListener(‘click’, (event) => {
             event.stopPropagation();
         });
     </script>
 </body>
 </html>
+
