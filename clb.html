@@ -383,41 +383,175 @@
                 padding: 0 15px;
             }
         }
+                .read-aloud-btn {
+    padding: 10px 20px;
+    background-color: var(--primary-blue);
+    color: var(--white);
+    border: none;
+    border-radius: 6px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-left: 20px; /* Khoảng cách từ logo */
+}
+
+.read-aloud-btn:hover {
+    background-color: var(--dark-blue);
+}
+
+.reading {
+    background-color: var(--accent-orange) !important;
+}    
+
+
     </style>
 </head>
 <body>
+    <script>
+    // Nội dung thủ công để đọc (bạn có thể chỉnh sửa tùy ý)
+    const customContent = `
+CÁC CÂU LẠC BỘ TRỰC THUỘC ĐOÀN TRƯỜNG THPT CHUYÊN LÊ QUÝ ĐÔN - TỈNH ĐIỆN BIÊN. 
+Với mục tiêu tạo nên một môi trường học đường năng động, sáng tạo và phát triển toàn diện, Đoàn trường THPT Chuyên Lê Quý Đôn - Điện Biên luôn chú trọng phát triển các câu lạc bộ (CLB) học sinh như một phần không thể thiếu trong đời sống học đường. Mỗi CLB là một không gian riêng để học sinh được thỏa sức thể hiện đam mê, rèn luyện kỹ năng, kết nối bạn bè và lan tỏa những giá trị tích cực.
+Từ học thuật, nghệ thuật đến thể thao và hoạt động xã hội, các CLB trực thuộc Đoàn trường không chỉ là nơi hội tụ những học sinh nhiệt huyết, tài năng mà còn là “sân chơi” giúp mỗi thành viên trưởng thành hơn từng ngày. Dưới đây là danh sách các câu lạc bộ đang hoạt động sôi nổi tại trường – những mảnh ghép quan trọng làm nên màu sắc riêng biệt cho ngôi nhà chung Lê Quý Đôn.
+Câu lạc bộ Truyền thông - MCC,
+Tự hào là CLB truyền thông có tầm ảnh hưởng lớn nhất trên địa bàn tỉnh Điện Biên, MCC đã đứng sau tổ chức các sự kiện đình đám như: the summer stage 2024, miss and mister, miss boys. Đặc biệt chúng mình còn nhận được sự tin tưởng của Đoàn trường khi được góp mặt trong một số hoạt động: Chào đón tân học sinh BAB, tiếp sức mùa thi.
+Câu lạc bộ Nhảy - CNVR,
+Tự hào là một trong những câu lạc bộ nhảy lớn nhất Điện Biên với bề dày kinh nghiệm, sự chỉn chu trong sản phẩm và luôn nỗ lực với đam mê của mình. Với hơn 30k lượt theo dõi và 100k lượt thích, CNVR thường xuyên biểu diễn cho các chương trình và lễ lớn của trường và địa bàn tỉnh. Ngoài ra, CNVR cũng đã đứng ra tổ chức nhiều chương trình lớn như SHOWCASE ONLINE ORCHID 2022, SUMMERLAND 2018, SUMMERLAND 2022.
+Câu lạc bộ Hát - MIS,
+Được thành lập từ năm 2016, CLB M.I.S hay Melody In Soul là CLB Hát trường THPT Chuyên Lê Quý Đôn, nơi những bạn trẻ đam mê âm nhạc cùng giao lưu và học hỏi. M.I.S chính là nơi những nốt nhạc cùng nhau toà sáng, đắm chìm vào những giai điệu để cùng nhau tạo nên một bản giao hưởng tuyệt vời.
+Câu lạc bộ Diễn xuất - LCC,
+CLB đã có 5 năm hoạt động trong trường, được Đoàn trường tin tưởng và luôn có mặt trong các chương trình lớn nhỏ của trường như chương trình chào xuân GALA, chương trình chào tân học sinh BAB, các hoạt động ngoại khoá trong vào ngoài trường như Đêm nhạc DUCA, Đêm nhạc Thương Thương TSS 2024,... Bên cạnh đó chúng mình còn cùng nhau mang tới những bộ phim hay ấn tượng với nhiều cảm xúc khác nhau.
+Câu lạc bộ Ghita - LGC,
+Hướng đến những bạn học sinh có niềm đam mê với nhạc cụ, ca hát tại trường THPT chuyên Lê Quý Đôn, chúng mình- LGCers- mang theo sứ mệnh tạo ra môi trường phát triển năng khiếu lành mạnh, giúp các thành viên toả sáng hơn trong lĩnh vực mình yêu thích.
+Câu lạc bộ Bóng rổ - LBC,
+Vậy là sau 4 năm tích cực hoạt động cùng 4 thế hệ thành viên đầy nỗ lực và đam mê, LBC đã có được một số thành tựu nhất định, mang về vô số thành tích phong trào thể thao cho trường. Không dừng lại ở đó LBC hứa hẹn sẽ “cháy“ hơn nữa để mang về nhiều chiếc cup hơn trong các giải đấu sắp tới.
+Câu lạc bộ Sách - RBC,
+“Một cuốn cũng có thể là một vì sao sáng, một ngọn lửa sinh động làm sáng bừng không gian tối, dẫn lối ta vào vũ trụ đang rộng mở.” Hiểu được tầm quan trọng của những con chữ tinh hoa của những người đi trước, CLB Sách – RBC chúng mình rất hoan nghênh mọi người cùng đến và chia sẻ niềm yêu thích của mình với các bạn xung quanh.
+Câu lạc bộ Tiếng Anh - Engdom,
+Tự hào là một trong những câu lạc bộ lâu đời nhất của ngôi nhà chung Chuyên Lê Quý Đôn, ENGDOM chính là nơi hội tụ những bạn học sinh mang trong mình niềm đam mê với bộ môn tiếng Anh và mong muốn phát triển kỹ năng mềm của bản thân mình. Các bạn học sinh không chỉ có cơ hội nâng cao khả năng ngoại ngữ của mình mà còn được thỏa sức sáng tạo, rèn luyện kỹ năng làm việc nhóm qua những dự án và sự kiện như School’s Out Mind’s In, OPEN MIC,...; các chuyên mục truyền thông như Vitamin Vocab, Guest our guest.
+Câu lạc bộ Vẽ - Art 45°,
+Xin chào tất cả mọi người, chúng mình là ART 45° – nơi hội tụ những con người có đam mê hội họa. Chúng mình được thành lập vào năm 2016. Trong suốt những năm hoạt động ấy, CLB luôn không ngừng cải thiện và tiến bộ để đạt được kết quả tốt nhất. ART 45° là nơi để các bạn thỏa sức làm điều mình thích, là nơi để học hỏi, trau dồi kinh nghiệm vẽ để phát triển bản thân.
+Câu lạc bộ Môi trường và Cộng đồng - EAS,
+Câu lạc bộ Môi trường và Cộng đồng - EᗩՏ được thành lập với mục đích lan tỏa những thông điệp ý nghĩa, nhằm thúc đẩy và kêu gọi mọi người cùng chung tay vì một môi trường xanh - sạch - đẹp. Qua từng sự kiện, bạn không chỉ biết thêm nhiều kiến thức thú vị, bổ ích về xã hội mà còn có cơ hội được cùng các thành viên thử thách bản thân với nhiều trải nghiệm mới lạ.
+Câu lạc bộ Thiện nguyện - BBL,
+Chuyến tàu yêu thương BBL khởi hành từ năm 2021, là một tổ chức thiện nguyện mang trong mình sứ mệnh lan tỏa tinh thần đoàn kết, tấm lòng chân thiện và mang lại ấm áp, lan tỏa yêu thương trong cộng đồng. CLB Tình nguyện chính là nơi để các bạn đóng góp sức trẻ, thể hiện tinh thần nhiệt huyết và cho đi để nhận lại thật nhiều niềm vui khi làm được những việc có ích cho xã hội.
+Câu lạc bộ Bóng đá - LFC,
+Le Quy Don’s Football Club (LFC) – Câu lạc bộ bóng đá của Trường THPT Chuyên Lê Quý Đôn, là sân chơi lý tưởng để bạn giao lưu, học hỏi và cùng nhau phát triển. Sau 6 năm hoạt động đầy thử thách và chiến thắng, với sự trở lại này, LFC đã sẵn sàng cho một năm học mới với những quyết tâm cao nhất.
+Câu lạc bộ Văn hóa Nhật Bản - LJCC,
+CLB Văn hóa Nhật chúng mình được lập ra với mong muốn mang đến cho các bạn một môi trường được bao quanh bởi những nét đặc trưng ấy của Nhật Bản. Đến với CLB chúng mình, mọi người sẽ được học hỏi tìm hiểu một cách chi tiết hơn về văn hoá và đất nước Nhật Bản. Có thể nói đây cũng là cơ hội tìm hiểu nhau cho các học sinh có cùng đam mê về những khía cạnh độc đáo trong đời sống con người nơi đây.
+Câu lạc bộ Bóng chuyền - LVC,
+Chúng mình là LVC. Chúng mình muốn mang đến cho mọi người một sân chơi lành mạnh, giao lưu, học hỏi giữa những bạn có cùng đam mê với bóng chuyền. Ở đây các bạn có thể thoả sức với niềm đam mê của mình, cùng nhau xây dựng một tập thể đoàn kết, trau dồi kĩ năng và tinh thần đồng đội. Hơn thế nữa chúng ta có thể cùng nhau trải qua những mùa giải thật bùng nổ.
+Câu lạc bộ Board Game - BGC,
+BGC xin được cảm ơn mọi người đã ủng hộ và tiếp động lực cho câu lạc bộ trong thời gian vừa qua thành công. Ngay lúc này, chúng mình đã sẵn sàng thổi bùng ngọn lửa đam mê Boardgames thêm một lần nữa, cùng các bạn tạo nên những kỉ niệm đáng nhớ tại nhà trường.
+Câu lạc bộ Sức khỏe học đường - YHC,
+YHC hướng tới việc mở rộng các hoạt động, khuyến khích ngày càng nhiều các bạn học sinh tham gia, duy trì thói quen sống khỏe mạnh cũng như góp phần tuyên truyền về những kiến thức bổ ích đó. CLB mong muốn tạo ra một không gian trường học tích cực, nơi các bạn có thể cùng nhau tập luyện, học hỏi, chia sẻ và hỗ trợ lẫn nhau để đạt được những mục tiêu sức khỏe cá nhân và môi trường học tập lành mạnh.
+Câu lạc bộ LQĐ Tôi và Bạn - TVB,
+Câu lạc bộ TVB là nơi để các bạn được giao lưu, được tham gia các hoạt động cũng như nung nấu ước mơ giúp bản thân trở nên dần hoàn thiện hơn khi cùng làm việc với những người đã và đang hoạt động trong CLB. Tôi và Bạn sẽ giúp các bạn lưu giữ những hoài niệm, ký ức đẹp đẽ trong 3 năm của thanh xuân. Với niềm tin của”bạn”gửi gắm vào CLB thì chúng mình rất hy vọng sẽ đem lại sự gắn kết, sẻ chia, ấm áp như những người bạn.
+Câu lạc bộ Bóng chày - StarChasers,
+Là một môn thể thao mới được du nhập. Nếu như mọi người đang muốn trải nghiệm, tham gia một môn thể thao mới, có những cảm giác mới lạ, thú vị thì hãy đến và đồng hành của chúng mình nhé.
+Câu lạc bộ Múa - FOW,
+Chúng tớ là Fly On Wings với một niềm đam mê yêu thích biểu diễn vũ đạo múa. Qua một khoảng thời gian ngừng hoạt động, CLB MÚA chính thức quay trở lại cùng nhiều sự đổi mới lần này. FOW luôn mong rằng những bạn cùng sở thích, cùng đam mê bộ môn nghệ thuật vũ đạo múa sẽ luôn luôn tin yêu và sẽ đồng hành cùng clb trong thời gian tới!
+    `;
+
+    // Hàm đọc nội dung thủ công
+    function readCustomContent() {
+        speak(customContent, event.target);
+    }
+
+    // Hàm sử dụng SpeechSynthesis để đọc văn bản
+    function speak(text, button) {
+        if ('speechSynthesis' in window) {
+            // Chia văn bản thành các câu để đọc mượt hơn
+            const sentences = text.split('.').filter(sentence => sentence.trim() !== '');
+            let index = 0;
+
+            function readNextSentence() {
+                if (index < sentences.length) {
+                    const utterance = new SpeechSynthesisUtterance(sentences[index].trim());
+                    utterance.lang = 'vi-VN'; // Ngôn ngữ tiếng Việt
+                    utterance.rate = 1; // Tốc độ đọc
+                    utterance.pitch = 1; // Độ cao giọng
+                    utterance.volume = 1; // Âm lượng
+
+                    // Chọn giọng tiếng Việt
+                    const voices = speechSynthesis.getVoices();
+                    const vietnameseVoice = voices.find(voice => voice.lang === 'vi-VN');
+                    if (vietnameseVoice) {
+                        utterance.voice = vietnameseVoice;
+                    }
+
+                    // Thêm hiệu ứng visual khi đang đọc
+                    button.classList.add('reading');
+
+                    utterance.onend = () => {
+                        index++;
+                        readNextSentence();
+                    };
+
+                    speechSynthesis.speak(utterance);
+                } else {
+                    // Kết thúc đọc, bỏ hiệu ứng
+                    button.classList.remove('reading');
+                }
+            }
+
+            // Hủy các utterance đang đọc (nếu có)
+            speechSynthesis.cancel();
+            readNextSentence();
+        } else {
+            alert('Trình duyệt của bạn không hỗ trợ đọc văn bản. Vui lòng thử trình duyệt khác.');
+        }
+    }
+
+    // Hàm dừng đọc
+    function stopReading() {
+        if ('speechSynthesis' in window) {
+            speechSynthesis.cancel();
+            const button = document.querySelector('.read-aloud-btn');
+            if (button) button.classList.remove('reading');
+        }
+    }
+
+    // Load voices khi sẵn sàng
+    window.speechSynthesis.onvoiceschanged = function() {
+        const voices = speechSynthesis.getVoices();
+    };
+</script>
     <header class="header">
         <div class="header-left">
             <a href="#"><img src="https://i.ibb.co/k2x779T4/unnamed-1.webp" alt="Logo" class="logo"></a>
         </div>
         <nav>
-            <ul class="nav-menu">
-                <li><a href="/suctrethanhnien/home">Trang chủ</a></li>
-                <li>
-                    <a href="/suctrethanhnien/doantruong" class="dropdown-arrow">Giới thiệu chung <i class="fas fa-caret-down"></i></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="/suctrethanhnien/gioithieu">Về Đoàn trường chuyên THPT Lê Quý Đôn</a></li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="/suctrethanhnien/hoatdong" class="dropdown-arrow">Hoạt động tiêu biểu <i class="fas fa-caret-down"></i></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="/suctrethanhnien/clb">Câu lạc bộ</a></li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="/suctrethanhnien/tintuc" class="dropdown-arrow">Tin tức <i class="fas fa-caret-down"></i></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="/suctrethanhnien/giaoluu">Giao lưu nghệ thuật</a></li>
-                        <li><a href="/suctrethanhnien/tieplua">Lễ tiếp lửa</a></li>
-                        <li><a href="/suctrethanhnien/k16">K16 tri ân</a></li>
-                        <li><a href="/suctrethanhnien/hocbong">Học bổng GEOL</a></li>
-                        <li><a href="/suctrethanhnien/huuhung">Trần Hữu Hưng - Nam sinh ưu tú trường THPT Lê Quý Đôn</a></li>
-                    </ul>
-                </li>
+    <ul class="nav-menu">
+        <li><a href="/suctrethanhnien/home">Trang chủ</a></li>
+        <li>
+            <a href="/suctrethanhnien/doantruong" class="dropdown-arrow">Giới thiệu chung <i class="fas fa-caret-down"></i></a>
+            <ul class="dropdown-menu">
+                <li><a href="/suctrethanhnien/gioithieu">Về Đoàn trường chuyên THPT Lê Quý Đôn</a></li>
             </ul>
-        </nav>
+        </li>
+        <li>
+            <a href="/suctrethanhnien/hoatdong" class="dropdown-arrow">Hoạt động tiêu biểu <i class="fas fa-caret-down"></i></a>
+            <ul class="dropdown-menu">
+                <li><a href="/suctrethanhnien/clb">Câu lạc bộ</a></li>
+            </ul>
+        </li>
+        <li>
+            <a href="/suctrethanhnien/tintuc" class="dropdown-arrow">Tin tức <i class="fas fa-caret-down"></i></a>
+            <ul class="dropdown-menu">
+                <li><a href="/suctrethanhnien/giaoluu">Giao lưu nghệ thuật</a></li>
+                <li><a href="/suctrethanhnien/tieplua">Lễ tiếp lửa</a></li>
+                <li><a href="/suctrethanhnien/k16">K16 tri ân</a></li>
+                <li><a href="/suctrethanhnien/hocbong">Học bổng GEOL</a></li>
+                <li><a href="/suctrethanhnien/huuhung">Trần Hữu Hưng - Nam sinh ưu tú trường THPT Lê Quý Đôn</a></li>
+            </ul>
+        </li>
+    </ul>
+</nav>
+<button onclick="readCustomContent()" class="read-aloud-btn" aria-label="Đọc nội dung giới thiệu">Đọc nội dung</button>
+    <button onclick="stopReading()" class="read-aloud-btn" aria-label="Dừng đọc nội dung">Dừng đọc</button>
     </header>
+
 
     <div class="container">
         <div class="header">
