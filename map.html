@@ -9,7 +9,7 @@
             margin: 0;
             font-family: 'Roboto', 'Segoe UI', Arial, sans-serif;
             background: linear-gradient(135deg, #e0e7ff, #f3f4f6);
-            overflow: hidden;
+            overflow: hidden; /* Ngăn cuộn trang chính */
         }
         #map-container {
             position: relative;
@@ -19,18 +19,18 @@
             justify-content: center;
             align-items: center;
             background: #ffffff;
+            overflow: auto; /* Cho phép cuộn để xem toàn bộ bản đồ */
+            cursor: grab; /* Thay đổi con trỏ để chỉ ra có thể kéo */
+        }
+        #map-container.dragging {
+            cursor: grabbing;
         }
         #map {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            object-position: center;
+            /* map sẽ có kích thước thực tế dựa trên originalMapWidth/Height để chứa toàn bộ ảnh gốc */
+            position: absolute; /* Quan trọng: Đặt tuyệt đối để marker có thể đặt trên nó */
             border-radius: 8px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease;
-        }
-        #map:hover {
-            transform: scale(1.02);
+            /* Sẽ được JavaScript thiết lập kích thước và vị trí */
         }
         .marker {
             position: absolute;
@@ -42,14 +42,16 @@
             transition: transform 0.3s ease, filter 0.3s ease;
             filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.4));
             animation: pulse 2s infinite ease-in-out;
+            transform: translate(-50%, -100%); /* Điều chỉnh để chân marker ở đúng tọa độ */
+            z-index: 5; /* Đảm bảo marker nằm trên bản đồ */
         }
         @keyframes pulse {
-            0% { transform: scale(1); filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.4)); }
-            50% { transform: scale(1.1); filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.7)); }
-            100% { transform: scale(1); filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.4)); }
+            0% { transform: translate(-50%, -100%) scale(1); filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.4)); }
+            50% { transform: translate(-50%, -100%) scale(1.1); filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.7)); }
+            100% { transform: translate(-50%, -100%) scale(1); filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.4)); }
         }
         .marker:hover {
-            transform: scale(1.5);
+            transform: translate(-50%, -100%) scale(1.5);
             filter: drop-shadow(0 0 12px rgba(255, 215, 0, 0.9));
             animation: none;
         }
@@ -67,6 +69,7 @@
             font-size: 14px;
             scrollbar-width: thin;
             scrollbar-color: #888 #f0f0f5;
+            transform: translate(0, -50%); /* Căn chỉnh panel theo chiều dọc so với marker */
         }
         .info-panel::-webkit-scrollbar {
             width: 6px;
@@ -118,6 +121,17 @@
         .close-popup:hover {
             background: #cc0000;
             transform: scale(1.1);
+        }
+        #panorama-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.7); /* Mờ và tối */
+            z-index: 999; /* Nằm dưới panorama-container nhưng trên bản đồ */
+            cursor: pointer; /* Cho biết có thể click để đóng */
         }
         #panorama-container {
             display: none;
@@ -193,6 +207,9 @@
     <div id="map-container">
         <img id="map" src="https://hmtuan002.github.io/suctrethanhnien/ht.png" alt="Bản đồ">
     </div>
+
+    <div id="panorama-overlay"></div>
+
     <div id="panorama-container">
         <button class="close-btn" onclick="closePanorama()">Đóng</button>
         <div id="panorama"></div>
@@ -200,11 +217,16 @@
 
     <script>
         // Dữ liệu tòa nhà với tọa độ marker và thông tin tầng/phòng
+        // Tọa độ X và Y là tỷ lệ phần trăm (0.0 đến 1.0) của chiều rộng và chiều cao ảnh GỐC.
+        // BẠN CẦN ĐIỀN CHÍNH XÁC KÍCH THƯỚC GỐC (PIXEL) CỦA ẢNH "ht.png" TẠI ĐÂY
+        let originalMapWidth = 0; // Sẽ được cập nhật sau khi ảnh tải
+        let originalMapHeight = 0; // Sẽ được cập nhật sau khi ảnh tải
+
         const buildings = [
             {
                 name: "Tòa A",
-                x: 100,
-                y: 100,
+                x_ratio: 0.415, // Tỷ lệ từ trái của ảnh gốc (ví dụ: 25%)
+                y_ratio: 0.755, // Tỷ lệ từ trên của ảnh gốc (ví dụ: 35%)
                 floors: [
                     {
                         name: "Tầng 1",
@@ -224,8 +246,8 @@
             },
             {
                 name: "Tòa B",
-                x: 200,
-                y: 150,
+                x_ratio: 0.66, // Tỷ lệ từ trái của ảnh gốc (ví dụ: 65%)
+                y_ratio: 0.50, // Tỷ lệ từ trên của ảnh gốc (ví dụ: 50%)
                 floors: [
                     {
                         name: "Tầng 1",
@@ -235,43 +257,175 @@
                         ]
                     }
                 ]
-            }
+            },
+            {
+                name: "Tòa C",
+                x_ratio: 0.595, // Tỷ lệ từ trái của ảnh gốc (ví dụ: 65%)
+                y_ratio: 0.485, // Tỷ lệ từ trên của ảnh gốc (ví dụ: 50%)
+                floors: [
+                    {
+                        name: "Tầng 1",
+                        rooms: [
+                            { name: "Phòng 101", panorama: "https://hmtuan002.github.io/suctrethanhnien/Hs.jpg" },
+                            { name: "Phòng 102", panorama: "https://hmtuan002.github.io/suctrethanhnien/Hs.jpg" }
+                        ]
+                    }
+                ]
+            },
+                name: "Tòa D",
+                x_ratio: 0.595, // Tỷ lệ từ trái của ảnh gốc (ví dụ: 65%)
+                y_ratio: 0.485, // Tỷ lệ từ trên của ảnh gốc (ví dụ: 50%)
+                floors: [
+                    {
+                        name: "Tầng 1",
+                        rooms: [
+                            { name: "Phòng 101", panorama: "https://hmtuan002.github.io/suctrethanhnien/Hs.jpg" },
+                            { name: "Phòng 102", panorama: "https://hmtuan002.github.io/suctrethanhnien/Hs.jpg" }
+                        ]
+                    }
+                ]
+            },
         ];
 
         const mapContainer = document.getElementById('map-container');
+        const mapImage = document.getElementById('map');
         const panoramaContainer = document.getElementById('panorama-container');
+        const panoramaOverlay = document.getElementById('panorama-overlay');
         let viewer = null;
         let activePanel = null;
 
-        // Tạo marker và panel cho từng tòa nhà
-        buildings.forEach(building => {
-            const marker = document.createElement('div');
-            marker.className = 'marker';
-            marker.style.left = `${building.x}px`;
-            marker.style.top = `${building.y}px`;
+        // Biến để xử lý kéo bản đồ
+        let isDragging = false;
+        let startX, startY, scrollLeft, scrollTop;
 
-            const panel = document.createElement('div');
-            panel.className = 'info-panel';
-            panel.style.left = `${building.x + 50}px`;
-            panel.style.top = `${building.y}px`;
-            panel.innerHTML = `
-                <h3>${building.name}</h3>
-                <ul id="floor-list-${building.name.replace(/\s+/g, '-')}"</ul>
-                <button class="close-popup" onclick="closePopup(this)">X</button>
-            `;
-            mapContainer.appendChild(marker);
-            mapContainer.appendChild(panel);
-
-            const floorList = panel.querySelector(`#floor-list-${building.name.replace(/\s+/g, '-')}`);
-            marker.addEventListener('click', () => {
-                if (activePanel) activePanel.style.display = 'none';
-                panel.style.display = 'block';
-                activePanel = panel;
-                showFloors(building, floorList);
-            });
+        // --- Chức năng kéo bản đồ ---
+        mapContainer.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            mapContainer.classList.add('dragging');
+            startX = e.pageX - mapContainer.offsetLeft;
+            startY = e.pageY - mapContainer.offsetTop;
+            scrollLeft = mapContainer.scrollLeft;
+            scrollTop = mapContainer.scrollTop;
+            e.preventDefault(); // Ngăn kéo ảnh mặc định
         });
 
-        // Hiển thị danh sách tầng
+        mapContainer.addEventListener('mouseleave', () => {
+            isDragging = false;
+            mapContainer.classList.remove('dragging');
+        });
+
+        mapContainer.addEventListener('mouseup', () => {
+            isDragging = false;
+            mapContainer.classList.remove('dragging');
+        });
+
+        mapContainer.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+            e.preventDefault();
+            const x = e.pageX - mapContainer.offsetLeft;
+            const y = e.pageY - mapContainer.offsetTop;
+            const walkX = (x - startX); // Tốc độ cuộn X
+            const walkY = (y - startY); // Tốc độ cuộn Y
+            mapContainer.scrollLeft = scrollLeft - walkX;
+            mapContainer.scrollTop = scrollTop - walkY;
+        });
+
+        // --- Chức năng đặt Marker ---
+        function placeMarkers() {
+            // Xóa các marker và panel cũ
+            document.querySelectorAll('.marker, .info-panel').forEach(el => el.remove());
+
+            // Đảm bảo mapImage đã có kích thước tự nhiên
+            if (originalMapWidth === 0 || originalMapHeight === 0) {
+                console.warn("Kích thước ảnh gốc chưa được tải. Vui lòng kiểm tra lại originalMapWidth/Height.");
+                return;
+            }
+
+            // Tính toán tỷ lệ co giãn của ảnh trên màn hình so với ảnh gốc
+            const containerWidth = mapContainer.offsetWidth;
+            const containerHeight = mapContainer.offsetHeight;
+
+            // Tính toán kích thước mà ảnh sẽ có sau khi `object-fit: cover` được áp dụng
+            let effectiveScale;
+            const containerAspectRatio = containerWidth / containerHeight;
+            const imageAspectRatio = originalMapWidth / originalMapHeight;
+
+            if (imageAspectRatio > containerAspectRatio) {
+                // Ảnh rộng hơn container, chiều cao ảnh sẽ khớp container
+                effectiveScale = containerHeight / originalMapHeight;
+            } else {
+                // Ảnh cao hơn container, chiều rộng ảnh sẽ khớp container
+                effectiveScale = containerWidth / originalMapWidth;
+            }
+
+            const displayedImageWidth = originalMapWidth * effectiveScale;
+            const displayedImageHeight = originalMapHeight * effectiveScale;
+
+            // Đặt kích thước cho ảnh mapImage để nó có thể được cuộn
+            mapImage.style.width = `${displayedImageWidth}px`;
+            mapImage.style.height = `${displayedImageHeight}px`;
+
+            // Tính toán offset của ảnh so với góc trên cùng bên trái của mapContainer
+            // Khi object-fit: cover và căn giữa, ảnh sẽ có thể bị lệch nếu kích thước không khớp hoàn toàn
+            const offsetX = (containerWidth - displayedImageWidth) / 2;
+            const offsetY = (containerHeight - displayedImageHeight) / 2;
+            
+            mapImage.style.left = `${offsetX}px`;
+            mapImage.style.top = `${offsetY}px`;
+
+
+            buildings.forEach(building => {
+                const marker = document.createElement('div');
+                marker.className = 'marker';
+                
+                // Tính toán vị trí của marker trên ảnh ĐƯỢC HIỂN THỊ
+                // Sử dụng tỷ lệ từ dữ liệu và kích thước ảnh đã hiển thị
+                const markerX = offsetX + (building.x_ratio * originalMapWidth * effectiveScale);
+                const markerY = offsetY + (building.y_ratio * originalMapHeight * effectiveScale);
+
+                marker.style.left = `${markerX}px`;
+                marker.style.top = `${markerY}px`;
+
+                const panel = document.createElement('div');
+                panel.className = 'info-panel';
+                panel.style.left = `${markerX + 20}px`; // Offset sang phải một chút so với marker
+                panel.style.top = `${markerY - 50}px`; // Offset lên trên một chút so với marker
+
+                panel.innerHTML = `
+                    <h3>${building.name}</h3>
+                    <ul id="floor-list-${building.name.replace(/\s+/g, '-')}"</ul>
+                    <button class="close-popup" onclick="closePopup(this)">X</button>
+                `;
+                mapContainer.appendChild(marker);
+                mapContainer.appendChild(panel);
+
+                const floorList = panel.querySelector(`#floor-list-${building.name.replace(/\s+/g, '-')}`);
+                marker.addEventListener('click', (event) => {
+                    event.stopPropagation(); // Ngăn click lan ra mapContainer gây đóng panel khác hoặc kéo bản đồ
+                    if (activePanel && activePanel !== panel) {
+                        activePanel.style.display = 'none';
+                    }
+                    panel.style.display = 'block';
+                    activePanel = panel;
+                    showFloors(building, floorList);
+                });
+            });
+        }
+
+        // --- Xử lý tải ảnh để lấy kích thước gốc và đặt marker ---
+        // Sử dụng một đối tượng Image tạm thời để lấy kích thước tự nhiên của ảnh gốc
+        const tempImage = new Image();
+        tempImage.src = mapImage.src;
+        tempImage.onload = () => {
+            originalMapWidth = tempImage.naturalWidth;
+            originalMapHeight = tempImage.naturalHeight;
+            placeMarkers(); // Đặt marker sau khi đã biết kích thước gốc của ảnh
+        };
+
+        // Cập nhật vị trí marker khi cửa sổ thay đổi kích thước
+        window.addEventListener('resize', placeMarkers);
+
+        // --- Chức năng hiển thị thông tin và Panorama ---
         function showFloors(building, floorList) {
             floorList.innerHTML = '';
             building.floors.forEach(floor => {
@@ -282,7 +436,6 @@
             });
         }
 
-        // Hiển thị danh sách phòng
         function showRooms(floor, floorList) {
             floorList.innerHTML = '';
             floor.rooms.forEach(room => {
@@ -293,8 +446,8 @@
             });
         }
 
-        // Hiển thị ảnh 360
         function showPanorama(imageUrl) {
+            panoramaOverlay.style.display = 'block';
             panoramaContainer.style.display = 'block';
             if (activePanel) activePanel.style.display = 'none';
             if (viewer) {
@@ -308,8 +461,8 @@
             });
         }
 
-        // Đóng panorama
         function closePanorama() {
+            panoramaOverlay.style.display = 'none';
             panoramaContainer.style.display = 'none';
             if (viewer) {
                 viewer.destroy();
@@ -317,12 +470,19 @@
             }
         }
 
-        // Đóng popup
         function closePopup(button) {
             const panel = button.parentElement;
             panel.style.display = 'none';
             activePanel = null;
         }
+
+        // --- Xử lý click ra ngoài để tắt panorama ---
+        panoramaOverlay.addEventListener('click', closePanorama);
+
+        // Ngăn chặn sự kiện click bên trong panorama-container lan ra ngoài lớp phủ
+        panoramaContainer.addEventListener('click', (event) => {
+            event.stopPropagation();
+        });
     </script>
 </body>
 </html>
