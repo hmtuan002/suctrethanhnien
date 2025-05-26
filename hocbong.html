@@ -326,10 +326,111 @@
                 font-size: 0.9em;
             }
         }
+                .read-aloud-btn {
+    padding: 10px 20px;
+    background-color: var(--primary-blue);
+    color: var(--white);
+    border: none;
+    border-radius: 6px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-left: 20px; /* Khoảng cách từ logo */
+}
+
+.read-aloud-btn:hover {
+    background-color: var(--dark-blue);
+}
+
+.reading {
+    background-color: var(--accent-orange) !important;
+}    
+
+
+
     </style>
 </head>
 <body>
-<header class="header">
+  <script>
+    // Nội dung thủ công để đọc (bạn có thể chỉnh sửa tùy ý)
+    const customContent = `
+LỄ TRAO HỌC BỔNG GEOL
+Trung tâm Đào tạo và Du học Đức GEOL là đơn vị hàng đầu trong lĩnh vực đào tạo tiếng Đức và tư vấn du học nghề, đại học, cao học tại Đức. Hiện tại, GEOL có 16 cơ sở tại Việt Nam và một văn phòng đại diện tại Đức. Với tầm nhìn trở thành công ty tư vấn du học và đào tạo tiếng Đức hàng đầu Việt Nam, GEOL cam kết cung cấp chương trình học chất lượng cao, giúp học viên chinh phục chứng chỉ quốc tế và lựa chọn công việc phù hợp tại Đức. Tỉ lệ học viên của GEOL đỗ chứng chỉ tiếng Đức B1 ngay từ lần thi đầu tiên đạt 70-80%, minh chứng cho chất lượng đào tạo của trung tâm.
+
+Hai nhà lãnh đạo của GEOL – Anh Vũ Anh Tuấn (Chairman) và Anh Lại Huy Toàn (CEO) – đều là những người có bề dày kinh nghiệm trong lĩnh vực giáo dục và công nghệ. Anh Vũ Anh Tuấn là Tiến sĩ Toán học, hiện đang định cư tại Đức từ năm 2011. Xuất thân trong một gia đình có truyền thống giáo dục, anh mong muốn mang đến cơ hội học tập và phát triển cho thế hệ trẻ Việt Nam thông qua việc đào tạo và tư vấn du học. Anh Lại Huy Toàn có gần hai thập kỷ hoạt động trong các lĩnh vực IT, bảo hiểm, kinh doanh công nghệ và giáo dục. Với kiến thức sâu rộng và tầm nhìn chiến lược, anh đã góp phần đưa GEOL trở thành đơn vị đào tạo tiếng Đức và tư vấn du học uy tín tại Việt Nam.
+
+Học bổng lần này được trao cho hai em học sinh có hoàn cảnh khó khăn nhưng luôn nỗ lực vươn lên trong học tập: em Lại Nguyễn Kiều Anh (lớp 10A4) và em Hoàng An Chi (lớp 10A9). Mỗi suất học bổng trị giá 1 triệu đồng/tháng, được cấp đến khi hai em hoàn thành chương trình lớp 12. Đây là sự ghi nhận những nỗ lực học tập của các em cũng như động lực để các em tiếp tục cố gắng trên hành trình chinh phục tri thức.
+
+Đại diện GEOL nhấn mạnh: "Chúng tôi tin rằng, với sự hỗ trợ này, các em học sinh sẽ có thêm điều kiện thuận lợi để theo đuổi ước mơ, mở ra những cơ hội học tập và phát triển bản thân trong tương lai."
+
+Học bổng GEOL không chỉ là sự hỗ trợ tài chính mà còn là niềm động viên lớn lao dành cho các bạn học sinh có đam mê du học. Với sự đồng hành của GEOL, các em học sinh của nhà trường sẽ có thêm cơ hội hiện thực hóa ước mơ học tập, mở ra tương lai tươi sáng phía trước. Buổi lễ trao học bổng khép lại với nhiều cảm xúc và kỳ vọng. Hy vọng rằng, trong tương lai, sẽ có thêm nhiều học sinh tài năng được tiếp cận với cơ hội học bổng ý nghĩa từ GEOL, tiếp tục vững bước trên con đường chinh phục kho tàng tri thức và hội nhập quốc tế.
+    `;
+
+    // Hàm đọc nội dung thủ công
+    function readCustomContent() {
+        speak(customContent, event.target);
+    }
+
+    // Hàm sử dụng SpeechSynthesis để đọc văn bản
+    function speak(text, button) {
+        if ('speechSynthesis' in window) {
+            // Chia văn bản thành các câu để đọc mượt hơn
+            const sentences = text.split('.').filter(sentence => sentence.trim() !== '');
+            let index = 0;
+
+            function readNextSentence() {
+                if (index < sentences.length) {
+                    const utterance = new SpeechSynthesisUtterance(sentences[index].trim());
+                    utterance.lang = 'vi-VN'; // Ngôn ngữ tiếng Việt
+                    utterance.rate = 1; // Tốc độ đọc
+                    utterance.pitch = 1; // Độ cao giọng
+                    utterance.volume = 1; // Âm lượng
+
+                    // Chọn giọng tiếng Việt
+                    const voices = speechSynthesis.getVoices();
+                    const vietnameseVoice = voices.find(voice => voice.lang === 'vi-VN');
+                    if (vietnameseVoice) {
+                        utterance.voice = vietnameseVoice;
+                    }
+
+                    // Thêm hiệu ứng visual khi đang đọc
+                    button.classList.add('reading');
+
+                    utterance.onend = () => {
+                        index++;
+                        readNextSentence();
+                    };
+
+                    speechSynthesis.speak(utterance);
+                } else {
+                    // Kết thúc đọc, bỏ hiệu ứng
+                    button.classList.remove('reading');
+                }
+            }
+
+            // Hủy các utterance đang đọc (nếu có)
+            speechSynthesis.cancel();
+            readNextSentence();
+        } else {
+            alert('Trình duyệt của bạn không hỗ trợ đọc văn bản. Vui lòng thử trình duyệt khác.');
+        }
+    }
+
+    // Hàm dừng đọc
+    function stopReading() {
+        if ('speechSynthesis' in window) {
+            speechSynthesis.cancel();
+            const button = document.querySelector('.read-aloud-btn');
+            if (button) button.classList.remove('reading');
+        }
+    }
+
+    // Load voices khi sẵn sàng
+    window.speechSynthesis.onvoiceschanged = function() {
+        const voices = speechSynthesis.getVoices();
+    };
+</script>
+    <header class="header">
         <div class="header-left">
             <a href="#"><img src="https://i.ibb.co/k2x779T4/unnamed-1.webp" alt="Logo" class="logo"></a>
         </div>
@@ -360,7 +461,10 @@
         </li>
     </ul>
 </nav>
+<button onclick="readCustomContent()" class="read-aloud-btn" aria-label="Đọc nội dung giới thiệu">Đọc nội dung</button>
+    <button onclick="stopReading()" class="read-aloud-btn" aria-label="Dừng đọc nội dung">Dừng đọc</button>
     </header>
+
 
     <section class="main-section">
         <h1>LỄ TRAO HỌC BỔNG GEOL</h1>
