@@ -459,14 +459,123 @@
                 height: 120px;
             }
         }
+                .read-aloud-btn {
+    padding: 10px 20px;
+    background-color: var(--primary-blue);
+    color: var(--white);
+    border: none;
+    border-radius: 6px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-left: 20px; /* Khoảng cách từ logo */
+}
+
+.read-aloud-btn:hover {
+    background-color: var(--dark-blue);
+}
+
+.reading {
+    background-color: var(--accent-orange) !important;
+}    
+
+
+
     </style>
 </head>
 <body>
-<header class="header">
+  <script>
+    // Nội dung thủ công để đọc (bạn có thể chỉnh sửa tùy ý)
+    const customContent = `
+TIN TỨC MỚI HÔM NAY
+
+TRAO HỌC BỔNG - TRẢI NGHIỆM XE ĐIỆN VINFAST: LAN TỎA ĐAM MÊ, TIẾP BƯỚC ƯỚC MƠ
+Ngày 05/4/2025, tại Trường THPT Chuyên Lê Quý Đôn - Điện Biên, Công ty TNHH Kinh doanh Thương mại và Dịch vụ VinFast đã phối hợp cùng nhà trường tổ chức chương trình trao học bổng dành cho các em học sinh xuất sắc trong Kỳ thi học sinh giỏi Quốc gia năm học 2024 – 2025 và tổ chức cho các em học sinh trải nghiệm lái xe đạp điện VinFast.
+
+Tin tiêu biểu
+
+GIAO LƯU VĂN HÓA NGHỆ THUẬT VỚI CHỦ ĐỀ “THẮP SÁNG ƯỚC MƠ”
+Sáng ngày 12 tháng 10 năm 2024, trường THPT Chuyên Lê Quý Đôn thành phố Điện Biên đã tổ chức chương trình Giao lưu văn hóa nghệ thuật với trung tâm nghệ thuật tình thương do NSND Trương Tường Vy sáng lập với chủ đề “Thắp sáng ước mơ”.
+
+LỄ TIẾP LỬA ĐỘI TUYỂN HỌC SINH GIỎI CẤP QUỐC GIA NĂM HỌC 2024 - 2025
+Sáng ngày 14/12/2024, trường THPT Chuyên Lê Quý Đôn long trọng tổ chức lễ tiếp lửa cho các em học sinh và các thầy cô giáo ôn luyện đội tuyển Học sinh giỏi Quốc gia năm học 2024 – 2025.
+
+CỰU HỌC SINH KỶ NIỆM (KHÓA 2011_2014) TỚI CHÚC CHƯƠNG TRÌNH KHỞI ĐỘNG TỔ KỶ NIỆM 30 NĂM THÀNH LẬP
+Nhân dịp kỷ niệm 42 năm Ngày Nhà giáo Việt Nam (20/11/1982 – 20/11/2024); 29 năm ngày thành lập trường THPT Chuyên Lê Quý Đôn (1995 – 2024), ngày 16/11/2024 cựu học sinh K16 (niên khóa 2011 – 2014) đã tổ chức buổi Hội ngộ - Tri ân sau 10 năm rời xa mái trường với chủ đề “Dấu ấn thanh xuân”.
+
+LỄ TRAO HỌC BỔNG GEOL - CHẬP CÁNH ƯỚC MƠ CHO HỌC SINH TRƯỜNG THPT CHUYÊN LÊ QUÝ ĐÔN - ĐIỆN BIÊN
+Ngày 01/4/2025, trung tâm Đào tạo và Du học Đức GEOL (German Everyday Online) đã tổ chức lễ trao học bổng dành cho hai học sinh xuất sắc của Trường THPT Chuyên Lê Quý Đôn, tỉnh Điện Biên.
+    `;
+
+    // Hàm đọc nội dung thủ công
+    function readCustomContent() {
+        speak(customContent, event.target);
+    }
+
+    // Hàm sử dụng SpeechSynthesis để đọc văn bản
+    function speak(text, button) {
+        if ('speechSynthesis' in window) {
+            // Chia văn bản thành các câu để đọc mượt hơn
+            const sentences = text.split('.').filter(sentence => sentence.trim() !== '');
+            let index = 0;
+
+            function readNextSentence() {
+                if (index < sentences.length) {
+                    const utterance = new SpeechSynthesisUtterance(sentences[index].trim());
+                    utterance.lang = 'vi-VN'; // Ngôn ngữ tiếng Việt
+                    utterance.rate = 1; // Tốc độ đọc
+                    utterance.pitch = 1; // Độ cao giọng
+                    utterance.volume = 1; // Âm lượng
+
+                    // Chọn giọng tiếng Việt
+                    const voices = speechSynthesis.getVoices();
+                    const vietnameseVoice = voices.find(voice => voice.lang === 'vi-VN');
+                    if (vietnameseVoice) {
+                        utterance.voice = vietnameseVoice;
+                    }
+
+                    // Thêm hiệu ứng visual khi đang đọc
+                    button.classList.add('reading');
+
+                    utterance.onend = () => {
+                        index++;
+                        readNextSentence();
+                    };
+
+                    speechSynthesis.speak(utterance);
+                } else {
+                    // Kết thúc đọc, bỏ hiệu ứng
+                    button.classList.remove('reading');
+                }
+            }
+
+            // Hủy các utterance đang đọc (nếu có)
+            speechSynthesis.cancel();
+            readNextSentence();
+        } else {
+            alert('Trình duyệt của bạn không hỗ trợ đọc văn bản. Vui lòng thử trình duyệt khác.');
+        }
+    }
+
+    // Hàm dừng đọc
+    function stopReading() {
+        if ('speechSynthesis' in window) {
+            speechSynthesis.cancel();
+            const button = document.querySelector('.read-aloud-btn');
+            if (button) button.classList.remove('reading');
+        }
+    }
+
+    // Load voices khi sẵn sàng
+    window.speechSynthesis.onvoiceschanged = function() {
+        const voices = speechSynthesis.getVoices();
+    };
+</script>
+    <header class="header">
         <div class="header-left">
             <a href="#"><img src="https://i.ibb.co/k2x779T4/unnamed-1.webp" alt="Logo" class="logo"></a>
         </div>
-       <nav>
+        <nav>
     <ul class="nav-menu">
         <li><a href="/suctrethanhnien/home">Trang chủ</a></li>
         <li>
@@ -493,7 +602,11 @@
         </li>
     </ul>
 </nav>
+<button onclick="readCustomContent()" class="read-aloud-btn" aria-label="Đọc nội dung giới thiệu">Đọc nội dung</button>
+    <button onclick="stopReading()" class="read-aloud-btn" aria-label="Dừng đọc nội dung">Dừng đọc</button>
     </header>
+
+
 
     <section class="main-section">
         <h1>TIN TỨC MỚI HÔM NAY</h1>
