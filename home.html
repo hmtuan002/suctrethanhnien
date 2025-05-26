@@ -600,14 +600,14 @@
     margin-left: 20px; /* Khoảng cách từ logo */
 }
 
-.read-aloud-btn:hover {
-    background-color: var(--dark-blue);
+.header-buttons {
+    display: flex;
+    gap: 15px; /* Khoảng cách giữa hai nút */
+    align-items: center;
+    padding: 0 10px; /* Thêm padding để tránh dính mép */
 }
 
-.reading {
-    background-color: var(--accent-orange) !important;
-}
-        .read-aloud-btn {
+.read-aloud-btn {
     padding: 10px 20px;
     background-color: var(--primary-blue);
     color: var(--white);
@@ -616,15 +616,40 @@
     font-size: 1em;
     cursor: pointer;
     transition: background-color 0.3s ease;
-    margin-left: 20px; /* Giữ khoảng cách từ logo */
+    margin-left: 0; /* Loại bỏ margin-left cũ */
 }
 
-.read-aloud-btn + .read-aloud-btn {
-    margin-left: 15px; /* Tạo khoảng cách giữa hai nút "Đọc nội dung" và "Dừng đọc" */
-}
+@media (max-width: 768px) {
+    .header {
+        flex-direction: column;
+        align-items: center;
+        padding: 15px 20px;
+    }
 
-.reading {
-    background-color: var(--accent-orange) !important;
+    .header-left {
+        position: static;
+        transform: none;
+        margin-bottom: 10px;
+    }
+
+    .nav-menu {
+        margin-top: 10px;
+        flex-wrap: wrap;
+        justify-content: center;
+        width: 100%;
+    }
+
+    .header-buttons {
+        flex-direction: column; /* Đưa nút thành cột trên di động */
+        gap: 10px; /* Giảm khoảng cách trên di động */
+        width: 100%;
+    }
+
+    .read-aloud-btn {
+        width: 100%; /* Đảm bảo nút chiếm toàn bộ chiều rộng */
+        max-width: 300px; /* Giới hạn chiều rộng tối đa */
+        margin: 5px 0; /* Thêm margin để cách đều */
+    }
 }
     </style>
 </head>
@@ -703,40 +728,42 @@ CÁC CÔNG CỤ HIỆN ĐẠI CHO ĐOÀN VIÊN TÌM HIỂU VỀ ĐOÀN TRƯỜNG
         const voices = speechSynthesis.getVoices();
     };
 </script>
-    <header class="header">
-        <div class="header-left">
-            <a href="#"><img src="https://i.ibb.co/k2x779T4/unnamed-1.webp" alt="Logo" class="logo"></a>
-        </div>
-        <nav>
-    <ul class="nav-menu">
-        <li><a href="/suctrethanhnien/home">Trang chủ</a></li>
-        <li>
-            <a href="/suctrethanhnien/doantruong" class="dropdown-arrow">Giới thiệu chung <i class="fas fa-caret-down"></i></a>
-            <ul class="dropdown-menu">
-                <li><a href="/suctrethanhnien/gioithieu">Về Đoàn trường chuyên THPT Lê Quý Đôn</a></li>
-            </ul>
-        </li>
-        <li>
-            <a href="/suctrethanhnien/hoatdong" class="dropdown-arrow">Hoạt động tiêu biểu <i class="fas fa-caret-down"></i></a>
-            <ul class="dropdown-menu">
-                <li><a href="/suctrethanhnien/clb">Câu lạc bộ</a></li>
-            </ul>
-        </li>
-        <li>
-            <a href="/suctrethanhnien/tintuc" class="dropdown-arrow">Tin tức <i class="fas fa-caret-down"></i></a>
-            <ul class="dropdown-menu">
-                <li><a href="/suctrethanhnien/giaoluu">Giao lưu nghệ thuật</a></li>
-                <li><a href="/suctrethanhnien/tieplua">Lễ tiếp lửa</a></li>
-                <li><a href="/suctrethanhnien/k16">K16 tri ân</a></li>
-                <li><a href="/suctrethanhnien/hocbong">Học bổng GEOL</a></li>
-                <li><a href="/suctrethanhnien/huuhung">Trần Hữu Hưng - Nam sinh ưu tú trường THPT Lê Quý Đôn</a></li>
-            </ul>
-        </li>
-    </ul>
-</nav>
-<button onclick="readCustomContent()" class="read-aloud-btn" aria-label="Đọc nội dung giới thiệu">Đọc nội dung</button>
-    <button onclick="stopReading()" class="read-aloud-btn" aria-label="Dừng đọc nội dung">Dừng đọc</button>
-    </header>
+<header class="header">
+    <div class="header-left">
+        <a href="#"><img src="https://i.ibb.co/k2x779T4/unnamed-1.webp" alt="Logo" class="logo"></a>
+    </div>
+    <nav>
+        <ul class="nav-menu">
+            <li><a href="/suctrethanhnien/home">Trang chủ</a></li>
+            <li>
+                <a href="/suctrethanhnien/doantruong" class="dropdown-arrow">Giới thiệu chung <i class="fas fa-caret-down"></i></a>
+                <ul class="dropdown-menu">
+                    <li><a href="/suctrethanhnien/gioithieu">Về Đoàn trường chuyên THPT Lê Quý Đôn</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="/suctrethanhnien/hoatdong" class="dropdown-arrow">Hoạt động tiêu biểu <i class="fas fa-caret-down"></i></a>
+                <ul class="dropdown-menu">
+                    <li><a href="/suctrethanhnien/clb">Câu lạc bộ</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="/suctrethanhnien/tintuc" class="dropdown-arrow">Tin tức <i class="fas fa-caret-down"></i></a>
+                <ul class="dropdown-menu">
+                    <li><a href="/suctrethanhnien/giaoluu">Giao lưu nghệ thuật</a></li>
+                    <li><a href="/suctrethanhnien/tieplua">Lễ tiếp lửa</a></li>
+                    <li><a href="/suctrethanhnien/k16">K16 tri ân</a></li>
+                    <li><a href="/suctrethanhnien/hocbong">Học bổng GEOL</a></li>
+                    <li><a href="/suctrethanhnien/huuhung">Trần Hữu Hưng - Nam sinh ưu tú trường THPT Lê Quý Đôn</a></li>
+                </ul>
+            </li>
+        </ul>
+    </nav>
+    <div class="header-buttons">
+        <button onclick="readCustomContent()" class="read-aloud-btn" aria-label="Đọc nội dung giới thiệu">Đọc nội dung</button>
+        <button onclick="stopReading()" class="read-aloud-btn" aria-label="Dừng đọc nội dung">Dừng đọc</button>
+    </div>
+</header>
 
     <section class="hero-section">
         <div class="hero-content">
