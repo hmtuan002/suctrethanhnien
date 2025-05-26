@@ -335,40 +335,141 @@
                 font-size: 0.9em;
             }
         }
+                        .read-aloud-btn {
+    padding: 10px 20px;
+    background-color: var(--primary-blue);
+    color: var(--white);
+    border: none;
+    border-radius: 6px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-left: 20px; /* Khoảng cách từ logo */
+}
+
+.read-aloud-btn:hover {
+    background-color: var(--dark-blue);
+}
+
+.reading {
+    background-color: var(--accent-orange) !important;
+}    
+
     </style>
 </head>
 <body>
+<script>
+    // Nội dung thủ công để đọc (bạn có thể chỉnh sửa tùy ý)
+    const customContent = `
+THÀNH TÍCH CỦA TRẦN HỮU HƯNG
+Được sự dìu dắt của thầy và cô trường THPT chuyên Lê Quý Đôn, em Trần Hữu Hưng đã đạt được nhiều thành tích cả trong học tập như: Giải Nhì HSG môn Vật Lý lớp 11 cấp tỉnh năm học 2022-2023; Giải Khuyến khích HSG MTCT Vật Lý 11 năm học 2022-2023; Giải Ba HSG môn Vật Lý lớp 12 cấp tỉnh năm học 2023-2024; Đạt Danh hiệu học sinh giỏi năm học 2022-2023.
+
+Ngoài những thành tích nổi trội trong học tập, em Trần Hữu Hưng còn đạt nhiều thành tích trong các hoạt động phong trào như: Giải Nhì cuộc thi NCKH Kĩ thuật học sinh trung học cấp tỉnh năm học 2022-2023; Giải Khuyến khích cuộc thi Sáng tạo thanh thiếu niên thành phố Điện Biên Phủ năm 2023; Đạt giải bài viết xuất sắc trong cuộc thi "Những kỷ niệm sâu sắc về thầy cô và mái trường" năm học 2023-2024; Tham gia với vai trò BTC, Leader các chương trình của Đoàn trường: Tiếp sức kì thi vào 10 năm học 2022-2023, Tiếp sức kì thi TN THPT QG năm học 2022-2023, Chương trình Miss And Mister II, Chương trình MissBoys Season 6, BAB Season 7,...
+
+Với sự nhiệt huyết trong các phong trào Đoàn trường, lớp, em Trần Hữu Hưng đã đạt danh hiệu Học sinh 3 Tốt cấp tỉnh năm 2022-2023; được BCH Đoàn Thành phố Điện Biên Phủ tặng giấy khen Đã có thành tích xuất sắc trong Tháng Thanh niên năm 2023 (ngày 06/04/2023); Đoàn trường THPT chuyên Lê Quý Đôn tặng Giấy khen có nhiều đóng góp trong công tác đoàn và phong trào thanh niên trường học nhiệm kì 2022-2023 (ngày 20/11/2023); Đoàn trường THPT chuyên Lê Quý Đôn tặng Giấy khen có thành tích xuất sắc trong công tác đoàn và phong trào thanh niên trường học năm học 2022-2023 (ngày 22/05/2023); Đoàn trường THPT chuyên Lê Quý Đôn tặng Giấy khen là thành viên CLB MCC có thành tích xuất sắc trong công tác đoàn và phong trào thanh niên trường học Học kì I, năm học 2022-2023 (ngày 16/01/2023); Đoàn trường THPT chuyên Lê Quý Đôn tặng Giấy khen có nhiều đóng góp trong Game show Âm vang Điện Biên năm 2023 (ngày 09/10/2023).
+
+Em Trần Hữu Hưng cho hay "Lê Quý Đôn 2023 trong mình có lẽ là một năm của sự thành công về mọi mặt của tập thể thầy và trò trường. Năm 2023 vừa qua, trong mình, ắt hẳn là một năm đáng nhớ nhất, với thật nhiều kỉ niệm qua bao cung bậc cảm xúc, cùng "Chuyên Lê" vượt qua bao khó khăn, thử thách để đạt được nhiều thành công - bản thân mình cũng thấy mình đã luôn cố gắng hết mình đóng góp cho trường bằng những thành tích cụ thể. Năm vừa qua, bản thân mình được học hỏi và trưởng thành trong tổ chức Đoàn trường THPT chuyên Lê Quý Đôn, mình thấy rõ hơn hẳn tinh thần tuổi trẻ xung kích của thanh niên trường đã đóng góp rất nhiều cho sự thành công của việc thực hiện phong trào thanh niên trường học. Mình mong, trong năm 2024, "chuyên Lê" vẫn sẽ luôn như vậy, vẫn luôn là một Chuyên Lê thành công!."
+
+Hi vọng em sẽ còn tiến cao, tiến xa hơn nữa trong học tập, trong các phong trào hoạt động của thanh thiếu niên và được mọi người tin yêu, quý mến, luôn là tấm gương sáng để các bạn học tập, sẵn sàng theo đuổi những mục tiêu to lớn hơn và biến ước mơ của mình thành sự thật.
+    `;
+
+    // Hàm đọc nội dung thủ công
+    function readCustomContent() {
+        speak(customContent, event.target);
+    }
+
+    // Hàm sử dụng SpeechSynthesis để đọc văn bản
+    function speak(text, button) {
+        if ('speechSynthesis' in window) {
+            // Chia văn bản thành các câu để đọc mượt hơn
+            const sentences = text.split('.').filter(sentence => sentence.trim() !== '');
+            let index = 0;
+
+            function readNextSentence() {
+                if (index < sentences.length) {
+                    const utterance = new SpeechSynthesisUtterance(sentences[index].trim());
+                    utterance.lang = 'vi-VN'; // Ngôn ngữ tiếng Việt
+                    utterance.rate = 1; // Tốc độ đọc
+                    utterance.pitch = 1; // Độ cao giọng
+                    utterance.volume = 1; // Âm lượng
+
+                    // Chọn giọng tiếng Việt
+                    const voices = speechSynthesis.getVoices();
+                    const vietnameseVoice = voices.find(voice => voice.lang === 'vi-VN');
+                    if (vietnameseVoice) {
+                        utterance.voice = vietnameseVoice;
+                    }
+
+                    // Thêm hiệu ứng visual khi đang đọc
+                    button.classList.add('reading');
+
+                    utterance.onend = () => {
+                        index++;
+                        readNextSentence();
+                    };
+
+                    speechSynthesis.speak(utterance);
+                } else {
+                    // Kết thúc đọc, bỏ hiệu ứng
+                    button.classList.remove('reading');
+                }
+            }
+
+            // Hủy các utterance đang đọc (nếu có)
+            speechSynthesis.cancel();
+            readNextSentence();
+        } else {
+            alert('Trình duyệt của bạn không hỗ trợ đọc văn bản. Vui lòng thử trình duyệt khác.');
+        }
+    }
+
+    // Hàm dừng đọc
+    function stopReading() {
+        if ('speechSynthesis' in window) {
+            speechSynthesis.cancel();
+            const button = document.querySelector('.read-aloud-btn');
+            if (button) button.classList.remove('reading');
+        }
+    }
+
+    // Load voices khi sẵn sàng
+    window.speechSynthesis.onvoiceschanged = function() {
+        const voices = speechSynthesis.getVoices();
+    };
+</script>
     <header class="header">
         <div class="header-left">
             <a href="#"><img src="https://i.ibb.co/k2x779T4/unnamed-1.webp" alt="Logo" class="logo"></a>
         </div>
         <nav>
-            <ul class="nav-menu">
-                <li><a href="/suctrethanhnien/home">Trang chủ</a></li>
-                <li>
-                    <a href="/suctrethanhnien/doantruong" class="dropdown-arrow">Giới thiệu chung <i class="fas fa-caret-down"></i></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="/suctrethanhnien/gioithieu">Về Đoàn trường chuyên THPT Lê Quý Đôn</a></li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="/suctrethanhnien/hoatdong" class="dropdown-arrow">Hoạt động tiêu biểu <i class="fas fa-caret-down"></i></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="/suctrethanhnien/clb">Câu lạc bộ</a></li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="/suctrethanhnien/tintuc" class="dropdown-arrow">Tin tức <i class="fas fa-caret-down"></i></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="/suctrethanhnien/giaoluu">Giao lưu nghệ thuật</a></li>
-                        <li><a href="/suctrethanhnien/tieplua">Lễ tiếp lửa</a></li>
-                        <li><a href="/suctrethanhnien/k16">K16 tri ân</a></li>
-                        <li><a href="/suctrethanhnien/hocbong">Học bổng GEOL</a></li>
-                        <li><a href="/suctrethanhnien/huuhung">Trần Hữu Hưng - Nam sinh ưu tú trường THPT Lê Quý Đôn</a></li>
-                    </ul>
-                </li>
+    <ul class="nav-menu">
+        <li><a href="/suctrethanhnien/home">Trang chủ</a></li>
+        <li>
+            <a href="/suctrethanhnien/doantruong" class="dropdown-arrow">Giới thiệu chung <i class="fas fa-caret-down"></i></a>
+            <ul class="dropdown-menu">
+                <li><a href="/suctrethanhnien/gioithieu">Về Đoàn trường chuyên THPT Lê Quý Đôn</a></li>
             </ul>
-        </nav>
+        </li>
+        <li>
+            <a href="/suctrethanhnien/hoatdong" class="dropdown-arrow">Hoạt động tiêu biểu <i class="fas fa-caret-down"></i></a>
+            <ul class="dropdown-menu">
+                <li><a href="/suctrethanhnien/clb">Câu lạc bộ</a></li>
+            </ul>
+        </li>
+        <li>
+            <a href="/suctrethanhnien/tintuc" class="dropdown-arrow">Tin tức <i class="fas fa-caret-down"></i></a>
+            <ul class="dropdown-menu">
+                <li><a href="/suctrethanhnien/giaoluu">Giao lưu nghệ thuật</a></li>
+                <li><a href="/suctrethanhnien/tieplua">Lễ tiếp lửa</a></li>
+                <li><a href="/suctrethanhnien/k16">K16 tri ân</a></li>
+                <li><a href="/suctrethanhnien/hocbong">Học bổng GEOL</a></li>
+                <li><a href="/suctrethanhnien/huuhung">Trần Hữu Hưng - Nam sinh ưu tú trường THPT Lê Quý Đôn</a></li>
+            </ul>
+        </li>
+    </ul>
+</nav>
+<button onclick="readCustomContent()" class="read-aloud-btn" aria-label="Đọc nội dung giới thiệu">Đọc nội dung</button>
+    <button onclick="stopReading()" class="read-aloud-btn" aria-label="Dừng đọc nội dung">Dừng đọc</button>
     </header>
 
     <section class="main-section">
