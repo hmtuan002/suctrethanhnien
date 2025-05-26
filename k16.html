@@ -389,10 +389,129 @@
                 padding: 20px;
             }
         }
+                .read-aloud-btn {
+    padding: 10px 20px;
+    background-color: var(--primary-blue);
+    color: var(--white);
+    border: none;
+    border-radius: 6px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-left: 20px; /* Khoảng cách từ logo */
+}
+
+.read-aloud-btn:hover {
+    background-color: var(--dark-blue);
+}
+
+.reading {
+    background-color: var(--accent-orange) !important;
+}    
+
+
+
     </style>
 </head>
 <body>
-<header class="header">
+  <script>
+    // Nội dung thủ công để đọc (bạn có thể chỉnh sửa tùy ý)
+    const customContent = `
+HỘI KHÓA K16 - KỶ NIỆM 10 NĂM RA TRƯỜNG
+Hội khóa được đón chào thầy giáo Phạm Hồng Phong - nguyên Hiệu trưởng nhà trường; cô giáo Lê Thị Biên – Phó hiệu trưởng nhà trường và hơn 40 quý thầy giáo, cô giáo đã trực tiếp giảng dạy các em. Đây cũng là dịp cựu học sinh K16 được ôn lại những kỉ niệm khó quên của năm tháng học tập dưới mái trường THPT Chuyên Lê Quý Đôn, với hành trang mà nhà trường, thầy cô đã kiến tạo, học sinh niên khóa 2011 - 2014 đang ngày càng vững vàng, trưởng thành hơn. Bước đầu khẳng định được vị trí và có những thành công nhất định trong cuộc sống.
+
+Trong chương trình gặp gỡ tri ân, đại diện cho các bạn cựu học sinh K16, em Trần Đức Anh xúc động chia sẻ: “Trong không gian đầy ắp kỷ niệm này, chúng em được trở về với mái trường, nơi đã ghi dấu những năm tháng tuổi trẻ rực rỡ nhất. Mười năm qua đi, nhưng tình yêu thương, sự tận tâm của thầy cô vẫn luôn là hành trang quý giá đồng hành cùng chúng em trên mỗi bước đường đời. Thầy cô không chỉ là người mở ra cho chúng em những cánh cửa tri thức, mà còn là những người định hướng nhân cách, giúp chúng em biết sống đúng, sống đẹp và sống ý nghĩa.”
+
+“Qua từng bài giảng, từng lời khuyên nhủ, thầy cô đã dạy chúng em biết kính trên nhường dưới, biết trân trọng công sức của người khác, và biết đặt lòng biết ơn vào trái tim mình. Chúng em hiểu rằng, tri ân không chỉ là một lời nói, mà là cách sống. Và hôm nay, hơn bao giờ hết, chúng em muốn nói lời tri ân ấy từ tận sâu thẳm trái tim mình. Cảm ơn thầy cô vì đã không chỉ dạy dỗ mà còn thắp sáng ngọn lửa đạo đức, để mỗi chúng em luôn hướng về điều tốt đẹp, giữ vững nhân cách dù đi đến bất cứ nơi đâu.”
+
+Nhân dịp ngày trở về, bên cạnh những bó hoa tươi thắm, những món quà ấm áp tình nghĩa gửi tặng toàn thể các thầy cô tham dự, Hội cựu học sinh khóa 2011-2014 đã trao tặng Quỹ khuyến học nhà trường món quà trị giá 12.000.000 đồng. Đây là sự tri ân vô cùng ý nghĩa hòa chung không khí cả nước đang phấn khởi hướng về kỷ niệm 42 năm ngày Nhà giáo Việt Nam (20/11/1982 – 20/11/2024) và hướng tới kỉ niệm 30 năm thành lập trường THPT Chuyên Lê Quý Đôn (1995 – 2025).
+
+Tại chương trình Hội khoá đã có nhiều hoạt động rất ý nghĩa và sôi nổi. Một trong những hoạt động nổi bật của chương trình là gặp mặt, giao lưu với các em học sinh lớp 12 đang học tại nhà trường với chủ đề: “Chia sẻ trải nghiệm – thắp sáng ước mơ”. Các anh chị đã mang đến những câu chuyện chân thực về hành trình học tập, công việc, cũng như kinh nghiệm vượt qua thử thách sau khi tốt nghiệp. Không chỉ là lời khuyên, những chia sẻ này còn truyền cảm hứng, tiếp thêm động lực để các em mạnh dạn định hướng tương lai.
+
+Phát biểu tại buổi gặp mặt, Cô giáo Lê Thị Biên – Phó hiệu trưởng nhà trường thay mặt cho toàn thể các thầy cô giáo tham dự bày tỏ sự cảm kích, phấn khởi trước tình cảm nồng nhiệt, sự tri ân quý giá mà các cựu học sinh dành tặng; niềm tự hào, kiêu hãnh và không quên biểu dương những tình cảm trân quý của các bạn cựu học sinh khóa 2011-2014 đã dành cho nhà trường và các thầy cô giáo: “Hôm nay, được gặp lại các em sau mười năm, thầy cô vô cùng xúc động và tự hào. Nhìn các em trưởng thành, tự tin và thành đạt, thầy cô cảm thấy những nỗ lực của mình đã được đền đáp xứng đáng.”
+
+“Thầy cô tin rằng những bài học về tri thức, đạo đức và lòng biết ơn mà mình từng trao gửi vẫn luôn đồng hành cùng các em trên hành trình cuộc sống. Cảm ơn các em đã trở về, mang theo tình cảm và sự tri ân sâu sắc tới tập thể nhà trường. Chúc các em luôn mạnh khỏe, hạnh phúc và thành công trên con đường phía trước!”
+
+Một ngày Hội khoá ngắn ngủi đã trôi qua, chưa đủ để thầy trò, bạn bè hàn huyên tâm sự. Chỉ kịp chụp những bức hình lưu niệm bù cho 10 năm trước, cùng ăn với nhau một bữa liên hoan, các trò tặng các thầy cô những bó hoa, những món quà tri ân vô cùng ý nghĩa... Còn nhiều lắm những điều chưa nói hết. Tất cả lại cùng mong một ngày hội ngộ trong tương lai gần nhất. Sau Hội khóa, đã có những sự kết nối, liên hệ, hỗ trợ và tương tác trong các mảng công việc và trong đời sống để gắn kết những nhóm cựu học sinh.
+
+Sự kiện hội khóa kết thúc đã để lại nhiều cảm xúc đan xen và cả sự tiếc nuối đến nao lòng đối với tất cả thầy cô và các bạn cựu học sinh khóa 2011-2014. Buổi gặp mặt sau 10 năm ra trường cũng là điểm bắt đầu hứa hẹn cho những lần gặp đầy ắp tiếng cười mai sau trong các sự kiện Hội khóa 20-25-30 năm… của tất cả cựu học sinh THPT Chuyên Lê Quý Đôn. Mong rằng tất cả chúng ta sẽ hội ngộ trên chuyến tàu “Trở về thanh xuân” tại lễ kỉ niệm 30 năm thành lập trường sắp tới!
+
+“Tháng mười một - “Có hẹn với Thanh xuân”!
+
+Trở lại khung trời năm mình mười tám tuổi
+
+Của những vô tư, ngây ngô và hờn dỗi…
+
+Gác lại âu lo, lòng nhẹ tựa mây trời…”
+
+Nơi ấy: chỉ có bạn và tôi!”
+    `;
+
+    // Hàm đọc nội dung thủ công
+    function readCustomContent() {
+        speak(customContent, event.target);
+    }
+
+    // Hàm sử dụng SpeechSynthesis để đọc văn bản
+    function speak(text, button) {
+        if ('speechSynthesis' in window) {
+            // Chia văn bản thành các câu để đọc mượt hơn
+            const sentences = text.split('.').filter(sentence => sentence.trim() !== '');
+            let index = 0;
+
+            function readNextSentence() {
+                if (index < sentences.length) {
+                    const utterance = new SpeechSynthesisUtterance(sentences[index].trim());
+                    utterance.lang = 'vi-VN'; // Ngôn ngữ tiếng Việt
+                    utterance.rate = 1; // Tốc độ đọc
+                    utterance.pitch = 1; // Độ cao giọng
+                    utterance.volume = 1; // Âm lượng
+
+                    // Chọn giọng tiếng Việt
+                    const voices = speechSynthesis.getVoices();
+                    const vietnameseVoice = voices.find(voice => voice.lang === 'vi-VN');
+                    if (vietnameseVoice) {
+                        utterance.voice = vietnameseVoice;
+                    }
+
+                    // Thêm hiệu ứng visual khi đang đọc
+                    button.classList.add('reading');
+
+                    utterance.onend = () => {
+                        index++;
+                        readNextSentence();
+                    };
+
+                    speechSynthesis.speak(utterance);
+                } else {
+                    // Kết thúc đọc, bỏ hiệu ứng
+                    button.classList.remove('reading');
+                }
+            }
+
+            // Hủy các utterance đang đọc (nếu có)
+            speechSynthesis.cancel();
+            readNextSentence();
+        } else {
+            alert('Trình duyệt của bạn không hỗ trợ đọc văn bản. Vui lòng thử trình duyệt khác.');
+        }
+    }
+
+    // Hàm dừng đọc
+    function stopReading() {
+        if ('speechSynthesis' in window) {
+            speechSynthesis.cancel();
+            const button = document.querySelector('.read-aloud-btn');
+            if (button) button.classList.remove('reading');
+        }
+    }
+
+    // Load voices khi sẵn sàng
+    window.speechSynthesis.onvoiceschanged = function() {
+        const voices = speechSynthesis.getVoices();
+    };
+</script>
+    <header class="header">
         <div class="header-left">
             <a href="#"><img src="https://i.ibb.co/k2x779T4/unnamed-1.webp" alt="Logo" class="logo"></a>
         </div>
@@ -423,7 +542,11 @@
         </li>
     </ul>
 </nav>
+<button onclick="readCustomContent()" class="read-aloud-btn" aria-label="Đọc nội dung giới thiệu">Đọc nội dung</button>
+    <button onclick="stopReading()" class="read-aloud-btn" aria-label="Dừng đọc nội dung">Dừng đọc</button>
     </header>
+
+
 
     <section class="main-section">
         <h1>HỘI KHÓA K16 - KỶ NIỆM 10 NĂM RA TRƯỜNG</h1>
