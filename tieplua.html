@@ -340,10 +340,126 @@
                 font-size: 0.9em;
             }
         }
+                .read-aloud-btn {
+    padding: 10px 20px;
+    background-color: var(--primary-blue);
+    color: var(--white);
+    border: none;
+    border-radius: 6px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-left: 20px; /* Khoảng cách từ logo */
+}
+
+.read-aloud-btn:hover {
+    background-color: var(--dark-blue);
+}
+
+.reading {
+    background-color: var(--accent-orange) !important;
+}    
+
+
+
     </style>
 </head>
 <body>
-<header class="header">
+  <script>
+    // Nội dung thủ công để đọc (bạn có thể chỉnh sửa tùy ý)
+    const customContent = `
+LỄ TIẾP LỬA ĐỘI TUYỂN HSG QUỐC GIA 2024-2025
+Sáng ngày 14/12/2024, trường THPT Chuyên Lê Quý Đôn long trọng tổ chức lễ tiếp lửa cho các em học sinh và các thầy cô giáo ôn luyện đội tuyển Học sinh giỏi Quốc gia năm học 2024 – 2025.
+
+
+Năm học 2024 – 2025, nhà trường có 10 đội tuyển tham dự kỳ thi HSGQG bao gồm các môn: Toán học, Ngữ văn, Vật lý, Hoá học, Sinh học, Lịch sử, Địa lý, Tiếng Anh, Tin học, Trung Quốc với 100 học sinh trong đó có 94 em là học sinh trường THPT Chuyên Lê Quý Đôn; 06 em học sinh ở các trường PTDTNT THPT Mường Nhé; THPT Thành phố; PTDTNT tỉnh; THPT huyện Điện Biên; 36 học sinh vượt cấp lớp 11; 25 học sinh dự thi lần 2 và 03 em học sinh lớp 10. Đây là lần đầu tiên trong suốt hành trình 29 năm qua có học sinh lớp 10 vừa đỗ vào trường đã tham gia dự thi học sinh giỏi Quốc gia.
+
+Để trở thành thành viên chính thức, các em đã trải qua rất nhiều kỳ thi, từ cấp trường đến cấp tỉnh, qua nhiều bài khảo sát, đánh giá của các thầy cô. Các em đã vượt qua mọi khó khăn để khẳng định trí tuệ, sự nỗ lực của bản thân.
+
+
+Phát biểu tại lễ tiếp lửa, Nhà giáo Ưu tú Bùi Thị Anh - Bí thư Đảng Uỷ, Hiệu trưởng nhà trường đã chia sẻ, động viên, thể hiện sự quan tâm, cổ vũ tinh thần cho các em trong đội tuyển học sinh giỏi với lời nhắn gửi: “Chỉ còn 10 ngày nữa các em bước vào kỳ thi, cô mong muốn trong thời gian nước rút này các em hãy giữ gìn sức khoẻ, phân bố thời gian hợp lí giữa ôn tập và nghỉ ngơi thư giãn, tạo năng lượng tốt nhất cho mình để có thể phát huy tốt nhất thế mạnh, sự thông minh sáng tạo trong quá trình làm bài, cô tin các em sẽ thành công và mang vinh quang về cho bản thân, gia đình, thầy cô, nhà trường, tỉnh nhà.”
+
+Bên cạnh đó, Nhà giáo Ưu tú Bùi Thị Anh cũng gửi lời cảm ơn đến Lãnh đạo Sở Giáo dục và Đào tạo tỉnh Điện Biên, các đơn vị trường đã quan tâm sâu sắc và tạo điều kiện trong suốt giai đoạn tổ chức ôn tập Học sinh giỏi; Ban đại diện cha mẹ học sinh và các thầy cô giáo luôn nỗ lực hết mình trong sự nghiệp nuôi dưỡng các thế hệ nhân tài.
+
+
+Thầy giáo Trần Đại Lộ - giáo viên lãnh đội Toán đã thay mặt các thầy cô giáo ôn luyện có những lời nhắn nhủ, động viên đến các học sinh đội tuyển. Là người trực tiếp sát cánh từng ngày, từng giờ bên học sinh, thầy giáo thể hiện sự thấu hiểu trước những vất vả, khó khăn mà các em học sinh dự thi học sinh giỏi quốc gia phải trải qua đồng thời động viên các em cố gắng hơn nữa, có chiến thuật hợp lí trong thời gian còn lại để có thể về đích thành công.
+
+
+Với tinh thần quyết tâm cao độ, em Trịnh Anh Thảo - lớp 10A5, chuyên Văn khóa K29 - đến từ đội tuyển HSG QG môn Ngữ Văn đại diện cho 100 học sinh thi học sinh giỏi Quốc gia năm nay hứa sẽ nỗ lực hết sức mình để mang lại thành tích cao nhất về cho tỉnh nhà.
+
+Ban Giám hiệu và Đoàn trường đã tặng hoa và quà lưu niệm cho các thầy cô giáo lãnh đội và các học sinh 10 đội tuyển.
+
+Bên cạnh đó, chương trình cũng gửi những lá thư đầy ý nghĩa mang theo lời chúc mà học sinh trong trường gửi đến các em học sinh dự thi. Những lời chúc dí dỏm nhưng chứa đựng tình cảm chân thành, niềm tin, niềm tự hào của học sinh toàn trường sẽ là nguồn khích lệ lớn đối với các học sinh đội tuyển, để các em thêm tự tin và quyết tâm bước vào kì thi quan trọng sắp tới.
+
+
+Buổi lễ kết thúc bằng những giây phút hào hứng xen lẫn xúc động khi 100 học sinh đội tuyển cùng nhau viết những điều ước và thả những điều ước đó theo những quả bóng bay, những cánh chim bồ câu mang theo hi vọng được bay cao bay xa trên bầu trời đầy nắng. Mong sao tất cả những điều ước mà các em mong mỏi đều sẽ trở thành hiện thực. Hi vọng trường THPT Chuyên Lê Quý Đôn sẽ đạt được thành tích cao trong kì thi Học sinh giỏi cấp Quốc gia sắp tới!
+    `;
+
+    // Hàm đọc nội dung thủ công
+    function readCustomContent() {
+        speak(customContent, event.target);
+    }
+
+    // Hàm sử dụng SpeechSynthesis để đọc văn bản
+    function speak(text, button) {
+        if ('speechSynthesis' in window) {
+            // Chia văn bản thành các câu để đọc mượt hơn
+            const sentences = text.split('.').filter(sentence => sentence.trim() !== '');
+            let index = 0;
+
+            function readNextSentence() {
+                if (index < sentences.length) {
+                    const utterance = new SpeechSynthesisUtterance(sentences[index].trim());
+                    utterance.lang = 'vi-VN'; // Ngôn ngữ tiếng Việt
+                    utterance.rate = 1; // Tốc độ đọc
+                    utterance.pitch = 1; // Độ cao giọng
+                    utterance.volume = 1; // Âm lượng
+
+                    // Chọn giọng tiếng Việt
+                    const voices = speechSynthesis.getVoices();
+                    const vietnameseVoice = voices.find(voice => voice.lang === 'vi-VN');
+                    if (vietnameseVoice) {
+                        utterance.voice = vietnameseVoice;
+                    }
+
+                    // Thêm hiệu ứng visual khi đang đọc
+                    button.classList.add('reading');
+
+                    utterance.onend = () => {
+                        index++;
+                        readNextSentence();
+                    };
+
+                    speechSynthesis.speak(utterance);
+                } else {
+                    // Kết thúc đọc, bỏ hiệu ứng
+                    button.classList.remove('reading');
+                }
+            }
+
+            // Hủy các utterance đang đọc (nếu có)
+            speechSynthesis.cancel();
+            readNextSentence();
+        } else {
+            alert('Trình duyệt của bạn không hỗ trợ đọc văn bản. Vui lòng thử trình duyệt khác.');
+        }
+    }
+
+    // Hàm dừng đọc
+    function stopReading() {
+        if ('speechSynthesis' in window) {
+            speechSynthesis.cancel();
+            const button = document.querySelector('.read-aloud-btn');
+            if (button) button.classList.remove('reading');
+        }
+    }
+
+    // Load voices khi sẵn sàng
+    window.speechSynthesis.onvoiceschanged = function() {
+        const voices = speechSynthesis.getVoices();
+    };
+</script>
+    <header class="header">
         <div class="header-left">
             <a href="#"><img src="https://i.ibb.co/k2x779T4/unnamed-1.webp" alt="Logo" class="logo"></a>
         </div>
@@ -374,7 +490,10 @@
         </li>
     </ul>
 </nav>
+<button onclick="readCustomContent()" class="read-aloud-btn" aria-label="Đọc nội dung giới thiệu">Đọc nội dung</button>
+    <button onclick="stopReading()" class="read-aloud-btn" aria-label="Dừng đọc nội dung">Dừng đọc</button>
     </header>
+
 
     <section class="main-section">
         <h1>LỄ TIẾP LỬA ĐỘI TUYỂN HSG QUỐC GIA 2024-2025</h1>
