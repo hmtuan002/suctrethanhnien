@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,700;1,400&display=swap');
-
         :root {
             --primary-blue: #0A6DFF;
             --dark-blue: #0056b3;
@@ -19,7 +18,6 @@
             --accent-orange: #ff6f61;
             --border-radius-card: 15px;
         }
-
         body {
             font-family: 'Roboto', sans-serif;
             margin: 0;
@@ -736,80 +734,43 @@
     </style>
 </head>
 <body>
+  <!-- Thêm phần audio ẩn để phát file mp3 -->
+  <audio id="audio-reader" src="dochome.mp3" preload="auto"></audio>
   <script>
-    // Nội dung thủ công để đọc (bạn có thể chỉnh sửa tùy ý)
-    const customContent = `
-SỨC TRẺ THANH NIÊN,
-TRƯỜNG THPT CHUYÊN LÊ QUÝ ĐÔN, ĐIỆN BIÊN,
-Sức Trẻ Thanh Niên là không gian kết nối, lan tỏa tinh thần nhiệt huyết, sáng tạo và trách nhiệm của thế hệ trẻ Việt Nam. Trang web cung cấp những thông tin cập nhật về các hoạt động Đoàn - Hội, câu chuyện truyền cảm hứng, kỹ năng sống và cơ hội phát triển toàn diện dành cho thanh thiếu niên trên khắp cả nước. Cùng đồng hành để viết tiếp hành trình tuổi trẻ đầy đam mê và cống hiến.
-CÁC CÔNG CỤ HIỆN ĐẠI CHO ĐOÀN VIÊN TÌM HIỂU VỀ ĐOÀN TRƯỜNG, Chatbot AI Đoàn viên, Chatbot AI chuyên trả lời các câu hỏi về Đoàn trường và tuyển sinh vào 10, Thi thử Đoàn viên, Hệ thống kiểm tra và chấm điểm tự động các câu hỏi về Đoàn trường, Khám phá 360°, Khám phá bố cục, cấu trúc toàn bộ trường học thông qua công nghệ ảnh 360°. ĐOÀN TRƯỜNG - NGƯỜI ĐỒNG HÀNH CÙNG HÀNH TRÌNH TUỔI TRẺ CỦA BAO THẾ HỆ THANH NIÊN THPT CHUYÊN LÊ QUÝ ĐÔN, Như ánh lửa đầu tiên nhóm lên trong tim tuổi trẻ, Đoàn trường là người thầy, người bạn và người truyền lửa – giúp bao thế hệ học sinh chuyên Lê Quý Đôn vững bước, tự tin viết tiếp câu chuyện thanh xuân rực rỡ. 
-ĐOÀN TRƯỜNG KHÔNG CHỈ KHUẤY ĐỘNG PHONG TRÀO, MÀ CÒN KHƠI DẬY ĐAM MÊ. MỖI HOẠT ĐỘNG LÀ MỘT BƯỚC TIẾN, MỖI CƠ HỘI LÀ MỘT LỜI KHÍCH LỆ TUỔI TRẺ VƯƠN XA, Đoàn trường không chỉ là nơi khởi xướng những phong trào sôi nổi, mà còn là nơi khơi dậy đam mê, nuôi dưỡng lý tưởng và đánh thức tiềm năng trong mỗi bạn trẻ. Từ những buổi sinh hoạt gần gũi, những chiến dịch đầy nhiệt huyết cho đến các hoạt động ngoại khóa sáng tạo và ý nghĩa – Đoàn đã mở ra những không gian để học sinh không chỉ học tập, mà còn được rèn luyện, thể hiện bản thân và sống trọn với thanh xuân. Mỗi chương trình, mỗi hoạt động không chỉ là một dấu ấn đẹp, mà còn là một nấc thang đưa các bạn tiến gần hơn đến sự tự tin, bản lĩnh và tinh thần cống hiến. Ở đó, tuổi trẻ được lắng nghe, được dẫn dắt và được truyền cảm hứng để vươn xa, dám ước mơ và dám hành động. Chính nhờ vai trò bền bỉ và âm thầm ấy, Đoàn trường đã trở thành người bạn đồng hành không thể thiếu trong hành trình trưởng thành của biết bao thế hệ học sinh – một nơi mà mỗi cá nhân đều có cơ hội tỏa sáng theo cách của riêng mình.
-    `;
-
-    // Hàm đọc nội dung thủ công
+    // Phát file dochome.mp3 khi nhấn nút "Đọc nội dung"
     function readCustomContent() {
-        speak(customContent, event.target);
-    }
-
-    // Hàm sử dụng SpeechSynthesis để đọc văn bản
-    function speak(text, button) {
-        if ('speechSynthesis' in window) {
-            // Chia văn bản thành các câu để đọc mượt hơn
-            const sentences = text.split('.').filter(sentence => sentence.trim() !== '');
-            let index = 0;
-
-            function readNextSentence() {
-                if (index < sentences.length) {
-                    const utterance = new SpeechSynthesisUtterance(sentences[index].trim());
-                    utterance.lang = 'vi-VN'; // Ngôn ngữ tiếng Việt
-                    utterance.rate = 1.5; // Tốc độ đọc
-                    utterance.pitch = 1; // Độ cao giọng
-                    utterance.volume = 1; // Âm lượng
-
-                    // Chọn giọng tiếng Việt
-                    const voices = speechSynthesis.getVoices();
-                    const vietnameseVoice = voices.find(voice => voice.lang === 'vi-VN');
-                    if (vietnameseVoice) {
-                        utterance.voice = vietnameseVoice;
-                    }
-
-                    // Thêm hiệu ứng visual khi đang đọc
-                    button.classList.add('reading');
-
-                    utterance.onend = () => {
-                        index++;
-                        readNextSentence();
-                    };
-
-                    speechSynthesis.speak(utterance);
-                } else {
-                    // Kết thúc đọc, bỏ hiệu ứng
-                    button.classList.remove('reading');
-                }
-            }
-
-            // Hủy các utterance đang đọc (nếu có)
-            speechSynthesis.cancel();
-            readNextSentence();
-        } else {
-            alert('Trình duyệt của bạn không hỗ trợ đọc văn bản. Vui lòng thử trình duyệt khác.');
+        var audio = document.getElementById('audio-reader');
+        if (audio) {
+            audio.currentTime = 0; // Phát lại từ đầu
+            audio.play();
+            // Hiệu ứng visual cho nút (nếu muốn)
+            var button = document.querySelector('.read-aloud-btn');
+            if (button) button.classList.add('reading');
         }
     }
 
-    // Hàm dừng đọc
+    // Dừng phát audio khi nhấn nút "Dừng đọc"
     function stopReading() {
-        if ('speechSynthesis' in window) {
-            speechSynthesis.cancel();
-            const button = document.querySelector('.read-aloud-btn');
+        var audio = document.getElementById('audio-reader');
+        if (audio) {
+            audio.pause();
+            audio.currentTime = 0;
+            var button = document.querySelector('.read-aloud-btn');
             if (button) button.classList.remove('reading');
         }
     }
 
-    // Load voices khi sẵn sàng
-    window.speechSynthesis.onvoiceschanged = function() {
-        const voices = speechSynthesis.getVoices();
-    };
-</script>
+    // Khi audio phát xong tự động bỏ hiệu ứng "reading"
+    window.addEventListener('DOMContentLoaded', function() {
+        var audio = document.getElementById('audio-reader');
+        var button = document.querySelector('.read-aloud-btn');
+        if (audio && button) {
+            audio.addEventListener('ended', function() {
+                button.classList.remove('reading');
+            });
+        }
+    });
+  </script>
 <header class="header">
     <div class="header-left">
         <a href="#"><img src="https://i.ibb.co/k2x779T4/unnamed-1.webp" alt="Logo" class="logo"></a>
@@ -819,8 +780,7 @@ CÁC CÔNG CỤ HIỆN ĐẠI CHO ĐOÀN VIÊN TÌM HIỂU VỀ ĐOÀN TRƯỜNG
             <li><a href="/suctrethanhnien/home">Trang chủ</a></li>
             <li>
                 <a href="/suctrethanhnien/doantruong" class="dropdown-arrow">Giới thiệu chung <i class="fas fa-caret-down"></i></a>
-                <ul class="dropdown-menu">Giới thiệu về Đoàn trường</a></li>
-                </ul>
+                <ul class="dropdown-menu">Giới thiệu về Đoàn trường</ul>
             </li>
             <li>
                 <a href="/suctrethanhnien/hoatdong" class="dropdown-arrow">Hoạt động tiêu biểu <i class="fas fa-caret-down"></i></a>
@@ -940,4 +900,3 @@ CÁC CÔNG CỤ HIỆN ĐẠI CHO ĐOÀN VIÊN TÌM HIỂU VỀ ĐOÀN TRƯỜNG
     </footer>
 </body>
 </html>
-
