@@ -483,7 +483,139 @@
 .reading {
     background-color: var(--accent-orange) !important;
 }    
+.header-buttons {
+    display: flex;
+    gap: 15px; /* Khoảng cách giữa hai nút */
+    align-items: center;
+    padding: 0 10px; /* Thêm padding để tránh dính mép */
+}
 
+.read-aloud-btn {
+    padding: 10px 20px;
+    background-color: var(--primary-blue);
+    color: var(--white);
+    border: none;
+    border-radius: 6px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-left: 0; /* Loại bỏ margin-left cũ */
+}
+
+@media (max-width: 768px) {
+    .header {
+        flex-direction: column;
+        align-items: center;
+        padding: 15px 20px;
+    }
+
+    .header-left {
+        position: static;
+        transform: none;
+        margin-bottom: 10px;
+    }
+
+    .nav-menu {
+        margin-top: 10px;
+        flex-wrap: wrap;
+        justify-content: center;
+        width: 100%;
+    }
+
+    .header-buttons {
+        flex-direction: column; /* Đưa nút thành cột trên di động */
+        gap: 10px; /* Giảm khoảng cách trên di động */
+        width: 100%;
+    }
+
+    .read-aloud-btn {
+        width: 100%; /* Đảm bảo nút chiếm toàn bộ chiều rộng */
+        max-width: 300px; /* Giới hạn chiều rộng tối đa */
+        margin: 5px 0; /* Thêm margin để cách đều */
+    }
+}
+@media (max-width: 768px) {
+    .header {
+        flex-direction: column;
+        align-items: center;
+        padding: 15px 20px;
+    }
+
+    .header-left {
+        position: static;
+        transform: none;
+        margin-bottom: 10px;
+    }
+
+    .nav-menu {
+        margin-top: 10px;
+        flex-wrap: wrap;
+        justify-content: center;
+        width: 100%;
+    }
+
+    .nav-menu li {
+        margin: 8px 15px;
+    }
+
+    .nav-menu > li > a {
+        font-size: 1em;
+        padding: 10px 0;
+    }
+
+    .dropdown-menu {
+        left: 50%;
+        transform: translateX(-50%) translateY(10px);
+        min-width: 200px;
+    }
+
+    /* Specific rule for Tin tức dropdown */
+    .nav-menu li:nth-child(4) .dropdown-menu {
+        left: auto;
+        right: 0;
+        transform: translateY(10px);
+    }
+
+    /* Explicitly ensure Giới thiệu chung and Hoạt động tiêu biểu are centered */
+    .nav-menu li:nth-child(2) .dropdown-menu,
+    .nav-menu li:nth-child(3) .dropdown-menu {
+        left: 50%;
+        transform: translateX(-50%) translateY(10px);
+    }
+
+    .hero-title {
+        font-size: 3em;
+    }
+
+    .hero-subtitle {
+        font-size: 1.4em;
+    }
+
+    .hero-description {
+        font-size: 1em;
+    }
+
+    .hero-image {
+        max-width: 90%;
+    }
+
+    .image-content-section {
+        padding: 40px 20px;
+    }
+
+    .image-content-section h2 {
+        font-size: 1.8em;
+        margin-bottom: 30px;
+    }
+
+    .grid-item-content {
+        padding: 15px;
+    }
+
+    .grid-item img {
+        height: 150px;
+    }
+}
 
 
     </style>
@@ -601,7 +733,7 @@ Kết quả, Hội nghị đã bầu Ban Thường vụ Trung ương Đoàn lầ
         <li>
             <a href="/suctrethanhnien/doantruong" class="dropdown-arrow">Giới thiệu chung <i class="fas fa-caret-down"></i></a>
             <ul class="dropdown-menu">
-                <li><a href="/suctrethanhnien/gioithieu">Về Đoàn trường chuyên THPT Lê Quý Đôn</a></li>
+                <li><a href="/suctrethanhnien/gioithieu">Giới thiệu về Đoàn trường</a></li>
             </ul>
         </li>
         <li>
@@ -617,7 +749,7 @@ Kết quả, Hội nghị đã bầu Ban Thường vụ Trung ương Đoàn lầ
                 <li><a href="/suctrethanhnien/tieplua">Lễ tiếp lửa</a></li>
                 <li><a href="/suctrethanhnien/k16">K16 tri ân</a></li>
                 <li><a href="/suctrethanhnien/hocbong">Học bổng GEOL</a></li>
-                <li><a href="/suctrethanhnien/huuhung">Trần Hữu Hưng - Nam sinh ưu tú trường THPT Lê Quý Đôn</a></li>
+                <li><a href="/suctrethanhnien/huuhung">Trần Hữu Hưng</a></li>
             </ul>
         </li>
     </ul>
