@@ -579,116 +579,76 @@
     </style>
 </head>
 <body>
+  <!-- Thêm phần audio ẩn để phát file mp3 -->
+  <audio id="audio-reader" src="docgioithieu.mp3" preload="auto"></audio>
   <script>
-    // Nội dung thủ công để đọc (bạn có thể chỉnh sửa tùy ý)
-    const customContent = `
-GIỚI THIỆU CHUNG VỀ ĐOÀN THANH NIÊN CỘNG SẢN HỒ CHÍ MINH,
-ĐẠI HỘI ĐOÀN TNCS HỒ CHÍ MINH TRƯỜNG THPT CHUYÊN LÊ QUÝ ĐÔN NHIỆM KỲ 2024 – 2025 HÀNH TRÌNH KẾT NỐI VÀ PHÁT TRIỂN.
-Chiều ngày 12/10/2024, Đoàn trường THPT Chuyên Lê Quý Đôn long trọng tổ chức Đại hội Đại biểu Đoàn TNCS Hồ Chí Minh nhiệm kỳ 2024-2025 với mục tiêu đề ra phương hướng hoạt động của công tác đoàn và phong trào thanh niên, bầu BCH Đoàn trường nhiệm kỳ 2024 – 2025.
-TẠI ĐẠI HỘI ĐÃ BẦU RA BCH ĐOÀN TRƯỜNG NHƯ SAU, Bí thư Đoàn trường: Đồng chí Lê Thúy Hòa,
-Phó Bí thư Đoàn trường: Đồng chí Lê Thị Huyền Trang,
-Phó Bí thư Đoàn trường: Đồng chí Nguyễn Sông Thao.
-TRONG SUỐT 30 NĂM HÌNH THÀNH VÀ PHÁT TRIỂN
-Đoàn trường THPT Chuyên Lê Quý Đôn, Điện Biên đã đạt được những thành tích như sau: I. DANH HIỆU THI ĐUA ĐÃ ĐẠT ĐƯỢC (TRONG 4 NĂM GẦN NHẤT). II. HÌNH THỨC KHEN THƯỞNG ĐÃ ĐẠT ĐƯỢC (TRONG 03 NĂM GẦN NHẤT)
-    `;
-
-    // Hàm đọc nội dung thủ công
+    // Phát file dochome.mp3 khi nhấn nút "Đọc nội dung"
     function readCustomContent() {
-        speak(customContent, event.target);
-    }
-
-    // Hàm sử dụng SpeechSynthesis để đọc văn bản
-    function speak(text, button) {
-        if ('speechSynthesis' in window) {
-            // Chia văn bản thành các câu để đọc mượt hơn
-            const sentences = text.split('.').filter(sentence => sentence.trim() !== '');
-            let index = 0;
-
-            function readNextSentence() {
-                if (index < sentences.length) {
-                    const utterance = new SpeechSynthesisUtterance(sentences[index].trim());
-                    utterance.lang = 'vi-VN'; // Ngôn ngữ tiếng Việt
-                    utterance.rate = 1.5; // Tốc độ đọc
-                    utterance.pitch = 1; // Độ cao giọng
-                    utterance.volume = 1; // Âm lượng
-
-                    // Chọn giọng tiếng Việt
-                    const voices = speechSynthesis.getVoices();
-                    const vietnameseVoice = voices.find(voice => voice.lang === 'vi-VN');
-                    if (vietnameseVoice) {
-                        utterance.voice = vietnameseVoice;
-                    }
-
-                    // Thêm hiệu ứng visual khi đang đọc
-                    button.classList.add('reading');
-
-                    utterance.onend = () => {
-                        index++;
-                        readNextSentence();
-                    };
-
-                    speechSynthesis.speak(utterance);
-                } else {
-                    // Kết thúc đọc, bỏ hiệu ứng
-                    button.classList.remove('reading');
-                }
-            }
-
-            // Hủy các utterance đang đọc (nếu có)
-            speechSynthesis.cancel();
-            readNextSentence();
-        } else {
-            alert('Trình duyệt của bạn không hỗ trợ đọc văn bản. Vui lòng thử trình duyệt khác.');
+        var audio = document.getElementById('audio-reader');
+        if (audio) {
+            audio.currentTime = 0; // Phát lại từ đầu
+            audio.play();
+            // Hiệu ứng visual cho nút (nếu muốn)
+            var button = document.querySelector('.read-aloud-btn');
+            if (button) button.classList.add('reading');
         }
     }
 
-    // Hàm dừng đọc
+    // Dừng phát audio khi nhấn nút "Dừng đọc"
     function stopReading() {
-        if ('speechSynthesis' in window) {
-            speechSynthesis.cancel();
-            const button = document.querySelector('.read-aloud-btn');
+        var audio = document.getElementById('audio-reader');
+        if (audio) {
+            audio.pause();
+            audio.currentTime = 0;
+            var button = document.querySelector('.read-aloud-btn');
             if (button) button.classList.remove('reading');
         }
     }
 
-    // Load voices khi sẵn sàng
-    window.speechSynthesis.onvoiceschanged = function() {
-        const voices = speechSynthesis.getVoices();
-    };
-</script>
-    <header class="header">
-        <div class="header-left">
-            <a href="#"><img src="https://i.ibb.co/k2x779T4/unnamed-1.webp" alt="Logo" class="logo"></a>
-        </div>
-        <nav>
-    <ul class="nav-menu">
-        <li><a href="/suctrethanhnien/home">Trang chủ</a></li>
-        <li>
-            <a href="/suctrethanhnien/doantruong" class="dropdown-arrow">Giới thiệu chung <i class="fas fa-caret-down"></i></a>
-            <ul class="dropdown-menu">
-                <li><a href="/suctrethanhnien/gioithieu">Giới thiệu về Đoàn trường</a></li>
-            </ul>
-        </li>
-        <li>
-            <a href="/suctrethanhnien/hoatdong" class="dropdown-arrow">Hoạt động tiêu biểu <i class="fas fa-caret-down"></i></a>
-            <ul class="dropdown-menu">
-                <li><a href="/suctrethanhnien/clb">Câu lạc bộ</a></li>
-            </ul>
-        </li>
-        <li>
-            <a href="/suctrethanhnien/tintuc" class="dropdown-arrow">Tin tức <i class="fas fa-caret-down"></i></a>
-            <ul class="dropdown-menu">
-                <li><a href="/suctrethanhnien/giaoluu">Giao lưu nghệ thuật</a></li>
-                <li><a href="/suctrethanhnien/tieplua">Lễ tiếp lửa</a></li>
-                <li><a href="/suctrethanhnien/k16">K16 tri ân</a></li>
-                <li><a href="/suctrethanhnien/hocbong">Học bổng GEOL</a></li>
-                <li><a href="/suctrethanhnien/huuhung">Trần Hữu Hưng</a></li>
-            </ul>
-        </li>
-    </ul>
-</nav>
-<button onclick="readCustomContent()" class="read-aloud-btn" aria-label="Đọc nội dung giới thiệu">Đọc nội dung</button>
-    <button onclick="stopReading()" class="read-aloud-btn" aria-label="Dừng đọc nội dung">Dừng đọc</button>
+    // Khi audio phát xong tự động bỏ hiệu ứng "reading"
+    window.addEventListener('DOMContentLoaded', function() {
+        var audio = document.getElementById('audio-reader');
+        var button = document.querySelector('.read-aloud-btn');
+        if (audio && button) {
+            audio.addEventListener('ended', function() {
+                button.classList.remove('reading');
+            });
+        }
+    });
+  </script>
+<header class="header">
+    <div class="header-left">
+        <a href="#"><img src="https://i.ibb.co/k2x779T4/unnamed-1.webp" alt="Logo" class="logo"></a>
+    </div>
+    <nav>
+        <ul class="nav-menu">
+            <li><a href="/suctrethanhnien/home">Trang chủ</a></li>
+            <li>
+                <a href="/suctrethanhnien/doantruong" class="dropdown-arrow">Giới thiệu chung <i class="fas fa-caret-down"></i></a>
+                <ul class="dropdown-menu">Giới thiệu về Đoàn trường</ul>
+            </li>
+            <li>
+                <a href="/suctrethanhnien/hoatdong" class="dropdown-arrow">Hoạt động tiêu biểu <i class="fas fa-caret-down"></i></a>
+                <ul class="dropdown-menu">
+                    <li><a href="/suctrethanhnien/clb">Câu lạc bộ</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="/suctrethanhnien/tintuc" class="dropdown-arrow">Tin tức <i class="fas fa-caret-down"></i></a>
+                <ul class="dropdown-menu">
+                    <li><a href="/suctrethanhnien/giaoluu">Giao lưu nghệ thuật</a></li>
+                    <li><a href="/suctrethanhnien/tieplua">Lễ tiếp lửa</a></li>
+                    <li><a href="/suctrethanhnien/k16">K16 tri ân</a></li>
+                    <li><a href="/suctrethanhnien/hocbong">Học bổng GEOL</a></li>
+                    <li><a href="/suctrethanhnien/huuhung">Trần Hữu Hưng</a></li>
+                </ul>
+            </li>
+        </ul>
+    </nav>
+    <div class="header-buttons">
+        <button onclick="readCustomContent()" class="read-aloud-btn" aria-label="Đọc nội dung giới thiệu">Đọc nội dung</button>
+        <button onclick="stopReading()" class="read-aloud-btn" aria-label="Dừng đọc nội dung">Dừng đọc</button>
+    </div>
     </header>
 
 
