@@ -621,141 +621,76 @@
     </style>
 </head>
 <body>
+  <!-- Thêm phần audio ẩn để phát file mp3 -->
+  <audio id="audio-reader" src="docdoantruong.mp3" preload="auto"></audio>
   <script>
-    // Nội dung thủ công để đọc (bạn có thể chỉnh sửa tùy ý)
-    const customContent = `
-    GIỚI THIỆU CHUNG
-VỀ ĐOÀN THANH NIÊN CỘNG SẢN HỒ CHÍ MINH
-Video lịch sử hình thành và phát triển của Đoàn TNCS Hồ Chí Minh
-"Thanh niên làm theo lời Bác" – Khúc tráng ca rực lửa của tuổi trẻ Việt Nam!
-Mỗi khi tiếng nhạc hùng tráng của bài hát "Đoàn Ca – Thanh niên làm theo lời Bác" vang lên, trái tim hàng triệu đoàn viên như được tiếp thêm lửa – ngọn lửa của lý tưởng, khát vọng và tinh thần cống hiến không ngừng nghỉ. Không chỉ là bản ca chính thức của Đoàn Thanh niên Cộng sản Hồ Chí Minh, bài hát đã trở thành biểu tượng âm nhạc thiêng liêng, truyền cảm hứng mạnh mẽ cho các thế hệ thanh niên Việt Nam trên hành trình dựng xây và bảo vệ Tổ quốc.
-
-Lời ca hùng tráng, nhịp điệu sôi nổi cùng thông điệp rõ ràng, sâu sắc – "Vì ngày mai, vươn vai lên đường!" – như lời hiệu triệu từ trái tim đến trái tim, thôi thúc mỗi bạn trẻ sống có lý tưởng, dám nghĩ, dám làm, dấn thân vì cộng đồng, đất nước. Đây không chỉ là âm nhạc, mà là tuyên ngôn hành động của tuổi trẻ Việt Nam: Tiên phong – Bản lĩnh – Đoàn kết – Sáng tạo – Phát triển.
-
-"Thanh niên làm theo lời Bác" không chỉ là bài hát – đó là sức mạnh, là niềm tin, là ánh sáng soi đường cho tuổi trẻ Việt Nam hôm nay và mai sau!
-
-Đoàn trong trái tim mỗi thanh niên Việt Nam là?
-Đoàn Thanh niên Cộng sản Hồ Chí Minh không chỉ là tổ chức của tuổi trẻ, mà còn là ngọn lửa tiên phong thắp sáng lý tưởng sống đẹp và khơi dậy khát vọng vươn lên trong mỗi thanh niên Việt Nam. Từ khi thành lập, Đoàn luôn giữ vai trò là mái nhà chung của hàng triệu thế hệ thanh niên, nơi mỗi đoàn viên được rèn luyện, trưởng thành và cống hiến. Đoàn không chỉ khởi xướng các phong trào sôi nổi, mà còn là nơi định hướng lý tưởng sống, giáo dục đạo đức và lối sống cho thế hệ trẻ. Mỗi hoạt động của Đoàn là một cơ hội để tuổi trẻ thử thách bản thân, phát huy sáng tạo và tham gia vào các công tác xã hội đầy ý nghĩa. Từ đó, Đoàn đã giúp thanh niên phát triển toàn diện, đồng thời góp phần xây dựng một xã hội tiến bộ, văn minh. Trong mọi thời kỳ, Đoàn luôn là lực lượng xung kích, đi đầu trong các phong trào, khẳng định vai trò của mình trong việc dẫn dắt, truyền cảm hứng và lan tỏa tinh thần trách nhiệm, đoàn kết và sáng tạo.
-Đôi nét giới thiệu về Đoàn TNCS Hồ Chí Minh
-Đoàn TNCS Hồ Chí Minh là tổ chức chính trị - xã hội của thanh niên Việt Nam do Đảng Cộng sản Việt Nam và Chủ tịch Hồ Chí Minh sáng lập, lãnh đạo và rèn luyện. Đoàn bao gồm những thanh niên tiên tiến, phấn đấu vì mục tiêu, lý tưởng của Đảng là độc lập dân tộc gắn liền với chủ nghĩa xã hội, dân giàu, nước mạnh, dân chủ, công bằng, văn minh.
-
-Đoàn TNCS Hồ Chí Minh là đội dự bị tin cậy của Đảng Cộng sản Việt Nam, là lực lượng xung kích cách mạng, là trường học xã hội chủ nghĩa của thanh niên, đại diện chăm lo và bảo vệ quyền lợi hợp pháp, chính đáng của tuổi trẻ; phụ trách Đội Thiếu niên Tiền phong Hồ Chí Minh; là lực lượng nòng cốt chính trị trong phong trào thanh niên và trong các tổ chức thanh niên Việt Nam. Đoàn TNCS Hồ Chí Minh là thành viên của hệ thống chính trị, hoạt động trong khuôn khổ Hiến pháp và Pháp luật của nước Cộng hòa Xã hội Chủ nghĩa Việt Nam. Đoàn TNCS Hồ Chí Minh đoàn kết, phát triển quan hệ hữu nghị, hợp tác bình đẳng với các tổ chức thanh niên tiến bộ, thanh niên và nhân dân các nước trong cộng đồng quốc tế phấn đấu vì hòa bình, độc lập dân tộc, dân chủ và tiến bộ xã hội, vì tương lai và hạnh phúc của tuổi trẻ.
-
-Đoàn TNCS Hồ Chí Minh tổ chức và hoạt động theo nguyên tắc tập trung dân chủ. Hệ thống tổ chức của Đoàn gồm 4 cấp: cấp Trung ương; cấp tỉnh; cấp huyện; cấp cơ sở (gồm Đoàn cơ sở và chi đoàn cơ sở).
-
-Đoàn TNCS Hồ Chí Minh được thành lập ngày 26/3/1931, đến nay đã trải qua 10 kỳ Đại hội đại biểu toàn quốc. Bài hát chính thức của Đoàn TNCS Hồ Chí Minh là “Thanh niên làm theo lời Bác”, nhạc và lời: Hoàng Hòa. Cờ Đoàn nền đỏ; hình chữ nhật, chiều rộng bằng hai phần ba chiều dài; ở giữa có hình huy hiệu Đoàn; đường kính huy hiệu bằng hai phần năm chiều rộng cờ. Huy hiệu Đoàn có hình tròn, trên nền sọc xanh lá và trắng là hình ảnh một cánh tay nắm chắc lá cờ Tổ quốc đi lên; chạy xung quanh hình tròn lớn là dòng chữ “ĐOÀN THANH NIÊN CỘNG SẢN HỒ CHÍ MINH”; Huy hiệu có 4 màu: Xanh lá, đỏ cờ, vàng, trắng (không màu); Huy hiệu biểu thị sức mạnh, ý chí của thanh niên Việt Nam, tính xung kích của tuổi trẻ trong công cuộc xây dựng và bảo vệ Tổ quốc. Hiện nay, Đoàn TNCS Hồ Chí Minh có khoảng 5,7 triệu đoàn viên.
-
-Được xây dựng, rèn luyện và trưởng thành qua các thời kỳ đấu tranh cách mạng, Đoàn đã tập hợp đông đảo thanh niên phát huy chủ nghĩa anh hùng cách mạng, cống hiến xuất sắc cho sự nghiệp giải phóng dân tộc, thống nhất đất nước, xây dựng và bảo vệ Tổ quốc. Bước vào thời kỳ mới, Đoàn tiếp tục phát huy những truyền thống quý báu của dân tộc và bản chất tốt đẹp của mình, xây dựng lớp thanh niên giàu lòng yêu nước, yêu chủ nghĩa xã hội, có bản lĩnh chính trị, ý thức chấp hành pháp luật, đạo đức cách mạng và lối sống đẹp, có ước mơ, hoài bão, khát vọng đưa đất nước vươn lên, có tri thức, sức khoẻ, kỹ năng xã hội, năng lực chuyên môn, làm chủ khoa học công nghệ hiện đại. Tiếp tục nâng cao chất lượng tổ chức Đoàn, mở rộng mặt trận đoàn kết tập hợp thanh niên; phát huy vai trò xung kích cùng toàn Đảng, toàn dân, toàn quân thực hiện thắng lợi công nghiệp hoá, hiện đại hoá đất nước, vì mục tiêu dân giàu, nước mạnh, dân chủ, công bằng, văn minh, góp phần đưa nước ta cơ bản trở thành nước công nghiệp theo hướng hiện đại vào năm 2020 với 2 phong trào hành động cách mạng của tuổi trẻ là “Xung kích, tình nguyện phát triển kinh tế - xã hội và bảo vệ Tổ quốc” và “Đồng hành với thanh niên lập thân, lập nghiệp” cùng 10 chương trình, đề án lớn đã được Đại hội đại biểu toàn quốc lần thứ X Đoàn TNCS Hồ Chí Minh nhiệm kỳ 2012 - 2017 thông qua.
-Hội nghị lần thứ nhất Ban Chấp hành Trung ương Đoàn khóa XII, nhiệm kỳ 2022-2027 đã bầu Ban Thường vụ Trung ương Đoàn lần thứ XII gồm 33 đồng chí; Ban Bí thư Trung ương Đoàn lần thứ XII gồm 6 đồng chí.
-Đồng chí Bùi Quang Huy Bí thư thứ nhất Trung ương Đoàn khóa XII
-(sinh năm 1977, quê Nghệ An) trình độ Thạc sĩ Luật học, Cử nhân Luật, Cao cấp lý luận chính trị.
-DANH SÁCH BAN BÍ THƯ, BAN THƯỜNG VỤ TRUNG ƯƠNG ĐOÀN KHÓA XII, NHIỆM KỲ 2022-2027
-Ngày 16/12, tại phiên làm việc thứ năm, Đại hội đại biểu toàn quốc Đoàn Thanh niên Cộng sản Hồ Chí Minh lần thứ XII, nhiệm kỳ 2022-2027 đã ra mắt Ban Chấp hành Trung ương Đoàn khóa XII.
-
-Trước đó, chiều 15/12, tại phiên thứ tư, Đại hội đại biểu toàn quốc Đoàn Thanh niên Cộng sản Hồ Chí Minh lần thứ XII, nhiệm kỳ 2022-2027, đã bầu 144 đồng chí tham gia Ban Chấp hành Trung ương Đoàn khóa XII.
-
-Chiều cùng ngày, Hội nghị lần thứ nhất Ban Chấp hành Trung ương Đoàn khóa XII, nhiệm kỳ 2022-2027, tiến hành bầu Ban Thường vụ Trung ương Đoàn, Ban Bí thư Trung ương Đoàn, Ủy ban Kiểm tra Trung ương Đoàn khóa XII.
-
-Kết quả, Hội nghị đã bầu Ban Thường vụ Trung ương Đoàn lần thứ XII gồm 33 đồng chí; Ban Bí thư Trung ương Đoàn lần thứ XII gồm 6 đồng chí.
-    `;
-
-    // Hàm đọc nội dung thủ công
+    // Phát file dochome.mp3 khi nhấn nút "Đọc nội dung"
     function readCustomContent() {
-        speak(customContent, event.target);
-    }
-
-    // Hàm sử dụng SpeechSynthesis để đọc văn bản
-    function speak(text, button) {
-        if ('speechSynthesis' in window) {
-            // Chia văn bản thành các câu để đọc mượt hơn
-            const sentences = text.split('.').filter(sentence => sentence.trim() !== '');
-            let index = 0;
-
-            function readNextSentence() {
-                if (index < sentences.length) {
-                    const utterance = new SpeechSynthesisUtterance(sentences[index].trim());
-                    utterance.lang = 'vi-VN'; // Ngôn ngữ tiếng Việt
-                    utterance.rate = 1.5; // Tốc độ đọc
-                    utterance.pitch = 1; // Độ cao giọng
-                    utterance.volume = 1; // Âm lượng
-
-                    // Chọn giọng tiếng Việt
-                    const voices = speechSynthesis.getVoices();
-                    const vietnameseVoice = voices.find(voice => voice.lang === 'vi-VN');
-                    if (vietnameseVoice) {
-                        utterance.voice = vietnameseVoice;
-                    }
-
-                    // Thêm hiệu ứng visual khi đang đọc
-                    button.classList.add('reading');
-
-                    utterance.onend = () => {
-                        index++;
-                        readNextSentence();
-                    };
-
-                    speechSynthesis.speak(utterance);
-                } else {
-                    // Kết thúc đọc, bỏ hiệu ứng
-                    button.classList.remove('reading');
-                }
-            }
-
-            // Hủy các utterance đang đọc (nếu có)
-            speechSynthesis.cancel();
-            readNextSentence();
-        } else {
-            alert('Trình duyệt của bạn không hỗ trợ đọc văn bản. Vui lòng thử trình duyệt khác.');
+        var audio = document.getElementById('audio-reader');
+        if (audio) {
+            audio.currentTime = 0; // Phát lại từ đầu
+            audio.play();
+            // Hiệu ứng visual cho nút (nếu muốn)
+            var button = document.querySelector('.read-aloud-btn');
+            if (button) button.classList.add('reading');
         }
     }
 
-    // Hàm dừng đọc
+    // Dừng phát audio khi nhấn nút "Dừng đọc"
     function stopReading() {
-        if ('speechSynthesis' in window) {
-            speechSynthesis.cancel();
-            const button = document.querySelector('.read-aloud-btn');
+        var audio = document.getElementById('audio-reader');
+        if (audio) {
+            audio.pause();
+            audio.currentTime = 0;
+            var button = document.querySelector('.read-aloud-btn');
             if (button) button.classList.remove('reading');
         }
     }
 
-    // Load voices khi sẵn sàng
-    window.speechSynthesis.onvoiceschanged = function() {
-        const voices = speechSynthesis.getVoices();
-    };
-</script>
-    <header class="header">
-        <div class="header-left">
-            <a href="#"><img src="https://i.ibb.co/k2x779T4/unnamed-1.webp" alt="Logo" class="logo"></a>
-        </div>
-        <nav>
-    <ul class="nav-menu">
-        <li><a href="/suctrethanhnien/home">Trang chủ</a></li>
-        <li>
-            <a href="/suctrethanhnien/doantruong" class="dropdown-arrow">Giới thiệu chung <i class="fas fa-caret-down"></i></a>
-            <ul class="dropdown-menu">
-                <li><a href="/suctrethanhnien/gioithieu">Giới thiệu về Đoàn trường</a></li>
-            </ul>
-        </li>
-        <li>
-            <a href="/suctrethanhnien/hoatdong" class="dropdown-arrow">Hoạt động tiêu biểu <i class="fas fa-caret-down"></i></a>
-            <ul class="dropdown-menu">
-                <li><a href="/suctrethanhnien/clb">Câu lạc bộ</a></li>
-            </ul>
-        </li>
-        <li>
-            <a href="/suctrethanhnien/tintuc" class="dropdown-arrow">Tin tức <i class="fas fa-caret-down"></i></a>
-            <ul class="dropdown-menu">
-                <li><a href="/suctrethanhnien/giaoluu">Giao lưu nghệ thuật</a></li>
-                <li><a href="/suctrethanhnien/tieplua">Lễ tiếp lửa</a></li>
-                <li><a href="/suctrethanhnien/k16">K16 tri ân</a></li>
-                <li><a href="/suctrethanhnien/hocbong">Học bổng GEOL</a></li>
-                <li><a href="/suctrethanhnien/huuhung">Trần Hữu Hưng</a></li>
-            </ul>
-        </li>
-    </ul>
-</nav>
-<button onclick="readCustomContent()" class="read-aloud-btn" aria-label="Đọc nội dung giới thiệu">Đọc nội dung</button>
-    <button onclick="stopReading()" class="read-aloud-btn" aria-label="Dừng đọc nội dung">Dừng đọc</button>
+    // Khi audio phát xong tự động bỏ hiệu ứng "reading"
+    window.addEventListener('DOMContentLoaded', function() {
+        var audio = document.getElementById('audio-reader');
+        var button = document.querySelector('.read-aloud-btn');
+        if (audio && button) {
+            audio.addEventListener('ended', function() {
+                button.classList.remove('reading');
+            });
+        }
+    });
+  </script>
+<header class="header">
+    <div class="header-left">
+        <a href="#"><img src="https://i.ibb.co/k2x779T4/unnamed-1.webp" alt="Logo" class="logo"></a>
+    </div>
+    <nav>
+        <ul class="nav-menu">
+            <li><a href="/suctrethanhnien/home">Trang chủ</a></li>
+            <li>
+                <a href="/suctrethanhnien/doantruong" class="dropdown-arrow">Giới thiệu chung <i class="fas fa-caret-down"></i></a>
+                <ul class="dropdown-menu">Giới thiệu về Đoàn trường</ul>
+            </li>
+            <li>
+                <a href="/suctrethanhnien/hoatdong" class="dropdown-arrow">Hoạt động tiêu biểu <i class="fas fa-caret-down"></i></a>
+                <ul class="dropdown-menu">
+                    <li><a href="/suctrethanhnien/clb">Câu lạc bộ</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="/suctrethanhnien/tintuc" class="dropdown-arrow">Tin tức <i class="fas fa-caret-down"></i></a>
+                <ul class="dropdown-menu">
+                    <li><a href="/suctrethanhnien/giaoluu">Giao lưu nghệ thuật</a></li>
+                    <li><a href="/suctrethanhnien/tieplua">Lễ tiếp lửa</a></li>
+                    <li><a href="/suctrethanhnien/k16">K16 tri ân</a></li>
+                    <li><a href="/suctrethanhnien/hocbong">Học bổng GEOL</a></li>
+                    <li><a href="/suctrethanhnien/huuhung">Trần Hữu Hưng</a></li>
+                </ul>
+            </li>
+        </ul>
+    </nav>
+    <div class="header-buttons">
+        <button onclick="readCustomContent()" class="read-aloud-btn" aria-label="Đọc nội dung giới thiệu">Đọc nội dung</button>
+        <button onclick="stopReading()" class="read-aloud-btn" aria-label="Dừng đọc nội dung">Dừng đọc</button>
+    </div>
     </header>
 
 
