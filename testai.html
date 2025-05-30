@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Chatbot with GPT-4 Turbo and Google Search</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        #chat-container { max-height: 70vh; overflow-y: auto; }
+        .chat-message { margin: 10px; padding: 10px; border-radius: 10px; }
+        .user-message { background-color: #d1e7dd; align-self: flex-end; }
+        .bot-message { background-color: #f8d7da; align-self: flex-start; }
+    </style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+    <div class="w-full max-w-2xl bg-white rounded-lg shadow-lg p-6">
+        <h1 class="text-2xl font-bold text-center mb-4">AI Chatbot</h1>
+        <div id="chat-container" class="flex flex-col mb-4 p-4 bg-gray-50 rounded-lg"></div>
+        <div class="flex">
+            <input id="user-input" type="text" placeholder="Type your message..." class="flex-1 p-2 rounded-l-lg border border-gray-300 focus:outline-none">
+            <button onclick="sendMessage()" class="bg-blue-500 text-white p-2 rounded-r-lg hover:bg-blue-600">Send</button>
+        </div>
+    </div>
+
+    <script>
+        const OPENAI_API_KEY = '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'; // Replace with your OpenAI API key
+        const GOOGLE_API_KEY = 'AIzaSyDiWlxRu0Oi6qpIu2tHiKGatXTCOsaCD5w'; // Replace with your Google API key
+        const GOOGLE_CSE_ID = '62e6c64b002a84249'; // Replace with your Google Custom Search Engine ID
+
+        async function sendMessage() {
+            const userInput = document.getElementById('user-input').value.trim();
+            if (!userInput) return;
+
+            // Display user message
+            appendMessage(userInput, 'user-message');
+            document.getElementById('user-input').value = '';
+
+            // Search Google for additional context
+            const searchResults = await searchGoogle(userInput);
+            const context = searchResults ? searchResults.join('\n') : 'No additional context found.';
+
+            // Call ChatGPT API with user input and search context
+            const botResponse = await callChatGPT(userInput, context);
+            appendMessage(botResponse, 'bot-message');
+        }
+
+        function appendMessage(text, className) {
+            const chatContainer = document.getElementById('chat-container');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `chat-message ${className} max-w-xs`;
+            messageDiv.textContent = text;
+            chatContainer.appendChild(messageDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        async function searchGoogle(query) {
+            try {
+                const response = await axios.get('https://www.googleapis.com/customsearch/v1', {
+                    params: {
+                        key: GOOGLE_API_KEY,
+                        cx: GOOGLE_CSE_ID,
+                        q: query,
+                        num: 3 // Limit to 3 results
+                    }
+                });
+                const items = response.data.items || [];
+                return items.map(item => item.snippet);
+            } catch (error) {
+                console.error('Google Search Error:', error);
+                return null;
+            }
+        }
+
+        async function callChatGPT(userInput, context) {
+            try {
+                const response = await axios.post('https://api.openai.com/v1/chat/completions', {
+                    model: 'gpt-4-turbo',
+                    messages: [
+                        { role: 'system', content: 'You are a helpful AI assistant. Use the provided context to enhance your answers.' },
+                        { role: 'user', content: `Context: ${context}\n\nQuestion: ${userInput}` }
+                    ],
+                    max_tokens: 500,
+                    temperature: 0.7
+                }, {
+                    headers: {
+                        'Authorization': `Bearer ${OPENAI_API_KEY}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                return response.data.choices[0].message.content.trim();
+            } catch (error) {
+                console.error('ChatGPT Error:', error);
+                return 'Sorry, I encountered an error. Please try again.';
+            }
+        }
+
+        // Allow sending message with Enter key
+        document.getElementById('user-input').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendMessage();
+        });
+    </script>
+</body>
+</html>
