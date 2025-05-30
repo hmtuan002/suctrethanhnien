@@ -455,81 +455,9 @@
     let isSending = false;
     let typingInterval = null;
     let isStopped = false;
-    let schoolInfo = '';
-
-    // Hàm tải nội dung từ file tailieu.txt
-    async function fetchSchoolInfo() {
-        try {
-            const response = await fetch('https://hmtuan002.github.io/suctrethanhnien/tailieu.txt');
-            if (!response.ok) {
-                throw new Error('Không thể tải file tailieu.txt');
-            }
-            schoolInfo = await response.text();
-            console.log('Loaded school info:', schoolInfo);
-        } catch (error) {
-            console.error('Error fetching tailieu.txt:', error);
-            schoolInfo = 'Không thể tải thông tin trường. Vui lòng liên hệ Đoàn trường để biết thêm chi tiết.';
-        }
-    }
-
-    // Hàm tìm kiếm thông tin chính xác trong schoolInfo
-    function searchSchoolInfo(query) {
-        if (!schoolInfo || schoolInfo.includes('Không thể tải thông tin')) {
-            return null;
-        }
-
-        // Tách schoolInfo thành các đoạn (dựa trên dòng trống hoặc tiêu đề)
-        const sections = schoolInfo.split('\n\n').filter(s => s.trim());
-        const keywords = query.toLowerCase().split(/\s+/).filter(k => k.length > 2); // Loại bỏ từ ngắn
-        const stopWords = ['là', 'có', 'và', 'của', 'ở', 'cho', 'tại', 'được', 'thì', 'một', 'những', 'rằng'];
-
-        // Lọc từ khóa, loại bỏ stop words
-        const filteredKeywords = keywords.filter(k => !stopWords.includes(k));
-
-        if (filteredKeywords.length === 0) {
-            return null;
-        }
-
-        // Tính điểm cho mỗi đoạn dựa trên số từ khóa khớp và độ tương đồng
-        let bestMatch = null;
-        let highestScore = 0;
-
-        for (const section of sections) {
-            const sectionLower = section.toLowerCase();
-            let score = 0;
-
-            // Đếm số từ khóa khớp
-            for (const keyword of filteredKeywords) {
-                if (sectionLower.includes(keyword)) {
-                    score += 10; // Mỗi từ khóa khớp +10 điểm
-                }
-            }
-
-            // Tăng điểm nếu đoạn chứa từ khóa chính như "trường", "đoàn"
-            if (/trường|đoàn|lê quý đôn|hoạt động/i.test(sectionLower)) {
-                score += 5;
-            }
-
-            // Giảm điểm nếu đoạn quá dài và không tập trung (tránh trả lời lan man)
-            const sectionLength = section.split(' ').length;
-            if (sectionLength > 100) {
-                score -= Math.floor(sectionLength / 50); // Giảm điểm nếu quá dài
-            }
-
-            // Chỉ chọn đoạn nếu đạt ngưỡng tối thiểu
-            if (score > highestScore && score >= 10) {
-                highestScore = score;
-                bestMatch = section;
-            }
-        }
-
-        // Nếu không tìm thấy đoạn phù hợp, trả về null
-        return bestMatch;
-    }
 
     async function initApp() {
         console.log("Initializing app");
-        await fetchSchoolInfo(); // Tải thông tin từ tailieu.txt
         loadChats();
         setupEventListeners();
         setupTextareaAutoResize();
@@ -630,74 +558,34 @@
                 parts: [{ text: msg.content }]
             })).slice(0, -1);
 
-            // Kiểm tra xem câu hỏi có liên quan đến trường hoặc Đoàn trường không
-            const isSchoolRelated = /trường|THPT Chuyên Lê Quý Đôn|Đoàn trường|Đoàn Thanh niên|hoạt động Đoàn/i.test(userMessage);
+            const systemPrompt = `Bạn là Chatbot Đoàn trường THPT Chuyên Lê Quý Đôn tỉnh Điện Biên. Nếu câu hỏi là về Đoàn Thanh niên Cộng sản Hồ Chí Minh, các hoạt động Đoàn và thông tin về trường, hãy trả lời một cách chính xác, ngắn gọn dựa. Nếu câu hỏi là về các môn toán, văn, anh để hỗ trợ ôn thi vào lớp 10, hãy trả lời câu hỏi một cách ngắn gọn, chính xác và dễ hiểu. Đây là một số thông tin về trường: Trường THPT Chuyên Lê Quý Đôn, tỉnh Điện Biên, được thành lập vào ngày 7 tháng 6 năm 1995 theo Quyết định số 274/QĐ-UB-TC của UBND tỉnh Lai Châu (trước khi chia tách tỉnh). Ban đầu, trường mang tên Trường Phổ thông Cơ sở Năng khiếu Thị xã Điện Biên. Năm học 1996–1997, trường bắt đầu hoạt động với 160 học sinh bậc THCS. Đến năm học 1997–1998, trường đổi tên thành Trường THPT Lê Quý Đôn. Và từ năm học 2000–2001, trường chính thức mang tên Trường THPT Chuyên Lê Quý Đôn, với nhiệm vụ bồi dưỡng và phát triển năng khiếu học sinh về một môn học chuyên sâu, đồng thời đảm bảo chương trình giáo dục toàn diện cấp THPT, hiệu trưởng là Nhà giáo Ưu tú, Thạc sĩ Bùi Thị Anh. Cô đã gắn bó với nhà trường gần 25 năm và đảm nhiệm vai trò Hiệu trưởng từ tháng 10 năm 2021, địa chỉ trường Số 343, phố 10, Phường Mường Thanh, Thành phố Điện Biên Phủ, Tỉnh Điện Biên, số điện thoại trường 0215 3825 619, email trường chuyenlequydondb@gmail.com, website trường https://chuyenlequydondb.edu.vn, email đoàn trường: doantruongthptchuyenlqd@gmail.com, Bí thư Đoàn trường cô Lê Thúy Hòa có số điện thoại là 0372632222, website đoàn trường https://hmtuan002.github.io/suctrethanhnien/home, Quản trị viên Website Đoàn trường bạn Nguyễn Quang Minh có số điện thoại là 0849102558`;
 
-            let botReply;
-
-            if (isSchoolRelated) {
-                // Tìm kiếm trong schoolInfo trước
-                const localAnswer = searchSchoolInfo(userMessage);
-                if (localAnswer) {
-                    botReply = `\n${localAnswer}\n`;
-                } else {
-                    // Nếu không tìm thấy trong schoolInfo, sử dụng Gemini
-                    const systemPrompt = `Bạn là Chatbot Đoàn trường THPT Chuyên Lê Quý Đôn tỉnh Điện Biên. Dưới đây là thông tin chi tiết về trường và Đoàn trường:\n\n${schoolInfo}\n\nDựa trên thông tin này, hãy trả lời câu hỏi một cách chính xác, ngắn gọn, chỉ cung cấp thông tin liên quan trực tiếp đến câu hỏi. Nếu không có thông tin phù hợp trong dữ liệu hoặc bạn không biết câu trả lời, hãy đề nghị người hỏi liên hệ trực tiếp với Đoàn trường.`;
-
-                    const chatSession = model.startChat({
-                        history: [
-                            {
-                                role: "user",
-                                parts: [{ text: systemPrompt }]
-                            },
-                            {
-                                role: "model",
-                                parts: [{ text: "Tôi hiểu và sẽ trả lời chính xác dựa trên thông tin cung cấp." }]
-                            },
-                            ...historyForGemini
-                        ],
-                        generationConfig: {
-                            maxOutputTokens: 2000,
-                            temperature: 0.7,
-                            topP: 0.9,
-                            topK: 40,
-                        }
-                    });
-
-                    const result = await chatSession.sendMessage(userMessage);
-                    botReply = await result.response.text();
-
-                    // Nếu Gemini không trả lời được chính xác
-                    if (botReply.includes("Không có thông tin") || botReply.includes("Tôi không biết")) {
-                        botReply += "\n\nDựa trên thông tin có sẵn, tôi không tìm thấy câu trả lời chính xác. Vui lòng liên hệ trực tiếp với Đoàn trường để biết thêm chi tiết.";
-                    }
+            const chatSession = model.startChat({
+                history: [
+                    {
+                        role: "user",
+                        parts: [{ text: systemPrompt }]
+                    },
+                    {
+                        role: "model",
+                        parts: [{ text: "Tôi hiểu và sẽ trả lời chính xác dựa trên thông tin cung cấp." }]
+                    },
+                    ...historyForGemini
+                ],
+                generationConfig: {
+                    maxOutputTokens: 2000,
+                    temperature: 0.7,
+                    topP: 0.9,
+                    topK: 40,
                 }
-            } else {
-                // Câu hỏi không liên quan đến trường/Đoàn trường, sử dụng Gemini
-                const systemPrompt = `Bạn là Chatbot Đoàn trường THPT Chuyên Lê Quý Đôn tỉnh Điện Biên. Nếu câu hỏi là về Đoàn Thanh niên Cộng sản Hồ Chí Minh, các hoạt động Đoàn và thông tin về trường, hãy trả lời một cách chính xác, ngắn gọn dựa. Nếu câu hỏi là về các môn toán, văn, anh để hỗ trợ ôn thi vào lớp 10, hãy trả lời câu hỏi một cách ngắn gọn, chính xác và dễ hiểu. Đây là một số thông tin về trường (đừng nhắc gì về việc tôi cung cấp thông tin cho bạn trong câu trả lời): Trường THPT Chuyên Lê Quý Đôn, tỉnh Điện Biên, được thành lập vào ngày 7 tháng 6 năm 1995 theo Quyết định số 274/QĐ-UB-TC của UBND tỉnh Lai Châu (trước khi chia tách tỉnh). Ban đầu, trường mang tên Trường Phổ thông Cơ sở Năng khiếu Thị xã Điện Biên. Năm học 1996–1997, trường bắt đầu hoạt động với 160 học sinh bậc THCS. Đến năm học 1997–1998, trường đổi tên thành Trường THPT Lê Quý Đôn. Và từ năm học 2000–2001, trường chính thức mang tên Trường THPT Chuyên Lê Quý Đôn, với nhiệm vụ bồi dưỡng và phát triển năng khiếu học sinh về một môn học chuyên sâu, đồng thời đảm bảo chương trình giáo dục toàn diện cấp THPT, hiệu trưởng là Nhà giáo Ưu tú, Thạc sĩ Bùi Thị Anh. Cô đã gắn bó với nhà trường gần 25 năm và đảm nhiệm vai trò Hiệu trưởng từ tháng 10 năm 2021, địa chỉ trường Số 343, phố 10, Phường Mường Thanh, Thành phố Điện Biên Phủ, Tỉnh Điện Biên, số điện thoại trường 0215 3825 619, email trường chuyenlequydondb@gmail.com, website trường https://chuyenlequydondb.edu.vn, email đoàn trường: doantruongthptchuyenlqd@gmail.com, Bí thư Đoàn trường cô Lê Thúy Hòa có số điện thoại là 0372632222, website đoàn trường https://hmtuan002.github.io/suctrethanhnien/home, Quản trị viên Website Đoàn trường bạn Nguyễn Quang Minh có số điện thoại là 0849102558`;
+            });
 
-                const chatSession = model.startChat({
-                    history: [
-                        {
-                            role: "user",
-                            parts: [{ text: systemPrompt }]
-                        },
-                        {
-                            role: "model",
-                            parts: [{ text: "Tôi hiểu và sẽ trả lời chính xác dựa trên thông tin cung cấp." }]
-                        },
-                        ...historyForGemini
-                    ],
-                    generationConfig: {
-                        maxOutputTokens: 2000,
-                        temperature: 0.7,
-                        topP: 0.9,
-                        topK: 40,
-                    }
-                });
+            const result = await chatSession.sendMessage(userMessage);
+            let botReply = await result.response.text();
 
-                const result = await chatSession.sendMessage(userMessage);
-                botReply = await result.response.text();
+            // Nếu không tìm thấy thông tin chính xác
+            if (botReply.includes("Không có thông tin") || botReply.includes("Tôi không biết")) {
+                botReply += "\n\nDựa trên thông tin có sẵn, tôi không tìm thấy câu trả lời chính xác. Vui lòng liên hệ trực tiếp với Đoàn trường để biết thêm chi tiết.";
             }
 
             displayTypingMessage(botReply, () => {
