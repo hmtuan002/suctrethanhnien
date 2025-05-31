@@ -6,6 +6,7 @@
     <title>Lê Quý Đôn Chatbot</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script type="text/javascript" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
     <script>
@@ -387,7 +388,7 @@
                 <i class="fas fa-bars text-xl"></i>
             </button>
             <h1 class="text-xl font-semibold text-left flex-1">Chatbot Đoàn trường THPT Chuyên Lê Quý Đôn</h1>
-            <a href="/suctrethanhnien/home" class="bg-primary hover:bg-primary/90 text-white rounded-md transition px-4 py-2 text-sm font-medium flex items-center">
+            <a href="https://hmtuan002.github.io/suctrethanhnien/home" class="bg-primary hover:bg-primary/90 text-white rounded-md transition px-4 py-2 text-sm font-medium flex items-center">
                 <i class="fa-solid fa-home mr-2"></i> Quay về trang chủ
             </a>
         </header>
@@ -423,20 +424,10 @@
 </div>
 <div id="sidebar-backdrop"></div>
 
-<script type="importmap">
-    {
-        "imports": {
-            "@google/generative-ai": "https://esm.run/@google/generative-ai"
-        }
-    }
-</script>
-<script type="module">
-    import { GoogleGenerativeAI } from "@google/generative-ai";
-
-    // Thay thế bằng API key thực tế của bạn
-    const API_KEY = "AIzaSyAn9dMMM5u8dEGpI8mEzQvdMSuI8KFH8jM";
-    const genAI = new GoogleGenerativeAI(API_KEY);
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+<script>
+    const GEMINI_API_KEY = 'AIzaSyAn9dMMM5u8dEGpI8mEzQvdMSuI8KFH8jM'; // Replace with your Gemini API key
+    const GOOGLE_API_KEY = 'AIzaSyAHXFjAHfzSIYtTPy8u6vgSoDW4w2z0TBg'; // Replace with your Google API key
+    const GOOGLE_CSE_ID = '62e6c64b002a84249'; // Replace with your Google Custom Search Engine ID
 
     const chatContainer = document.getElementById('chat-container');
     const chatMessages = document.getElementById('chat-messages');
@@ -553,46 +544,19 @@
         isStopped = false;
 
         try {
-            const historyForGemini = currentChat.messages.map(msg => ({
-                role: msg.role === "user" ? "user" : "model",
-                parts: [{ text: msg.content }]
-            })).slice(0, -1);
+            // Search Google for additional context
+            const searchResults = await searchGoogle(userMessage);
+            const webContext = searchResults ? searchResults.join('\n') : 'No additional web context found.';
 
-            const systemPrompt = `Bạn là Chatbot Đoàn trường THPT Chuyên Lê Quý Đôn tỉnh Điện Biên. Nếu câu hỏi là về Đoàn Thanh niên Cộng sản Hồ Chí Minh, các hoạt động Đoàn và thông tin về trường, hãy trả lời một cách chính xác, ngắn gọn dựa. Nếu câu hỏi là về các môn toán, văn, anh để hỗ trợ ôn thi vào lớp 10, hãy trả lời câu hỏi một cách ngắn gọn, chính xác và dễ hiểu. Đây là một số thông tin về trường: Trường THPT Chuyên Lê Quý Đôn, tỉnh Điện Biên, được thành lập vào ngày 7 tháng 6 năm 1995 theo Quyết định số 274/QĐ-UB-TC của UBND tỉnh Lai Châu (trước khi chia tách tỉnh). Ban đầu, trường mang tên Trường Phổ thông Cơ sở Năng khiếu Thị xã Điện Biên. Năm học 1996–1997, trường bắt đầu hoạt động với 160 học sinh bậc THCS. Đến năm học 1997–1998, trường đổi tên thành Trường THPT Lê Quý Đôn. Và từ năm học 2000–2001, trường chính thức mang tên Trường THPT Chuyên Lê Quý Đôn, với nhiệm vụ bồi dưỡng và phát triển năng khiếu học sinh về một môn học chuyên sâu, đồng thời đảm bảo chương trình giáo dục toàn diện cấp THPT, hiệu trưởng là Nhà giáo Ưu tú, Thạc sĩ Bùi Thị Anh. Cô đã gắn bó với nhà trường gần 25 năm và đảm nhiệm vai trò Hiệu trưởng từ tháng 10 năm 2021, địa chỉ trường Số 343, phố 10, Phường Mường Thanh, Thành phố Điện Biên Phủ, Tỉnh Điện Biên, số điện thoại trường 0215 3825 619, email trường chuyenlequydondb@gmail.com, website trường https://chuyenlequydondb.edu.vn, email đoàn trường: doantruongthptchuyenlqd@gmail.com, Bí thư Đoàn trường cô Lê Thúy Hòa có số điện thoại là 0372632222, website đoàn trường https://hmtuan002.github.io/suctrethanhnien/home, Quản trị viên Website Đoàn trường bạn Nguyễn Quang Minh có số điện thoại là 0849102558`;
+            // Call Gemini API with enhanced prompt
+            const botResponse = await callGemini(userMessage, webContext);
 
-            const chatSession = model.startChat({
-                history: [
-                    {
-                        role: "user",
-                        parts: [{ text: systemPrompt }]
-                    },
-                    {
-                        role: "model",
-                        parts: [{ text: "Tôi hiểu và sẽ trả lời chính xác dựa trên thông tin cung cấp." }]
-                    },
-                    ...historyForGemini
-                ],
-                generationConfig: {
-                    maxOutputTokens: 2000,
-                    temperature: 0.7,
-                    topP: 0.9,
-                    topK: 40,
-                }
-            });
-
-            const result = await chatSession.sendMessage(userMessage);
-            let botReply = await result.response.text();
-
-            // Nếu không tìm thấy thông tin chính xác
-            if (botReply.includes("Không có thông tin") || botReply.includes("Tôi không biết")) {
-                botReply += "\n\nDựa trên thông tin có sẵn, tôi không tìm thấy câu trả lời chính xác. Vui lòng liên hệ trực tiếp với Đoàn trường để biết thêm chi tiết.";
-            }
-
-            displayTypingMessage(botReply, () => {
+            // Display bot response with typing effect
+            displayTypingMessage(botResponse, () => {
                 if (!isStopped) {
                     currentChat.messages.push({
                         role: "assistant",
-                        content: botReply,
+                        content: botResponse,
                         timestamp: new Date().toISOString()
                     });
                     saveChats();
@@ -600,25 +564,80 @@
             }, new Date().toISOString());
 
         } catch (error) {
-            console.error("Lỗi:", error);
-            addMessageToUI("assistant",
-                "Xin lỗi, đã có lỗi xảy ra khi tôi xử lý yêu cầu của bạn. Vui lòng thử lại sau.\n" +
-                "Nếu cần hỗ trợ gấp, bạn có thể liên hệ trực tiếp với Đoàn trường.",
-                new Date().toISOString());
-            if (currentChat) {
-                currentChat.messages.push({
-                    role: "assistant",
-                    content: "Xin lỗi, đã có lỗi xảy ra khi tôi xử lý yêu cầu của bạn. Vui lòng thử lại sau.\n" +
-                             "Nếu cần hỗ trợ gấp, bạn có thể liên hệ trực tiếp với Đoàn trường.",
-                    timestamp: new Date().toISOString()
-                });
-                saveChats();
-            }
+            console.error('Error:', error);
+            addMessageToUI("assistant", 'Xin lỗi, đã có lỗi xảy ra khi tôi xử lý yêu cầu của bạn. Vui lòng thử lại.', new Date().toISOString());
+            currentChat.messages.push({
+                role: "assistant",
+                content: 'Xin lỗi, đã có lỗi xảy ra khi tôi xử lý yêu cầu của bạn. Vui lòng thử lại.',
+                timestamp: new Date().toISOString()
+            });
+            saveChats();
         } finally {
             isSending = false;
             typingIndicator.classList.add("hidden");
             stopButtonContainer.classList.add("hidden");
             scrollToBottom();
+        }
+    }
+
+    async function searchGoogle(query) {
+        try {
+            const response = await axios.get('https://www.googleapis.com/customsearch/v1', {
+                params: {
+                    key: GOOGLE_API_KEY,
+                    cx: GOOGLE_CSE_ID,
+                    q: query,
+                    num: 3 // Limit to 5 results
+                }
+            });
+            const items = response.data.items || [];
+            return items.map(item => item.snippet);
+        } catch (error) {
+            console.error('Google Search Error:', error);
+            return null;
+        }
+    }
+
+    async function callGemini(userInput, webContext) {
+        try {
+            // Enhanced prompt structure
+            const prompt = `
+                Khi trả lời thì lựa chọn thông tin mới nhất để trả lời, không nhắc đến việc tôi đã cung cấp thông tin trước đó trong câu trả lời. nếu thời gian không rõ thì cứ lấy thời gian gần nhất với nội dung ở trong đoạn dữ liệu được cung cấp hoặc là dựa vào thời gian của tin tức (ví dụ 23 giờ trước từ  đó xác định là ngày hôm qua (30/05/2025)) (bỏ qua tính chính xác). nếu câu  hỏi không nêu rõ thời gian sự kiện thì phải lấy mốc là 2025. Phạm vi tìm kiếm dữ liệu xung quanh nội dung là 100 từ
+                Bạn là Chatbot Đoàn trường THPT Chuyên Lê Quý Đôn tỉnh Điện Biên hãy trả lời một cách ngắn gọn. Đây là một số thông tin về trường: Trường THPT Chuyên Lê Quý Đôn, tỉnh Điện Biên, được thành lập vào ngày 7 tháng 6 năm 1995 theo Quyết định số 274/QĐ-UB-TC của UBND tỉnh Lai Châu (trước khi chia tách tỉnh). Ban đầu, trường mang tên Trường Phổ thông Cơ sở Năng khiếu Thị xã Điện Biên. Năm học 1996–1997, trường bắt đầu hoạt động với 160 học sinh bậc THCS. Đến năm học 1997–1998, trường đổi tên thành Trường THPT Lê Quý Đôn. Và từ năm học 2000–2001, trường chính thức mang tên Trường THPT Chuyên Lê Quý Đôn, với nhiệm vụ bồi dưỡng và phát triển năng khiếu học sinh về một môn học chuyên sâu, đồng thời đảm bảo chương trình giáo dục toàn diện cấp THPT, hiệu trưởng là Nhà giáo Ưu tú, Thạc sĩ Bùi Thị Anh. Cô đã gắn bó với nhà trường gần 25 năm và đảm nhiệm vai trò Hiệu trưởng từ tháng 10 năm 2021, địa chỉ trường Số 343, phố 10, Phường Mường Thanh, Thành phố Điện Biên Phủ, Tỉnh Điện Biên, số điện thoại trường 0215 3825 619, email trường chuyenlequydondb@gmail.com, website trường https://chuyenlequydondb.edu.vn, email đoàn trường: doantruongthptchuyenlqd@gmail.com, Bí thư Đoàn trường cô Lê Thúy Hòa có số điện thoại là 0372632222, website đoàn trường https://hmtuan002.github.io/suctrethanhnien/home, Quản trị viên Website Đoàn trường bạn Nguyễn Quang Minh có số điện thoại là 0849102558
+                Lưu ý không viết tắt (trừ từ THPT, email, sđt). Kì thi tuyển sinh lớp 10 diễn ra trong ngày 27– 28/5/2025 vậy nên các hoạt động tiếp sức mùa thi vào 10 cũng diễn ra trong thời gian này (ví dụ Đoàn trường THPT Nà Tấu “Tiếp sức mùa thi” vào lớp 10 diễn ra vào ngày 27– 28/5/2025)
+                Lễ kết nạp đảng viên mới cho sinh viên năm cuối trường Cao đẳng Sư phạm Điện Biên diễn ra ngày 28/5/2025, tại trường Cao đẳng Sư phạm Điện Biên, Chi bộ 6 trực thuộc Đảng bộ bộ phận trường CĐSP Điện Biên long trọng tổ chức lễ kết nạp Đảng viên mới cho 32 sinh viên ưu tú chuyên ngành Giáo dục Mầm non.
+                bạn được lập trình và tạo ra bởi Nguyễn Quang Minh.
+                bạn còn có thể hổ trợ học sinh ôn luyện kì thi vào 10 (không nhất thiết phải vào trường THPT Chuyên Lê Quý Đôn tỉnh Điện Biên) đưa ra cách hướng dẫn luyện thi, ôn tập cũng như giải quyết các vấn đề
+                Đừng chào và giới thiệu bản thân khi không được yêu cầu
+                
+                Câu hỏi: ${userInput}
+                
+                Dữ liệu:
+                ${webContext}
+                
+                Hãy trả lời bằng tiếng Việt một cách ngắn gọn
+            `;
+
+            const response = await axios.post('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-thinking-exp-01-21:generateContent', {
+                contents: [
+                    {
+                        parts: [
+                            { text: prompt }
+                        ]
+                    }
+                ]
+            }, {
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                params: {
+                    key: GEMINI_API_KEY
+                }
+            });
+            return response.data.candidates[0].content.parts[0].text.trim();
+        } catch (error) {
+            console.error('Gemini API Error:', error);
+            return 'Xin lỗi, đã có lỗi xảy ra khi tôi xử lý yêu cầu của bạn. Vui lòng thử lại.';
         }
     }
 
