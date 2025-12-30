@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script type="text/javascript" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@google/generative-ai/dist/index.min.js"></script>
 
     <script>
         tailwind.config = {
@@ -425,9 +426,20 @@
 <div id="sidebar-backdrop"></div>
 
 <script>
-    const GEMINI_API_KEY = 'AIzaSyAn9dMMM5u8dEGpI8mEzQvdMSuI8KFH8jM'; // Replace with your Gemini API key
-    const GOOGLE_API_KEY = 'AIzaSyAHXFjAHfzSIYtTPy8u6vgSoDW4w2z0TBg'; // Replace with your Google API key
-    const GOOGLE_CSE_ID = '62e6c64b002a84249'; // Replace with your Google Custom Search Engine ID
+    // Cấu hình API
+    const GEMINI_API_KEY = "AIzaSyBenZZbItYu5oB0OT8p9H2xg7YUjecotMo";
+    const GOOGLE_API_KEY = "YOUR_GOOGLE_API_KEY_HERE"; // Thay bằng Google API key của bạn
+    const GOOGLE_CSE_ID = "YOUR_GOOGLE_CSE_ID_HERE"; // Thay bằng Google Custom Search Engine ID của bạn
+    
+    // Khởi tạo Gemini AI
+    let genAI, model;
+    try {
+        genAI = new googleGenerativeAi.GenerativeAI(GEMINI_API_KEY);
+        model = genAI.getGenerativeModel({ model: "gemini-2.5-flash-lite" });
+        console.log("Gemini AI initialized successfully");
+    } catch (error) {
+        console.error("Failed to initialize Gemini AI:", error);
+    }
 
     const chatContainer = document.getElementById('chat-container');
     const chatMessages = document.getElementById('chat-messages');
@@ -544,12 +556,15 @@
         isStopped = false;
 
         try {
-            // Search Google for additional context
-            const searchResults = await searchGoogle(userMessage);
-            const webContext = searchResults ? searchResults.join('\n') : 'No additional web context found.';
+            // Search Google for additional context (tùy chọn)
+            let webContext = '';
+            if (GOOGLE_API_KEY && GOOGLE_CSE_ID && GOOGLE_API_KEY !== 'YOUR_GOOGLE_API_KEY_HERE') {
+                const searchResults = await searchGoogle(userMessage);
+                webContext = searchResults ? searchResults.join('\n') : '';
+            }
 
-            // Call Gemini API with enhanced prompt
-            const botResponse = await callGemini(userMessage, webContext);
+            // Call Gemini API
+            const botResponse = await callGemini(userMessage, webContext, currentChat.messages);
 
             // Display bot response with typing effect
             displayTypingMessage(botResponse, () => {
@@ -587,7 +602,7 @@
                     key: GOOGLE_API_KEY,
                     cx: GOOGLE_CSE_ID,
                     q: query,
-                    num: 3 // Limit to 5 results
+                    num: 3 // Giới hạn 3 kết quả
                 }
             });
             const items = response.data.items || [];
@@ -598,46 +613,103 @@
         }
     }
 
-    async function callGemini(userInput, webContext) {
+    async function callGemini(userInput, webContext, chatHistory) {
         try {
-            // Enhanced prompt structure
-            const prompt = `
-                Khi trả lời thì lựa chọn thông tin mới nhất để trả lời, không nhắc đến việc tôi đã cung cấp thông tin trước đó trong câu trả lời. nếu thời gian không rõ thì cứ lấy thời gian gần nhất với nội dung ở trong đoạn dữ liệu được cung cấp hoặc là dựa vào thời gian của tin tức (ví dụ 23 giờ trước từ  đó xác định là ngày hôm qua (30/05/2025)) (bỏ qua tính chính xác). nếu câu  hỏi không nêu rõ thời gian sự kiện thì phải lấy mốc là 2025. Phạm vi tìm kiếm dữ liệu xung quanh nội dung là 100 từ
-                Bạn là Chatbot Đoàn trường THPT Chuyên Lê Quý Đôn tỉnh Điện Biên. Đây là một số thông tin về trường: Trường THPT Chuyên Lê Quý Đôn, tỉnh Điện Biên, được thành lập vào ngày 7 tháng 6 năm 1995 theo Quyết định số 274/QĐ-UB-TC của UBND tỉnh Lai Châu (trước khi chia tách tỉnh). Ban đầu, trường mang tên Trường Phổ thông Cơ sở Năng khiếu Thị xã Điện Biên. Năm học 1996–1997, trường bắt đầu hoạt động với 160 học sinh bậc THCS. Đến năm học 1997–1998, trường đổi tên thành Trường THPT Lê Quý Đôn. Và từ năm học 2000–2001, trường chính thức mang tên Trường THPT Chuyên Lê Quý Đôn, với nhiệm vụ bồi dưỡng và phát triển năng khiếu học sinh về một môn học chuyên sâu, đồng thời đảm bảo chương trình giáo dục toàn diện cấp THPT, hiệu trưởng là Nhà giáo Ưu tú, Thạc sĩ Bùi Thị Anh. Cô đã gắn bó với nhà trường gần 25 năm và đảm nhiệm vai trò Hiệu trưởng từ tháng 10 năm 2021, địa chỉ trường Số 343, phố 10, Phường Mường Thanh, Thành phố Điện Biên Phủ, Tỉnh Điện Biên, số điện thoại trường 0215 3825 619, email trường chuyenlequydondb@gmail.com, website trường https://chuyenlequydondb.edu.vn, email đoàn trường: doantruongthptchuyenlqd@gmail.com, Bí thư Đoàn trường cô Lê Thúy Hòa có số điện thoại là 0372632222, website đoàn trường https://hmtuan002.github.io/suctrethanhnien/home, Quản trị viên Website Đoàn trường bạn Nguyễn Quang Minh có số điện thoại là 0849102558
-                Lưu ý không viết tắt (trừ từ THPT, email, sđt). Kì thi tuyển sinh lớp 10 diễn ra trong ngày 27– 28/5/2025 vậy nên các hoạt động tiếp sức mùa thi vào 10 cũng diễn ra trong thời gian này (ví dụ Đoàn trường THPT Nà Tấu “Tiếp sức mùa thi” vào lớp 10 diễn ra vào ngày 27– 28/5/2025)
-                Lễ kết nạp đảng viên mới cho sinh viên năm cuối trường Cao đẳng Sư phạm Điện Biên diễn ra ngày 28/5/2025, tại trường Cao đẳng Sư phạm Điện Biên, Chi bộ 6 trực thuộc Đảng bộ bộ phận trường CĐSP Điện Biên long trọng tổ chức lễ kết nạp Đảng viên mới cho 32 sinh viên ưu tú chuyên ngành Giáo dục Mầm non.
-                bạn được lập trình và tạo ra bởi Nguyễn Quang Minh. Số lượng cán bộ giáo viên và nhân viên của trường THPT chuyên Lê Quý Đôn là 96 người.
-                bạn còn có thể hổ trợ học sinh ôn luyện kì thi vào 10 (không nhất thiết phải vào trường THPT Chuyên Lê Quý Đôn tỉnh Điện Biên) đưa ra cách hướng dẫn luyện thi, ôn tập cũng như giải quyết các vấn đề
-                Đừng chào và giới thiệu bản thân khi không được yêu cầu
-                
-                Câu hỏi: ${userInput}
-                
-                Dữ liệu:
-                ${webContext}
-                
-                Hãy trả lời bằng tiếng Việt
-            `;
+            // Chuẩn bị prompt
+            const systemPrompt = `
+Bạn là Chatbot Đoàn trường THPT Chuyên Lê Quý Đôn tỉnh Điện Biên. Đây là một số thông tin về trường:
 
-            const response = await axios.post('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-thinking-exp-01-21:generateContent', {
-                contents: [
-                    {
-                        parts: [
-                            { text: prompt }
-                        ]
-                    }
-                ]
-            }, {
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                params: {
-                    key: GEMINI_API_KEY
-                }
-            });
-            return response.data.candidates[0].content.parts[0].text.trim();
+THÔNG TIN TRƯỜNG:
+- Trường THPT Chuyên Lê Quý Đôn, tỉnh Điện Biên, được thành lập vào ngày 7 tháng 6 năm 1995 theo Quyết định số 274/QĐ-UB-TC của UBND tỉnh Lai Châu (trước khi chia tách tỉnh).
+- Ban đầu, trường mang tên Trường Phổ thông Cơ sở Năng khiếu Thị xã Điện Biên.
+- Năm học 1996–1997, trường bắt đầu hoạt động với 160 học sinh bậc THCS.
+- Năm học 1997–1998, trường đổi tên thành Trường THPT Lê Quý Đôn.
+- Từ năm học 2000–2001, trường chính thức mang tên Trường THPT Chuyên Lê Quý Đôn.
+- Hiệu trưởng: Nhà giáo Ưu tú, Thạc sĩ Bùi Thị Anh (gắn bó với nhà trường gần 25 năm, đảm nhiệm vai trò Hiệu trưởng từ tháng 10 năm 2021).
+- Địa chỉ: Số 343, phố 10, Phường Mường Thanh, Thành phố Điện Biên Phủ, Tỉnh Điện Biên.
+- Số điện thoại trường: 0215 3825 619.
+- Email trường: chuyenlequydondb@gmail.com.
+- Website trường: https://chuyenlequydondb.edu.vn.
+- Email đoàn trường: doantruongthptchuyenlqd@gmail.com.
+- Bí thư Đoàn trường: Cô Lê Thúy Hòa (SĐT: 0372632222).
+- Website đoàn trường: https://hmtuan002.github.io/suctrethanhnien/home.
+- Quản trị viên Website Đoàn trường: Bạn Nguyễn Quang Minh (SĐT: 0849102558).
+- Số lượng cán bộ giáo viên và nhân viên: 96 người.
+
+QUY TẮC TRẢ LỜI:
+1. Ưu tiên thông tin mới nhất để trả lời.
+2. Không nhắc đến việc tôi đã cung cấp thông tin trước đó trong câu trả lời.
+3. Nếu thời gian không rõ thì lấy thời gian gần nhất với nội dung ở trong đoạn dữ liệu được cung cấp hoặc dựa vào thời gian của tin tức.
+4. Nếu câu hỏi không nêu rõ thời gian sự kiện thì lấy mốc là 2025.
+5. Phạm vi tìm kiếm dữ liệu xung quanh nội dung là 100 từ.
+6. Không viết tắt (trừ từ THPT, email, SĐT).
+
+THÔNG TIN THỜI SỰ:
+- Kì thi tuyển sinh lớp 10 diễn ra trong ngày 27–28/5/2025.
+- Các hoạt động tiếp sức mùa thi vào 10 cũng diễn ra trong thời gian này.
+- Lễ kết nạp đảng viên mới cho sinh viên năm cuối trường Cao đẳng Sư phạm Điện Biên diễn ra ngày 28/5/2025.
+
+CHỨC NĂNG:
+1. Hỗ trợ học sinh ôn luyện kì thi vào 10 (không nhất thiết phải vào trường THPT Chuyên Lê Quý Đôn tỉnh Điện Biên).
+2. Đưa ra cách hướng dẫn luyện thi, ôn tập cũng như giải quyết các vấn đề.
+3. Trả lời các câu hỏi về trường và Đoàn trường.
+
+LƯU Ý:
+- Đừng chào và giới thiệu bản thân khi không được yêu cầu.
+- Bạn được lập trình và tạo ra bởi Nguyễn Quang Minh.
+- Luôn trả lời bằng tiếng Việt.`;
+
+            // Chuẩn bị lịch sử hội thoại
+            let conversationContext = '';
+            if (chatHistory && chatHistory.length > 0) {
+                // Lấy 5 tin nhắn gần nhất để làm ngữ cảnh
+                const recentMessages = chatHistory.slice(-5);
+                recentMessages.forEach(msg => {
+                    const role = msg.role === 'user' ? 'Người dùng' : 'Bạn';
+                    conversationContext += `${role}: ${msg.content}\n`;
+                });
+            }
+
+            // Tạo prompt hoàn chỉnh
+            const fullPrompt = `${systemPrompt}
+
+${webContext ? `THÔNG TIN BỔ SUNG TỪ WEB:\n${webContext}\n` : ''}
+${conversationContext ? `LỊCH SỬ HỘI THOẠI:\n${conversationContext}\n` : ''}
+Câu hỏi của người dùng: ${userInput}
+
+Hãy trả lời câu hỏi trên dựa trên thông tin được cung cấp.`;
+
+            // Gọi API Gemini
+            const result = await model.generateContent(fullPrompt);
+            const response = await result.response;
+            return response.text().trim();
+
         } catch (error) {
             console.error('Gemini API Error:', error);
-            return 'Xin lỗi, đã có lỗi xảy ra khi tôi xử lý yêu cầu của bạn. Vui lòng thử lại.';
+            
+            // Fallback: Thử sử dụng API endpoint trực tiếp nếu SDK gặp lỗi
+            try {
+                const prompt = `Bạn là Chatbot Đoàn trường THPT Chuyên Lê Quý Đôn tỉnh Điện Biên. Hãy trả lời câu hỏi: ${userInput}\n\nTrả lời bằng tiếng Việt.`;
+                
+                const response = await axios.post(
+                    `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=${GEMINI_API_KEY}`,
+                    {
+                        contents: [{
+                            parts: [{ text: prompt }]
+                        }]
+                    },
+                    {
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    }
+                );
+                
+                return response.data.candidates[0].content.parts[0].text.trim();
+            } catch (fallbackError) {
+                console.error('Fallback API Error:', fallbackError);
+                return 'Xin lỗi, đã có lỗi xảy ra khi tôi xử lý yêu cầu của bạn. Vui lòng thử lại.';
+            }
         }
     }
 
