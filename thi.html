@@ -1211,9 +1211,9 @@
         const db = firebase.firestore();
         
         // Khởi tạo AI
-        const API_KEY = "AIzaSyAcZaIvApX_UQKWZzP4uj2J1cCseZ_zkyk";
+        const API_KEY = "AIzaSyCh3IAB9g2mIG--I4zijLKEDNvish3WORY";
         const genAI = new GoogleGenerativeAI(API_KEY);
-        const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash-thinking-exp-01-21" });
+        const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash-lite" });
         
         // DOM Elements
         const startScreen = document.getElementById('start-screen');
@@ -2683,3 +2683,4 @@
     </script>
 </body>
 </html>
+
